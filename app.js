@@ -41,8 +41,14 @@
     var ringEl = document.getElementById("ring");
     if (!stage || !ringEl || reduceMotion) return;
     var angle = 0, velocity = 0, autoSpeed = 0.12, hovering = false, dragging = false, lastX = 0;
+    var visible = true, lastScroll = 0; // perf: rest the GPU when hero is off-screen or user is scrolling
 
     function frame() {
+      if (!visible) return; // observer restarts us when back in view
+      if (!dragging && Date.now() - lastScroll < 120) {
+        requestAnimationFrame(frame); // scrolling: skip work, keep the loop alive
+        return;
+      }
       if (!dragging) {
         angle += velocity;
         velocity *= 0.94; // friction after a flick
@@ -66,7 +72,25 @@
     ["pointerup", "pointercancel"].forEach(function (evt) {
       stage.addEventListener(evt, function () { dragging = false; });
     });
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (entries) {
+        var v = entries[0].isIntersecting;
+        if (v && !visible) { visible = true; requestAnimationFrame(frame); }
+        else visible = v;
+      }).observe(stage);
+    }
+    window.addEventListener("scroll", function () { lastScroll = Date.now(); }, { passive: true });
     requestAnimationFrame(frame);
+  })();
+
+  /* 2b. Rest CSS animations when their section is off-screen. */
+  (function lazyAnims() {
+    if (!("IntersectionObserver" in window)) return;
+    document.querySelectorAll(".marquee, .case-phones").forEach(function (el) {
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { e.target.classList.toggle("paused", !e.isIntersecting); });
+      }).observe(el);
+    });
   })();
 
   /* 3. (retired) One fixed theme per phone now — no crossfade. */
