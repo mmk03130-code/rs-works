@@ -1,0 +1,161 @@
+/* Saffron House — demo restaurant site by RS Works */
+:root {
+  color-scheme: dark;
+  --bg: #161210;
+  --bg2: #1e1712;
+  --card: #221a13;
+  --ink: #f4ecdc;
+  --ink2: #c8b797;
+  --saffron: #e8930c;
+  --saffron2: #f6bd4a;
+  --line: rgba(232, 147, 12, .16);
+  --sans: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  --serif: "Newsreader", Georgia, serif;
+  --ring-radius: 165px;
+  --dish-w: 168px;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--sans); line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+section { padding: 88px 0; }
+h1, h2, h3 { line-height: 1.12; margin: 0 0 16px; letter-spacing: -0.01em; }
+h1 { font-size: clamp(44px, 6vw, 76px); }
+h2 { font-size: clamp(30px, 3.6vw, 46px); }
+h2 em, h1 em { font-family: var(--serif); font-style: italic; font-weight: 500; color: var(--saffron2); }
+.kicker {
+  color: var(--saffron); font-size: 12px; font-weight: 600;
+  letter-spacing: .22em; text-transform: uppercase; margin: 0 0 14px;
+}
+.lede { color: var(--ink2); font-size: 18px; max-width: 34em; margin: 0 0 28px; }
+a { color: inherit; }
+
+/* Header */
+.site-header {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(22, 18, 16, .82);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+.header-in { display: flex; align-items: center; gap: 28px; padding: 14px 24px; max-width: 1120px; margin: 0 auto; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 19px; text-decoration: none; }
+.brand-mark {
+  width: 34px; height: 34px; border-radius: 10px; background: var(--saffron);
+  color: #1c130a; display: grid; place-items: center;
+  font-family: var(--serif); font-style: italic; font-weight: 600; font-size: 19px;
+}
+.nav { display: flex; gap: 22px; margin-left: auto; }
+.nav a { color: var(--ink2); text-decoration: none; font-size: 15px; }
+.nav a:hover { color: var(--ink); }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--saffron); color: #1c130a; font-weight: 600;
+  padding: 12px 22px; border-radius: 999px; text-decoration: none; border: 0;
+  font-size: 15px; cursor: pointer; font-family: inherit;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(232, 147, 12, .35); }
+.btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+.btn.ghost:hover { box-shadow: none; border-color: var(--saffron); }
+.btn.small { padding: 9px 18px; font-size: 14px; }
+.header-cta { margin-left: 6px; }
+
+/* Hero */
+.hero { padding: 72px 0 64px; position: relative; overflow: hidden; }
+.hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+.hero-copy p.note { color: var(--ink2); font-size: 15px; margin: 18px 0 0; }
+.hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; }
+
+/* Dish ring */
+.dish-stage { perspective: 1200px; height: 440px; position: relative; cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+.dish-stage:active { cursor: grabbing; }
+.dish-ring { position: absolute; inset: 0; transform-style: preserve-3d; will-change: transform; }
+.dish {
+  position: absolute; left: 50%; top: 42%;
+  width: var(--dish-w); aspect-ratio: 1;
+  margin-left: calc(var(--dish-w) / -2); margin-top: calc(var(--dish-w) / -2);
+  transform: rotateY(calc(var(--i) * 120deg)) translateZ(var(--ring-radius));
+}
+.dish img {
+  width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
+  border: 6px solid #2b2015;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, .55), 0 0 0 1px rgba(232, 147, 12, .25), 0 0 44px rgba(232, 147, 12, .14);
+  pointer-events: none;
+}
+.ring-caption { text-align: center; margin-top: 6px; min-height: 76px; }
+.ring-caption h3 { font-size: 22px; margin: 0 0 4px; }
+.ring-caption .price { color: var(--saffron2); font-weight: 600; font-size: 18px; }
+.ring-caption p { color: var(--ink2); font-size: 14px; margin: 4px 0 0; }
+.ring-hint { text-align: center; color: var(--ink2); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; opacity: .7; }
+
+/* Dishes grid */
+.dishes { background: var(--bg2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.dish-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; margin-top: 40px; }
+.card {
+  background: var(--card); border: 1px solid var(--line); border-radius: 18px;
+  overflow: hidden; transition: transform .2s ease, box-shadow .2s ease;
+}
+.card:hover { transform: translateY(-5px); box-shadow: 0 22px 44px rgba(0, 0, 0, .4); }
+.card img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
+.card-body { padding: 20px 20px 22px; }
+.card-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.card-top h3 { font-size: 19px; margin: 0; }
+.card-top .price { color: var(--saffron2); font-weight: 600; white-space: nowrap; }
+.card-body p { color: var(--ink2); font-size: 14.5px; margin: 8px 0 16px; }
+
+/* About */
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+.about-grid p { color: var(--ink2); font-size: 17px; }
+.about-badge {
+  width: 120px; height: 120px; border-radius: 50%; margin: 0 auto;
+  border: 1px solid var(--saffron); display: grid; place-items: center; text-align: center;
+  font-family: var(--serif); font-style: italic; color: var(--saffron2); font-size: 17px; line-height: 1.3;
+}
+
+/* Visit */
+.visit { background: var(--bg2); border-top: 1px solid var(--line); }
+.visit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 36px; }
+.visit-card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 30px; }
+.visit-card h3 { font-size: 20px; color: var(--saffron2); margin-bottom: 12px; }
+.visit-card dl { margin: 0; }
+.visit-card dt { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--ink2); margin-top: 14px; }
+.visit-card dd { margin: 4px 0 0; font-size: 17px; }
+.visit-card a { color: var(--ink); }
+
+/* Reserve band */
+.reserve { text-align: center; }
+.reserve .btn { font-size: 17px; padding: 15px 34px; }
+
+/* Footer */
+footer { border-top: 1px solid var(--line); padding: 34px 0; color: var(--ink2); font-size: 14px; }
+.foot-in { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; align-items: center; }
+.foot-in a { color: var(--saffron2); font-weight: 600; text-decoration: none; }
+.foot-in a:hover { text-decoration: underline; }
+.demo-note { font-size: 13px; opacity: .75; }
+
+/* Reveal on scroll */
+.reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s ease, transform .7s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+
+@media (max-width: 900px) {
+  .hero-grid, .about-grid, .visit-grid { grid-template-columns: 1fr; }
+  .dish-grid { grid-template-columns: 1fr 1fr; }
+  .nav { display: none; }
+  .header-cta { margin-left: auto; }
+  :root { --ring-radius: 118px; --dish-w: 132px; }
+  .dish-stage { height: 360px; }
+  section { padding: 64px 0; }
+}
+@media (max-width: 560px) {
+  .dish-grid { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  .reveal { opacity: 1; transform: none; }
+}
