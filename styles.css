@@ -91,8 +91,7 @@ h3 { font-size: clamp(24px, 2.6vw, 34px); letter-spacing: -.03em; line-height: 1
 /* Header */
 .site-header {
   position: sticky; top: 0; z-index: 50;
-  background: color-mix(in srgb, var(--paper) 88%, transparent);
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  background: var(--paper);
   border-bottom: 1px solid var(--line);
 }
 .nav {
@@ -173,14 +172,14 @@ h3 { font-size: clamp(24px, 2.6vw, 34px); letter-spacing: -.03em; line-height: 1
 .phone-face {
   position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden;
   border: 7px solid #0b0e11; border-radius: 30px; overflow: hidden; background: #111;
-  box-shadow: 0 30px 60px rgba(0, 0, 0, .45), inset 0 0 0 1px rgba(255, 255, 255, .12);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, .4), inset 0 0 0 1px rgba(255, 255, 255, .12);
 }
 .phone-front { transform: translateZ(calc(var(--depth) / 2)); }
 .phone-front img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 /* Real phone back: theme-tinted panel, camera island, wordmark */
 .phone-back { transform: rotateY(180deg) translateZ(calc(var(--depth) / 2)); display: block; }
 /* Phone frame edges: true 3D thickness */
-.phone-edge { position: absolute; background: #161b20; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .07); }
+.phone-edge { position: absolute; background: #0b0e11; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .07); }
 .edge-t { left: 0; top: 0; width: 100%; height: var(--depth); margin-top: calc(var(--depth) / -2); transform: rotateX(90deg); }
 .edge-b { left: 0; bottom: 0; width: 100%; height: var(--depth); margin-bottom: calc(var(--depth) / -2); transform: rotateX(90deg); }
 .edge-l { top: 0; left: 0; width: var(--depth); height: 100%; margin-left: calc(var(--depth) / -2); transform: rotateY(90deg); }
