@@ -143,7 +143,6 @@ strong { font-weight: 600; }
 .ring-caption h3 { font-size: 24px; margin: 0 0 4px; font-weight: 600; }
 .ring-caption .price { color: var(--saffron2); font-weight: 700; font-size: 19px; }
 .ring-caption p { color: var(--ink2); font-size: 14.5px; margin: 5px 0 0; }
-.ring-hint { text-align: center; color: var(--ink3); font-size: 11px; letter-spacing: .22em; text-transform: uppercase; opacity: .8; }
 
 /* ---------- Trust strip ---------- */
 .trust { padding: 0 0 8px; }
@@ -159,6 +158,9 @@ strong { font-weight: 600; }
 
 /* ---------- Menu ---------- */
 .menu { background: var(--bg2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+/* Slow plate turn on menu dish photos */
+.mi .plate img { animation: menu-plate-spin 30s linear infinite; }
+@keyframes menu-plate-spin { to { transform: rotate(360deg); } }
 .tabs {
   display: flex; gap: 10px; margin: 34px 0 30px; overflow-x: auto; padding-bottom: 6px;
   scrollbar-width: thin; -webkit-overflow-scrolling: touch;
@@ -401,4 +403,5 @@ footer { border-top: 1px solid var(--line); padding: 36px 0 120px; color: var(--
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   .reveal { opacity: 1; transform: none; }
   .cart-drawer { transition: none; }
+  .mi .plate img { animation: none; }
 }
