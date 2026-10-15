@@ -6,8 +6,8 @@
   <meta name="color-scheme" content="dark" />
 
   <!-- Primary SEO -->
-  <title>Saffron House | Desi &amp; Continental Grill — Gulberg, Lahore</title>
-  <meta name="description" content="Saffron House serves sizzling desi BBQ, karahi and continental grills in the heart of Gulberg, Lahore. Open daily 12 PM – 12 AM. Reserve your table on WhatsApp." />
+  <title>Saffron House | Desi BBQ &amp; Karahi — Gulberg, Lahore</title>
+  <meta name="description" content="Saffron House serves sizzling desi BBQ, karahi and continental grills in Gulberg, Lahore. Order pickup on WhatsApp or reserve your table online. Open daily 12 PM – 12 AM." />
   <link rel="canonical" href="https://rs-works.pages.dev/demos/saffron-house/" />
   <meta name="robots" content="index, follow" />
   <meta name="theme-color" content="#161210" />
@@ -15,8 +15,8 @@
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Saffron House" />
-  <meta property="og:title" content="Saffron House | Desi & Continental Grill — Gulberg, Lahore" />
-  <meta property="og:description" content="Sizzling desi BBQ, karahi and continental grills in Gulberg, Lahore. Open daily 12 PM – 12 AM." />
+  <meta property="og:title" content="Saffron House | Desi BBQ &amp; Karahi — Gulberg, Lahore" />
+  <meta property="og:description" content="Sizzling desi BBQ, karahi and continental grills in Gulberg, Lahore. Order pickup on WhatsApp — no apps, no commissions." />
   <meta property="og:url" content="https://rs-works.pages.dev/demos/saffron-house/" />
   <meta property="og:image" content="https://rs-works.pages.dev/demos/saffron-house/assets/chicken-karahi-wok.jpg" />
   <meta property="og:image:alt" content="Chicken karahi served sizzling in a black wok at Saffron House" />
@@ -27,7 +27,7 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&amp;family=Newsreader:ital,opsz,wght@1,6..72,500&amp;display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,500;1,6..72,500;1,6..72,600&amp;display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="styles.css" />
   <script src="app.js" defer></script>
@@ -38,8 +38,9 @@
     "@context": "https://schema.org",
     "@type": "Restaurant",
     "name": "Saffron House",
-    "servesCuisine": ["Desi", "BBQ", "Continental"],
+    "servesCuisine": ["Desi", "BBQ", "Karahi", "Continental"],
     "priceRange": "₨₨",
+    "telephone": "+92-300-0000000",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "12-B Main Boulevard, Gulberg III",
@@ -47,8 +48,13 @@
       "addressCountry": "PK"
     },
     "openingHours": "Mo-Su 12:00-24:00",
-    "telephone": "+92-300-0000000",
-    "url": "https://rs-works.pages.dev/demos/saffron-house/"
+    "acceptsReservations": "True",
+    "url": "https://rs-works.pages.dev/demos/saffron-house/",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "reviewCount": "1240"
+    }
   }
   </script>
 </head>
@@ -56,13 +62,20 @@
 
   <header class="site-header">
     <div class="header-in">
-      <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40"><rect width="40" height="40" rx="11" fill="#241a12"/><g stroke="#f0a22e" stroke-width="2.6" stroke-linecap="round" fill="none"><path d="M20 29 C 20 23, 20 18, 20 12"/><path d="M20 29 C 17 24, 14 21, 11 19"/><path d="M20 29 C 23 24, 26 21, 29 19"/></g><circle cx="20" cy="10" r="2.1" fill="#e2571e"/><circle cx="10" cy="17" r="2.1" fill="#e2571e"/><circle cx="30" cy="17" r="2.1" fill="#e2571e"/></svg></span> Saffron House</a>
+      <a class="brand" href="#top" aria-label="Saffron House — home"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40"><rect width="40" height="40" rx="11" fill="#241a12"/><g stroke="#f0a22e" stroke-width="2.6" stroke-linecap="round" fill="none"><path d="M20 29 C 20 23, 20 18, 20 12"/><path d="M20 29 C 17 24, 14 21, 11 19"/><path d="M20 29 C 23 24, 26 21, 29 19"/></g><circle cx="20" cy="10" r="2.1" fill="#e2571e"/><circle cx="10" cy="17" r="2.1" fill="#e2571e"/><circle cx="30" cy="17" r="2.1" fill="#e2571e"/></svg></span> Saffron House</a>
       <nav class="nav" aria-label="Primary">
-        <a href="#dishes">Dishes</a>
+        <a href="#menu">Menu</a>
+        <a href="#reviews">Reviews</a>
         <a href="#about">About</a>
         <a href="#visit">Visit</a>
       </nav>
-      <a class="btn small header-cta" href="https://wa.me/920000000000?text=Hello%20Saffron%20House!%20I%27d%20like%20to%20reserve%20a%20table." target="_blank" rel="noopener">Reserve a Table</a>
+      <div class="header-actions">
+        <button class="cart-btn" id="cartOpenBtn" aria-label="Open your order" aria-haspopup="dialog">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <span class="cart-count" id="cartCount" aria-hidden="true">0</span>
+        </button>
+        <a class="btn small header-cta" href="#reserve">Reserve a Table</a>
+      </div>
     </div>
   </header>
 
@@ -74,12 +87,12 @@
         <div class="hero-copy">
           <p class="kicker">Gulberg · Lahore — Est. 2019</p>
           <h1 id="hero-heading">Fire, spice &amp; <em>everything nice.</em></h1>
-          <p class="lede">Modern desi BBQ, wok-tossed karahi and continental grills — served sizzling, priced honestly, in the heart of Gulberg.</p>
+          <p class="lede">Modern desi BBQ, wok-tossed karahi and continental grills — served sizzling, priced honestly. Order pickup straight to our kitchen, or book your table in one tap.</p>
           <div class="hero-ctas">
-            <a class="btn" href="https://wa.me/920000000000?text=Hello%20Saffron%20House!%20I%27d%20like%20to%20reserve%20a%20table." target="_blank" rel="noopener">Reserve a Table</a>
-            <a class="btn ghost" href="#dishes">Explore the Menu</a>
+            <a class="btn" href="#menu">Order Pickup</a>
+            <a class="btn ghost" href="#reserve">Reserve a Table</a>
           </div>
-          <p class="note">Open daily · 12:00 PM – 12:00 AM</p>
+          <p class="note">Open daily · 12:00 PM – 12:00 AM · No apps, no accounts, no commissions</p>
         </div>
         <div class="hero-visual">
           <div class="dish-stage" id="dishStage" role="img" aria-label="Rotating showcase of three signature dishes: chicken karahi, seekh kebab platter and chicken biryani">
@@ -99,80 +112,256 @@
       </div>
     </section>
 
-    <!-- SIGNATURE DISHES -->
-    <section class="dishes" id="dishes" aria-labelledby="dishes-heading">
+    <!-- TRUST STRIP -->
+    <section class="trust" aria-label="Why Saffron House">
+      <div class="wrap trust-grid">
+        <div class="trust-item reveal"><strong>4.8<span aria-hidden="true"> ★</span></strong><span>1,240+ Google reviews</span></div>
+        <div class="trust-item reveal"><strong>25<span> min</span></strong><span>average pickup time</span></div>
+        <div class="trust-item reveal"><strong>0<span>%</span></strong><span>commission on direct orders</span></div>
+        <div class="trust-item reveal"><strong>7<span> yrs</span></strong><span>serving Gulberg</span></div>
+      </div>
+    </section>
+
+    <!-- MENU -->
+    <section class="menu" id="menu" aria-labelledby="menu-heading">
       <div class="wrap">
         <p class="kicker reveal">The Menu</p>
-        <h2 id="dishes-heading" class="reveal">Signature <em>dishes.</em></h2>
-        <div class="dish-grid">
+        <h2 id="menu-heading" class="reveal">Made over <em>fire.</em></h2>
+        <p class="lede reveal">Tap <strong>+ Add</strong> on anything you like — your order goes straight to our kitchen on WhatsApp. Pickup in ~25 minutes, or we deliver within 5 km.</p>
 
-          <article class="card reveal">
-            <div class="plate"><img src="assets/chicken-karahi-wok.jpg" alt="Chicken karahi in a black wok with red tomato gravy" width="1024" height="1024" loading="lazy" /></div>
-            <div class="card-body">
-              <div class="card-top"><h3>Chicken Karahi</h3><span class="price">₨1,450</span></div>
-              <p>Wok-tossed in desi ghee with ginger juliennes and green chilies. Our legend since day one.</p>
-              <a class="btn small ghost" href="https://wa.me/920000000000?text=Hello%20Saffron%20House!%20I%27d%20like%20to%20order%3A%20Chicken%20Karahi%20(%E2%82%A81%2C450)." target="_blank" rel="noopener">Order on WhatsApp</a>
-            </div>
+        <div class="tabs reveal" role="tablist" aria-label="Menu categories">
+          <button class="tab active" role="tab" aria-selected="true" aria-controls="panel-starters" id="tab-starters" data-panel="panel-starters">Starters</button>
+          <button class="tab" role="tab" aria-selected="false" aria-controls="panel-bbq" id="tab-bbq" data-panel="panel-bbq" tabindex="-1">BBQ &amp; Grill</button>
+          <button class="tab" role="tab" aria-selected="false" aria-controls="panel-karahi" id="tab-karahi" data-panel="panel-karahi" tabindex="-1">Karahi</button>
+          <button class="tab" role="tab" aria-selected="false" aria-controls="panel-breads" id="tab-breads" data-panel="panel-breads" tabindex="-1">Breads</button>
+          <button class="tab" role="tab" aria-selected="false" aria-controls="panel-rice" id="tab-rice" data-panel="panel-rice" tabindex="-1">Rice</button>
+          <button class="tab" role="tab" aria-selected="false" aria-controls="panel-desserts" id="tab-desserts" data-panel="panel-desserts" tabindex="-1">Desserts</button>
+          <button class="tab" role="tab" aria-selected="false" aria-controls="panel-drinks" id="tab-drinks" data-panel="panel-drinks" tabindex="-1">Drinks</button>
+        </div>
+
+        <!-- STARTERS -->
+        <div class="menu-panel" role="tabpanel" id="panel-starters" aria-labelledby="tab-starters">
+          <article class="mi" data-id="s1" data-name="Chicken Samosa (2 pc)" data-price="250">
+            <div class="plate"><img src="assets/malai-boti-skewers.jpg" alt="Chicken samosa" loading="lazy" width="400" height="400" /></div>
+            <div class="mi-body"><h3>Chicken Samosa <span class="mi-qty-note">(2 pc)</span></h3><p>Crisp golden pastry, spiced chicken &amp; potato filling, imli chutney.</p></div>
+            <div class="mi-side"><span class="price">₨250</span><button class="add-btn" aria-label="Add Chicken Samosa to order">+ Add</button></div>
           </article>
-
-          <article class="card reveal">
-            <div class="plate"><img src="assets/seekh-kebab-platter.jpg" alt="Char-grilled seekh kebab skewers on a sizzling platter" width="1024" height="1024" loading="lazy" /></div>
-            <div class="card-body">
-              <div class="card-top"><h3>Seekh Kebab Platter</h3><span class="price">₨1,250</span></div>
-              <p>Six char-grilled skewers over onions and lemon, served still sizzling.</p>
-              <a class="btn small ghost" href="https://wa.me/920000000000?text=Hello%20Saffron%20House!%20I%27d%20like%20to%20order%3A%20Seekh%20Kebab%20Platter%20(%E2%82%A81%2C250)." target="_blank" rel="noopener">Order on WhatsApp</a>
-            </div>
+          <article class="mi" data-id="s2" data-name="Dahi Bhalla Chaat" data-price="350">
+            <div class="plate"><img src="assets/gulab-jamun.jpg" alt="Dahi bhalla chaat" loading="lazy" width="400" height="400" /></div>
+            <div class="mi-body"><h3>Dahi Bhalla Chaat</h3><p>Lentil dumplings under whipped yogurt, tamarind, pomegranate.</p></div>
+            <div class="mi-side"><span class="price">₨350</span><button class="add-btn" aria-label="Add Dahi Bhalla Chaat to order">+ Add</button></div>
           </article>
-
-          <article class="card reveal">
-            <div class="plate"><img src="assets/chicken-biryani.jpg" alt="Chicken biryani with saffron rice in a traditional handi" width="1024" height="1024" loading="lazy" /></div>
-            <div class="card-body">
-              <div class="card-top"><h3>Chicken Biryani</h3><span class="price">₨380</span></div>
-              <p>Fragrant saffron basmati layered over tender chicken, with cool raita.</p>
-              <a class="btn small ghost" href="https://wa.me/920000000000?text=Hello%20Saffron%20House!%20I%27d%20like%20to%20order%3A%20Chicken%20Biryani%20(%E2%82%A8380)." target="_blank" rel="noopener">Order on WhatsApp</a>
-            </div>
+          <article class="mi" data-id="s3" data-name="Fish Pakora" data-price="550">
+            <div class="plate"><img src="assets/seekh-kebab-platter.jpg" alt="Fish pakora" loading="lazy" width="400" height="400" /></div>
+            <div class="mi-body"><h3>Fish Pakora</h3><p>River fish in ajwain-spiced gram flour batter, fried to order.</p></div>
+            <div class="mi-side"><span class="price">₨550</span><button class="add-btn" aria-label="Add Fish Pakora to order">+ Add</button></div>
           </article>
-
-          <article class="card reveal">
-            <div class="plate"><img src="assets/malai-boti-skewers.jpg" alt="Creamy malai boti chicken skewers with mint chutney" width="1024" height="1024" loading="lazy" /></div>
-            <div class="card-body">
-              <div class="card-top"><h3>Malai Boti Skewers</h3><span class="price">₨950</span></div>
-              <p>Cream-marinated chicken cubes, char-kissed and melt-soft, with mint chutney.</p>
-              <a class="btn small ghost" href="https://wa.me/920000000000?text=Hello%20Saffron%20House!%20I%27d%20like%20to%20order%3A%20Malai%20Boti%20Skewers%20(%E2%82%A8950)." target="_blank" rel="noopener">Order on WhatsApp</a>
-            </div>
+          <article class="mi" data-id="s4" data-name="Chicken Corn Soup" data-price="400">
+            <div class="plate mono" aria-hidden="true"><span>C</span></div>
+            <div class="mi-body"><h3>Chicken Corn Soup</h3><p>Slow-simmered classic with shredded chicken &amp; sweet corn.</p></div>
+            <div class="mi-side"><span class="price">₨400</span><button class="add-btn" aria-label="Add Chicken Corn Soup to order">+ Add</button></div>
           </article>
+        </div>
 
-          <article class="card reveal">
-            <div class="plate"><img src="assets/garlic-naan-basket.jpg" alt="Basket of fresh garlic naan brushed with butter" width="1024" height="1024" loading="lazy" /></div>
-            <div class="card-body">
-              <div class="card-top"><h3>Garlic Naan Basket</h3><span class="price">₨320</span></div>
-              <p>Tandoor-fresh naan brushed with garlic butter — made for mopping up karahi.</p>
-              <a class="btn small ghost" href="https://wa.me/920000000000?text=Hello%20Saffron%20House!%20I%27d%20like%20to%20order%3A%20Garlic%20Naan%20Basket%20(%E2%82%A8320)." target="_blank" rel="noopener">Order on WhatsApp</a>
-            </div>
+        <!-- BBQ & GRILL -->
+        <div class="menu-panel" role="tabpanel" id="panel-bbq" aria-labelledby="tab-bbq" hidden>
+          <article class="mi" data-id="b1" data-name="Seekh Kebab Platter" data-price="1250">
+            <div class="plate"><img src="assets/seekh-kebab-platter.jpg" alt="Seekh kebab platter" loading="lazy" width="400" height="400" /></div>
+            <div class="mi-body"><h3>Seekh Kebab Platter</h3><p>Six char-grilled skewers over onions and lemon, served sizzling.</p></div>
+            <div class="mi-side"><span class="price">₨1,250</span><button class="add-btn" aria-label="Add Seekh Kebab Platter to order">+ Add</button></div>
           </article>
-
-          <article class="card reveal">
-            <div class="plate"><img src="assets/gulab-jamun.jpg" alt="Gulab jamun dumplings in syrup with pistachio garnish" width="1024" height="1024" loading="lazy" /></div>
-            <div class="card-body">
-              <div class="card-top"><h3>Gulab Jamun</h3><span class="price">₨350</span></div>
-              <p>Warm syrup-soaked dumplings with crushed pistachio. The only right ending.</p>
-              <a class="btn small ghost" href="https://wa.me/920000000000?text=Hello%20Saffron%20House!%20I%27d%20like%20to%20order%3A%20Gulab%20Jamun%20(%E2%82%A8350)." target="_blank" rel="noopener">Order on WhatsApp</a>
-            </div>
+          <article class="mi" data-id="b2" data-name="Malai Boti Skewers" data-price="950">
+            <div class="plate"><img src="assets/malai-boti-skewers.jpg" alt="Malai boti skewers" loading="lazy" width="400" height="400" /></div>
+            <div class="mi-body"><h3>Malai Boti Skewers</h3><p>Cream-marinated chicken, char-kissed and melt-soft, mint chutney.</p></div>
+            <div class="mi-side"><span class="price">₨950</span><button class="add-btn" aria-label="Add Malai Boti Skewers to order">+ Add</button></div>
           </article>
+          <article class="mi" data-id="b3" data-name="Chicken Tikka (4 pc)" data-price="750">
+            <div class="plate"><img src="assets/seekh-kebab-platter.jpg" alt="Chicken tikka" loading="lazy" width="400" height="400" /></div>
+            <div class="mi-body"><h3>Chicken Tikka <span class="mi-qty-note">(4 pc)</span></h3><p>Overnight yogurt marinade, smoked over real coals.</p></div>
+            <div class="mi-side"><span class="price">₨750</span><button class="add-btn" aria-label="Add Chicken Tikka to order">+ Add</button></div>
+          </article>
+          <article class="mi" data-id="b4" data-name="Behari Kebab" data-price="1100">
+            <div class="plate"><img src="assets/malai-boti-skewers.jpg" alt="Behari kebab" loading="lazy" width="400" height="400" /></div>
+            <div class="mi-body"><h3>Behari Kebab</h3><p>Thin beef strips, mustard-oil marinade, caramelised edges.</p></div>
+            <div class="mi-side"><span class="price">₨1,100</span><button class="add-btn" aria-label="Add Behari Kebab to order">+ Add</button></div>
+          </article>
+        </div>
 
+        <!-- KARAHI -->
+        <div class="menu-panel" role="tabpanel" id="panel-karahi" aria-labelledby="tab-karahi" hidden>
+          <article class="mi" data-id="k1" data-name="Chicken Karahi (Half)" data-price="1450">
+            <div class="plate"><img src="assets/chicken-karahi-wok.jpg" alt="Chicken karahi" loading="lazy" width="400" height="400" /></div>
+            <div class="mi-body"><h3>Chicken Karahi <span class="mi-qty-note">(Half)</span></h3><p>Wok-tossed in desi ghee with ginger &amp; green chilies. Our legend.</p></div>
+            <div class="mi-side"><span class="price">₨1,450</span><button class="add-btn" aria-label="Add Chicken Karahi half to order">+ Add</button></div>
+          </article>
+          <article class="mi" data-id="k2" data-name="Chicken Karahi (Full)" data-price="2750">
+            <div class="plate"><img src="assets/chicken-karahi-wok.jpg" alt="Chicken karahi full" loading="lazy" width="400" height="400" /></div>
+            <div class="mi-body"><h3>Chicken Karahi <span class="mi-qty-note">(Full)</span></h3><p>The full wok — built for the whole table, extra desi ghee.</p></div>
+            <div class="mi-side"><span class="price">₨2,750</span><button class="add-btn" aria-label="Add Chicken Karahi full to order">+ Add</button></div>
+          </article>
+          <article class="mi" data-id="k3" data-name="White Chicken Karahi" data-price="1650">
+            <div class="plate"><img src="assets/chicken-karahi-wok.jpg" alt="White chicken karahi" loading="lazy" width="400" height="400" /></div>
+            <div class="mi-body"><h3>White Chicken Karahi</h3><p>Cream, black pepper &amp; green chili — the Lahori alter-ego.</p></div>
+            <div class="mi-side"><span class="price">₨1,650</span><button class="add-btn" aria-label="Add White Chicken Karahi to order">+ Add</button></div>
+          </article>
+          <article class="mi" data-id="k4" data-name="Mutton Karahi" data-price="2950">
+            <div class="plate"><img src="assets/chicken-karahi-wok.jpg" alt="Mutton karahi" loading="lazy" width="400" height="400" /></div>
+            <div class="mi-body"><h3>Mutton Karahi</h3><p>Slow-tendered mutton, tomato &amp; julienned ginger. Worth the wait.</p></div>
+            <div class="mi-side"><span class="price">₨2,950</span><button class="add-btn" aria-label="Add Mutton Karahi to order">+ Add</button></div>
+          </article>
+        </div>
+
+        <!-- BREADS -->
+        <div class="menu-panel" role="tabpanel" id="panel-breads" aria-labelledby="tab-breads" hidden>
+          <article class="mi" data-id="r1" data-name="Garlic Naan Basket" data-price="320">
+            <div class="plate"><img src="assets/garlic-naan-basket.jpg" alt="Garlic naan basket" loading="lazy" width="400" height="400" /></div>
+            <div class="mi-body"><h3>Garlic Naan Basket</h3><p>Tandoor-fresh naan brushed with garlic butter — made for mopping.</p></div>
+            <div class="mi-side"><span class="price">₨320</span><button class="add-btn" aria-label="Add Garlic Naan Basket to order">+ Add</button></div>
+          </article>
+          <article class="mi" data-id="r2" data-name="Roghni Naan" data-price="120">
+            <div class="plate"><img src="assets/garlic-naan-basket.jpg" alt="Roghni naan" loading="lazy" width="400" height="400" /></div>
+            <div class="mi-body"><h3>Roghni Naan</h3><p>Sesame-crusted, pillowy, straight from the clay oven.</p></div>
+            <div class="mi-side"><span class="price">₨120</span><button class="add-btn" aria-label="Add Roghni Naan to order">+ Add</button></div>
+          </article>
+          <article class="mi" data-id="r3" data-name="Cheese Naan" data-price="280">
+            <div class="plate"><img src="assets/garlic-naan-basket.jpg" alt="Cheese naan" loading="lazy" width="400" height="400" /></div>
+            <div class="mi-body"><h3>Cheese Naan</h3><p>Molten cheese core with a coriander finish. Dangerously good.</p></div>
+            <div class="mi-side"><span class="price">₨280</span><button class="add-btn" aria-label="Add Cheese Naan to order">+ Add</button></div>
+          </article>
+          <article class="mi" data-id="r4" data-name="Tandoori Roti" data-price="60">
+            <div class="plate"><img src="assets/garlic-naan-basket.jpg" alt="Tandoori roti" loading="lazy" width="400" height="400" /></div>
+            <div class="mi-body"><h3>Tandoori Roti</h3><p>Whole-wheat, blistered in the tandoor. The honest workhorse.</p></div>
+            <div class="mi-side"><span class="price">₨60</span><button class="add-btn" aria-label="Add Tandoori Roti to order">+ Add</button></div>
+          </article>
+        </div>
+
+        <!-- RICE -->
+        <div class="menu-panel" role="tabpanel" id="panel-rice" aria-labelledby="tab-rice" hidden>
+          <article class="mi" data-id="c1" data-name="Chicken Biryani" data-price="380">
+            <div class="plate"><img src="assets/chicken-biryani.jpg" alt="Chicken biryani" loading="lazy" width="400" height="400" /></div>
+            <div class="mi-body"><h3>Chicken Biryani</h3><p>Fragrant saffron basmati layered over tender chicken, cool raita.</p></div>
+            <div class="mi-side"><span class="price">₨380</span><button class="add-btn" aria-label="Add Chicken Biryani to order">+ Add</button></div>
+          </article>
+          <article class="mi" data-id="c2" data-name="Beef Biryani" data-price="450">
+            <div class="plate"><img src="assets/chicken-biryani.jpg" alt="Beef biryani" loading="lazy" width="400" height="400" /></div>
+            <div class="mi-body"><h3>Beef Biryani</h3><p>Slow-cooked beef folded through spiced basmati, crispy onions.</p></div>
+            <div class="mi-side"><span class="price">₨450</span><button class="add-btn" aria-label="Add Beef Biryani to order">+ Add</button></div>
+          </article>
+          <article class="mi" data-id="c3" data-name="Vegetable Pulao" data-price="300">
+            <div class="plate"><img src="assets/chicken-biryani.jpg" alt="Vegetable pulao" loading="lazy" width="400" height="400" /></div>
+            <div class="mi-body"><h3>Vegetable Pulao</h3><p>Yakhni-steamed basmati with seasonal vegetables &amp; whole spices.</p></div>
+            <div class="mi-side"><span class="price">₨300</span><button class="add-btn" aria-label="Add Vegetable Pulao to order">+ Add</button></div>
+          </article>
+          <article class="mi" data-id="c4" data-name="Chicken Fried Rice" data-price="550">
+            <div class="plate"><img src="assets/chicken-biryani.jpg" alt="Chicken fried rice" loading="lazy" width="400" height="400" /></div>
+            <div class="mi-body"><h3>Chicken Fried Rice</h3><p>Wok-breath basmati, egg ribbons, spring onion. Continental corner.</p></div>
+            <div class="mi-side"><span class="price">₨550</span><button class="add-btn" aria-label="Add Chicken Fried Rice to order">+ Add</button></div>
+          </article>
+        </div>
+
+        <!-- DESSERTS -->
+        <div class="menu-panel" role="tabpanel" id="panel-desserts" aria-labelledby="tab-desserts" hidden>
+          <article class="mi" data-id="d1" data-name="Gulab Jamun (4 pc)" data-price="350">
+            <div class="plate"><img src="assets/gulab-jamun.jpg" alt="Gulab jamun" loading="lazy" width="400" height="400" /></div>
+            <div class="mi-body"><h3>Gulab Jamun <span class="mi-qty-note">(4 pc)</span></h3><p>Warm syrup-soaked dumplings, crushed pistachio. The only right ending.</p></div>
+            <div class="mi-side"><span class="price">₨350</span><button class="add-btn" aria-label="Add Gulab Jamun to order">+ Add</button></div>
+          </article>
+          <article class="mi" data-id="d2" data-name="Kheer" data-price="300">
+            <div class="plate"><img src="assets/gulab-jamun.jpg" alt="Kheer" loading="lazy" width="400" height="400" /></div>
+            <div class="mi-body"><h3>Kheer</h3><p>Slow-stirred rice pudding, cardamom, silver leaf.</p></div>
+            <div class="mi-side"><span class="price">₨300</span><button class="add-btn" aria-label="Add Kheer to order">+ Add</button></div>
+          </article>
+          <article class="mi" data-id="d3" data-name="Shahi Tukra" data-price="400">
+            <div class="plate"><img src="assets/gulab-jamun.jpg" alt="Shahi tukra" loading="lazy" width="400" height="400" /></div>
+            <div class="mi-body"><h3>Shahi Tukra</h3><p>Saffron-soaked bread pudding, rabri, toasted almonds.</p></div>
+            <div class="mi-side"><span class="price">₨400</span><button class="add-btn" aria-label="Add Shahi Tukra to order">+ Add</button></div>
+          </article>
+          <article class="mi" data-id="d4" data-name="Kulfi Falooda" data-price="450">
+            <div class="plate"><img src="assets/gulab-jamun.jpg" alt="Kulfi falooda" loading="lazy" width="400" height="400" /></div>
+            <div class="mi-body"><h3>Kulfi Falooda</h3><p>Dense hand-churned kulfi over vermicelli, basil seeds, rose syrup.</p></div>
+            <div class="mi-side"><span class="price">₨450</span><button class="add-btn" aria-label="Add Kulfi Falooda to order">+ Add</button></div>
+          </article>
+        </div>
+
+        <!-- DRINKS -->
+        <div class="menu-panel" role="tabpanel" id="panel-drinks" aria-labelledby="tab-drinks" hidden>
+          <article class="mi" data-id="v1" data-name="Mango Lassi" data-price="350">
+            <div class="plate mono" aria-hidden="true"><span>M</span></div>
+            <div class="mi-body"><h3>Mango Lassi</h3><p>Chaunsa mangoes churned with creamy yogurt, cardamom dust.</p></div>
+            <div class="mi-side"><span class="price">₨350</span><button class="add-btn" aria-label="Add Mango Lassi to order">+ Add</button></div>
+          </article>
+          <article class="mi" data-id="v2" data-name="Fresh Lime Soda" data-price="250">
+            <div class="plate mono" aria-hidden="true"><span>L</span></div>
+            <div class="mi-body"><h3>Fresh Lime Soda</h3><p>Hand-pressed lime, soda, black salt. The karahi's best friend.</p></div>
+            <div class="mi-side"><span class="price">₨250</span><button class="add-btn" aria-label="Add Fresh Lime Soda to order">+ Add</button></div>
+          </article>
+          <article class="mi" data-id="v3" data-name="Kashmiri Chai" data-price="200">
+            <div class="plate mono" aria-hidden="true"><span>K</span></div>
+            <div class="mi-body"><h3>Kashmiri Chai</h3><p>Pink salt tea, crushed pistachio &amp; almond. Brewed slow.</p></div>
+            <div class="mi-side"><span class="price">₨200</span><button class="add-btn" aria-label="Add Kashmiri Chai to order">+ Add</button></div>
+          </article>
+          <article class="mi" data-id="v4" data-name="Soft Drink" data-price="150">
+            <div class="plate mono" aria-hidden="true"><span>S</span></div>
+            <div class="mi-body"><h3>Soft Drink</h3><p>Chilled can — Coke, Sprite or Fanta.</p></div>
+            <div class="mi-side"><span class="price">₨150</span><button class="add-btn" aria-label="Add Soft Drink to order">+ Add</button></div>
+          </article>
+        </div>
+
+        <p class="menu-foot reveal">Prices include taxes. Delivery within 5 km — <strong>₨200</strong>, free on orders over <strong>₨2,000</strong>.</p>
+      </div>
+    </section>
+
+    <!-- REVIEWS -->
+    <section class="reviews" id="reviews" aria-labelledby="reviews-heading">
+      <div class="wrap">
+        <p class="kicker reveal">Reviews</p>
+        <h2 id="reviews-heading" class="reveal">Lahore keeps <em>coming back.</em></h2>
+        <div class="review-grid">
+          <article class="review-card reveal">
+            <div class="stars" role="img" aria-label="Rated 5 out of 5">★★★★★</div>
+            <p>"The chicken karahi is genuinely the best I've had outside home. Sizzling when it hits the table — my kids fight over the crispy bits."</p>
+            <footer><strong>Fatima Khan</strong><span>DHA, Lahore</span></footer>
+          </article>
+          <article class="review-card reveal">
+            <div class="stars" role="img" aria-label="Rated 5 out of 5">★★★★★</div>
+            <p>"Ordered pickup on WhatsApp at 7:40, eating by 8:05. Faster than any app and the seekh kebabs were still smoking."</p>
+            <footer><strong>Bilal Hussain</strong><span>Gulberg, Lahore</span></footer>
+          </article>
+          <article class="review-card reveal">
+            <div class="stars" role="img" aria-label="Rated 5 out of 5">★★★★★</div>
+            <p>"Booked for my father's 60th — twelve people, zero chaos. The staff treated us like family. The mutton karahi alone is worth the drive."</p>
+            <footer><strong>Ayesha Malik</strong><span>Model Town, Lahore</span></footer>
+          </article>
+          <article class="review-card reveal">
+            <div class="stars" role="img" aria-label="Rated 4 out of 5">★★★★<span class="dim">★</span></div>
+            <p>"Malai boti melts in the mouth. Friday nights get packed so reserve ahead — learned that the delicious way."</p>
+            <footer><strong>Usman Tariq</strong><span>Johar Town, Lahore</span></footer>
+          </article>
+          <article class="review-card reveal">
+            <div class="stars" role="img" aria-label="Rated 5 out of 5">★★★★★</div>
+            <p>"White karahi + garlic naan + kashmiri chai. I dream about this combination. Prices are honest for this quality."</p>
+            <footer><strong>Sana Javed</strong><span>Cantt, Lahore</span></footer>
+          </article>
+          <article class="review-card reveal">
+            <div class="stars" role="img" aria-label="Rated 5 out of 5">★★★★★</div>
+            <p>"Took clients here for dinner — the room looks premium and the food backed it up. Behari kebab is a must-order."</p>
+            <footer><strong>Ahmed Raza</strong><span>Gulberg, Lahore</span></footer>
+          </article>
         </div>
       </div>
     </section>
 
     <!-- ABOUT -->
-    <section id="about" aria-labelledby="about-heading">
+    <section class="about" id="about" aria-labelledby="about-heading">
       <div class="wrap about-grid">
         <div class="reveal">
           <p class="kicker">Our Story</p>
           <h2 id="about-heading">A six-table grill <em>that grew up.</em></h2>
           <p>Saffron House started in 2019 as a six-table grill corner in Gulberg, with one wok, one tandoor, and a family recipe for karahi that regulars still ask about by name. Seven years later the room is bigger and the menu runs from smoky desi BBQ to continental grills — but every plate still leaves the kitchen the way it did on day one: sizzling, generous, and made to be shared.</p>
+          <p>We cook over real coals, grind our spices in-house every morning, and never let a plate sit under a heat lamp. That's the whole philosophy.</p>
         </div>
-        <div class="reveal">
+        <div class="reveal about-visual">
+          <div class="plate big"><img src="assets/seekh-kebab-platter.jpg" alt="Seekh kebabs grilling over real coals at Saffron House" loading="lazy" width="1024" height="1024" /></div>
           <div class="about-badge">Est.<br />2019<br />Lahore</div>
         </div>
       </div>
@@ -187,32 +376,67 @@
           <div class="visit-card reveal">
             <h3>Hours</h3>
             <dl>
-              <dt>Monday – Sunday</dt>
-              <dd>12:00 PM – 12:00 AM</dd>
-              <dt>Friday break</dt>
-              <dd>1:00 PM – 2:30 PM</dd>
+              <div><dt>Monday – Sunday</dt><dd>12:00 PM – 12:00 AM</dd></div>
+              <div><dt>Friday break</dt><dd>1:00 PM – 2:30 PM</dd></div>
+              <div><dt>Kitchen closes</dt><dd>11:30 PM</dd></div>
             </dl>
           </div>
           <div class="visit-card reveal">
             <h3>Location</h3>
             <dl>
-              <dt>Address</dt>
-              <dd>12-B Main Boulevard,<br />Gulberg III, Lahore</dd>
-              <dt>Phone</dt>
-              <dd><a href="tel:+923000000000">+92 300 0000000</a></dd>
+              <div><dt>Address</dt><dd>12-B Main Boulevard,<br />Gulberg III, Lahore</dd></div>
+              <div><dt>Phone</dt><dd><a href="tel:+923000000000">+92 300 0000000</a></dd></div>
+              <div><dt>Parking</dt><dd>Valet after 7 PM</dd></div>
             </dl>
           </div>
+        </div>
+        <div class="map-wrap reveal">
+          <iframe title="Map — Saffron House, Main Boulevard, Gulberg III, Lahore" src="https://www.google.com/maps?q=Main+Boulevard+Gulberg+III+Lahore+Pakistan&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
         </div>
       </div>
     </section>
 
     <!-- RESERVE -->
-    <section class="reserve" aria-labelledby="reserve-heading">
+    <section class="reserve" id="reserve" aria-labelledby="reserve-heading">
       <div class="wrap">
         <p class="kicker reveal">No apps · No accounts</p>
         <h2 id="reserve-heading" class="reveal">Book your table in <em>one tap.</em></h2>
-        <p class="lede reveal" style="margin-left:auto;margin-right:auto;text-align:center;">Tap below — your table request opens straight in WhatsApp. We confirm within minutes.</p>
-        <a class="btn reveal" href="https://wa.me/920000000000?text=Hello%20Saffron%20House!%20I%27d%20like%20to%20reserve%20a%20table." target="_blank" rel="noopener">Reserve a Table on WhatsApp</a>
+        <p class="lede reveal center">Tell us when — your request opens straight in WhatsApp and we confirm within minutes.</p>
+        <form class="reserve-form reveal" id="reserveForm" novalidate>
+          <div class="field">
+            <label for="rName">Your name</label>
+            <input id="rName" name="name" type="text" placeholder="e.g. Ahmed Raza" autocomplete="name" required />
+          </div>
+          <div class="field">
+            <label for="rPhone">Phone</label>
+            <input id="rPhone" name="phone" type="tel" placeholder="03xx xxxxxxx" autocomplete="tel" required />
+          </div>
+          <div class="field">
+            <label for="rDate">Date</label>
+            <input id="rDate" name="date" type="date" required />
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="rTime">Time</label>
+              <select id="rTime" name="time" required>
+                <option value="" disabled selected>Pick a time</option>
+                <option>12:30 PM</option><option>1:30 PM</option><option>2:30 PM</option>
+                <option>5:00 PM</option><option>6:00 PM</option><option>7:00 PM</option>
+                <option>8:00 PM</option><option>9:00 PM</option><option>10:00 PM</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="rGuests">Guests</label>
+              <select id="rGuests" name="guests" required>
+                <option value="" disabled selected>How many?</option>
+                <option>2 guests</option><option>3 guests</option><option>4 guests</option>
+                <option>5 guests</option><option>6 guests</option><option>8+ guests (we'll call you)</option>
+              </select>
+            </div>
+          </div>
+          <p class="form-error" id="reserveError" role="alert" hidden>Please fill in every field so we can confirm your table.</p>
+          <button class="btn big" type="submit">Reserve on WhatsApp</button>
+        </form>
       </div>
     </section>
 
@@ -224,6 +448,44 @@
       <span class="demo-note">Demo site by <a href="../../">RS Works</a> — want one like this for your restaurant?</span>
     </div>
   </footer>
+
+  <!-- Sticky mobile bar -->
+  <nav class="mobile-bar" aria-label="Quick actions">
+    <a href="#menu" class="mb-btn">Order</a>
+    <button class="mb-btn cart" id="cartOpenBtnMobile" aria-label="Open your order">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <span class="cart-count" id="cartCountMobile" aria-hidden="true">0</span>
+    </button>
+    <a href="#reserve" class="mb-btn accent">Reserve</a>
+  </nav>
+
+  <!-- Cart drawer -->
+  <div class="cart-backdrop" id="cartBackdrop" hidden></div>
+  <aside class="cart-drawer" id="cartDrawer" role="dialog" aria-modal="true" aria-labelledby="cartTitle" hidden>
+    <div class="cart-head">
+      <h2 id="cartTitle">Your Order</h2>
+      <button class="cart-close" id="cartCloseBtn" aria-label="Close your order">✕</button>
+    </div>
+    <p class="cart-empty" id="cartEmpty">Your plate is empty — add something delicious from the menu.</p>
+    <ul class="cart-items" id="cartItems"></ul>
+    <div class="cart-foot" id="cartFoot" hidden>
+      <div class="field">
+        <label for="custName">Your name</label>
+        <input id="custName" type="text" placeholder="e.g. Ahmed Raza" autocomplete="name" />
+      </div>
+      <div class="order-type" role="group" aria-label="Pickup or delivery">
+        <button type="button" class="ot-btn active" data-type="Pickup" aria-pressed="true">Pickup <small>~25 min</small></button>
+        <button type="button" class="ot-btn" data-type="Delivery" aria-pressed="false">Delivery <small>₨200 · free over ₨2,000</small></button>
+      </div>
+      <dl class="totals">
+        <div><dt>Subtotal</dt><dd id="tSub">₨0</dd></div>
+        <div><dt>Delivery</dt><dd id="tDel">—</dd></div>
+        <div class="grand"><dt>Total</dt><dd id="tGrand">₨0</dd></div>
+      </dl>
+      <a class="btn big wa-checkout" id="waCheckout" href="#" target="_blank" rel="noopener">Send Order on WhatsApp</a>
+      <p class="cart-note">No apps, no accounts — your order opens in WhatsApp and goes straight to our kitchen.</p>
+    </div>
+  </aside>
 
 </body>
 </html>
