@@ -159,8 +159,15 @@ strong { font-weight: 600; }
 /* ---------- Menu ---------- */
 .menu { background: var(--bg2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 /* Slow plate turn on menu dish photos */
-.mi .plate img { animation: menu-plate-spin 30s linear infinite; }
+.mi .plate img { animation: menu-plate-spin 24s linear infinite; }
 @keyframes menu-plate-spin { to { transform: rotate(360deg); } }
+.mi .plate::before {
+  content: ""; position: absolute; inset: 5px; border-radius: 50%; z-index: 1;
+  background: conic-gradient(from 0deg, transparent 0deg, rgba(255,240,210,.16) 45deg, transparent 110deg);
+  mix-blend-mode: screen; pointer-events: none;
+  animation: plate-sheen 12s linear infinite;
+}
+@keyframes plate-sheen { to { transform: rotate(360deg); } }
 .tabs {
   display: flex; gap: 10px; margin: 34px 0 30px; overflow-x: auto; padding-bottom: 6px;
   scrollbar-width: thin; -webkit-overflow-scrolling: touch;
