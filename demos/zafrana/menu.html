@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Menu — Zafrana Afghan Kitchen, Lewisham | 100% Halal</title>
-<meta name="description" content="The Zafrana menu: bolani, mantu and ashak starters; charcoal kebabs, chops and mixed grill; kabuli pilaw, karahis and slow mains. Halal Afghan food in Lewisham.">
+<meta name="description" content="The Zafrana menu: bolani, mantu and ashak starters; charcoal kebabs, chops and mixed grill; kabuli pilaw, karahis and slow mains. Order online for collection or delivery. Halal Afghan food in Lewisham.">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -19,7 +19,7 @@
       <a href="menu.html" class="active">Menu</a>
       <a href="story.html">Our Story</a>
       <a href="visit.html">Visit Us</a>
-      <a class="btn" href="https://wa.me/442079460018?text=Hello%20Zafrana%2C%20I%27d%20like%20to%20order" target="_blank" rel="noopener">Order on WhatsApp</a>
+      <a class="btn" href="menu.html">Order online</a>
     </nav>
     <button class="burger" onclick="document.getElementById('navLinks').classList.toggle('open')" aria-label="Menu">☰</button>
   </div>
@@ -30,7 +30,7 @@
   <div class="wrap">
     <span class="eyebrow">The menu</span>
     <h1>Twenty-five dishes, one charcoal grill.</h1>
-    <p>Everything 100% halal. Ask our team about allergens — vegetarian plates are marked, and we'll always tell you honestly what's in a dish.</p>
+    <p>Everything 100% halal. Tap <b>Add</b> to build your order, then send it straight to our WhatsApp — pay at the counter or on delivery. Ask our team about allergens; vegetarian plates are marked.</p>
   </div>
 </section>
 
@@ -47,62 +47,76 @@
     <span class="eyebrow">To begin</span>
     <h2>Starters</h2>
     <p class="g-lede">Folded, steamed and baked through the day — order a few for the table.</p>
-    <div class="item"><h3>Bolani <span class="tag">Vegetarian</span></h3><span class="p">£5.95</span><p class="desc">Crisp stuffed flatbread with leek and potato, green chutney and yogurt.</p></div>
-    <div class="item"><h3>Mantu</h3><span class="p">£6.95</span><p class="desc">Steamed beef dumplings, garlic yogurt, split-pea sauce, dried mint.</p></div>
-    <div class="item"><h3>Ashak <span class="tag">Vegetarian</span></h3><span class="p">£6.50</span><p class="desc">Leek and spring-onion dumplings under spiced tomato and yogurt.</p></div>
-    <div class="item"><h3>Borani Badenjan <span class="tag">Vegetarian</span></h3><span class="p">£5.50</span><p class="desc">Slow aubergine in tomato, finished with yogurt and warm naan.</p></div>
-    <div class="item"><h3>Shorwa</h3><span class="p">£4.95</span><p class="desc">The day's soup — usually lamb and vegetable, always built from stock, never a packet.</p></div>
+    <div class="item" data-name="Bolani" data-price="5.95"><img class="thumb" src="assets/dish-bolani.jpg" alt="Bolani — crisp stuffed Afghan flatbread with chutney and yogurt" loading="lazy"><div class="item-main"><h3>Bolani <span class="tag">Vegetarian</span></h3><p class="desc">Crisp stuffed flatbread with leek and potato, green chutney and yogurt.</p></div><div class="item-side"><span class="p">£5.95</span><button class="add-btn" type="button">Add</button><div class="stepper" hidden><button type="button" class="dec" aria-label="One less">−</button><span class="qty">1</span><button type="button" class="inc" aria-label="One more">+</button></div></div></div>
+    <div class="item" data-name="Mantu" data-price="6.95"><img class="thumb" src="assets/dish-mantu.jpg" alt="Mantu — steamed beef dumplings with garlic yogurt" loading="lazy"><div class="item-main"><h3>Mantu</h3><p class="desc">Steamed beef dumplings, garlic yogurt, split-pea sauce, dried mint.</p></div><div class="item-side"><span class="p">£6.95</span><button class="add-btn" type="button">Add</button><div class="stepper" hidden><button type="button" class="dec" aria-label="One less">−</button><span class="qty">1</span><button type="button" class="inc" aria-label="One more">+</button></div></div></div>
+    <div class="item" data-name="Ashak" data-price="6.50"><div class="item-main"><h3>Ashak <span class="tag">Vegetarian</span></h3><p class="desc">Leek and spring-onion dumplings under spiced tomato and yogurt.</p></div><div class="item-side"><span class="p">£6.50</span><button class="add-btn" type="button">Add</button><div class="stepper" hidden><button type="button" class="dec" aria-label="One less">−</button><span class="qty">1</span><button type="button" class="inc" aria-label="One more">+</button></div></div></div>
+    <div class="item" data-name="Borani Badenjan" data-price="5.50"><div class="item-main"><h3>Borani Badenjan <span class="tag">Vegetarian</span></h3><p class="desc">Slow aubergine in tomato, finished with yogurt and warm naan.</p></div><div class="item-side"><span class="p">£5.50</span><button class="add-btn" type="button">Add</button><div class="stepper" hidden><button type="button" class="dec" aria-label="One less">−</button><span class="qty">1</span><button type="button" class="inc" aria-label="One more">+</button></div></div></div>
+    <div class="item" data-name="Shorwa" data-price="4.95"><div class="item-main"><h3>Shorwa</h3><p class="desc">The day's soup — usually lamb and vegetable, always built from stock, never a packet.</p></div><div class="item-side"><span class="p">£4.95</span><button class="add-btn" type="button">Add</button><div class="stepper" hidden><button type="button" class="dec" aria-label="One less">−</button><span class="qty">1</span><button type="button" class="inc" aria-label="One more">+</button></div></div></div>
   </div>
-
   <div class="menu-group" id="grill">
     <span class="eyebrow">Real charcoal, cooked to order</span>
     <h2>From the grill</h2>
     <p class="g-lede">Each plate lands on warm naan with grilled tomato, red onion and salad.</p>
-    <div class="item"><h3>Seekh Kebab</h3><span class="p">£13.95</span><p class="desc">Hand-minced lamb, green chilli and coriander, two long skewers.</p></div>
-    <div class="item"><h3>Chicken Tikka</h3><span class="p">£12.95</span><p class="desc">Overnight marinade, charred at the edges the way it should be.</p></div>
-    <div class="item"><h3>Lamb Chops</h3><span class="p">£17.95</span><p class="desc">Four cutlets, house spice rub, rested before they reach you.</p></div>
-    <div class="item"><h3>Mixed Grill <span class="tag">For sharing</span></h3><span class="p">£24.95</span><p class="desc">Seekh kebab, chicken tikka and lamb chops on one platter — built for two, ordered by one.</p></div>
+    <div class="item" data-name="Seekh Kebab" data-price="13.95"><div class="item-main"><h3>Seekh Kebab</h3><p class="desc">Hand-minced lamb, green chilli and coriander, two long skewers.</p></div><div class="item-side"><span class="p">£13.95</span><button class="add-btn" type="button">Add</button><div class="stepper" hidden><button type="button" class="dec" aria-label="One less">−</button><span class="qty">1</span><button type="button" class="inc" aria-label="One more">+</button></div></div></div>
+    <div class="item" data-name="Chicken Tikka" data-price="12.95"><div class="item-main"><h3>Chicken Tikka</h3><p class="desc">Overnight marinade, charred at the edges the way it should be.</p></div><div class="item-side"><span class="p">£12.95</span><button class="add-btn" type="button">Add</button><div class="stepper" hidden><button type="button" class="dec" aria-label="One less">−</button><span class="qty">1</span><button type="button" class="inc" aria-label="One more">+</button></div></div></div>
+    <div class="item" data-name="Lamb Chops" data-price="17.95"><div class="item-main"><h3>Lamb Chops</h3><p class="desc">Four cutlets, house spice rub, rested before they reach you.</p></div><div class="item-side"><span class="p">£17.95</span><button class="add-btn" type="button">Add</button><div class="stepper" hidden><button type="button" class="dec" aria-label="One less">−</button><span class="qty">1</span><button type="button" class="inc" aria-label="One more">+</button></div></div></div>
+    <div class="item" data-name="Mixed Grill" data-price="24.95"><img class="thumb" src="assets/dish-grill.jpg" alt="Mixed grill — kebabs and chops over charcoal" loading="lazy"><div class="item-main"><h3>Mixed Grill <span class="tag">For sharing</span></h3><p class="desc">Seekh kebab, chicken tikka and lamb chops on one platter — built for two, ordered by one.</p></div><div class="item-side"><span class="p">£24.95</span><button class="add-btn" type="button">Add</button><div class="stepper" hidden><button type="button" class="dec" aria-label="One less">−</button><span class="qty">1</span><button type="button" class="inc" aria-label="One more">+</button></div></div></div>
   </div>
-
   <div class="menu-group" id="mains">
     <span class="eyebrow">The heart of the kitchen</span>
     <h2>Mains</h2>
     <p class="g-lede">Rice steamed in small batches all evening. When a dish is gone, it's gone for the day.</p>
-    <div class="item"><h3>Kabuli Pilaw <span class="tag">House signature</span></h3><span class="p">£16.95</span><p class="desc">Saffron basmati, sweet carrot, raisins, almonds — under slow-cooked lamb shank.</p></div>
-    <div class="item"><h3>Mahicha</h3><span class="p">£18.95</span><p class="desc">Lamb shank braised for hours until it gives up. Saffron rice, salad.</p></div>
-    <div class="item"><h3>Chicken Karahi</h3><span class="p">£14.95</span><p class="desc">Tomato, ginger and green chilli, cooked fast in the karahi. Naan or rice.</p></div>
-    <div class="item"><h3>Lamb Karahi</h3><span class="p">£15.95</span><p class="desc">The same fire, deeper flavour. Best shared with a second naan.</p></div>
-    <div class="item"><h3>Lubia <span class="tag">Vegetarian</span></h3><span class="p">£10.95</span><p class="desc">Kidney beans slow-simmered with saffron rice — humble, rich, filling.</p></div>
-    <div class="item"><h3>Daal <span class="tag">Vegetarian</span></h3><span class="p">£9.95</span><p class="desc">Yellow lentils, gentle heat, a knob of butter to finish.</p></div>
+    <div class="item" data-name="Kabuli Pilaw" data-price="16.95"><img class="thumb" src="assets/dish-kabuli.jpg" alt="Kabuli pilaw — saffron rice with lamb, carrot and raisins" loading="lazy"><div class="item-main"><h3>Kabuli Pilaw <span class="tag">House signature</span></h3><p class="desc">Saffron basmati, sweet carrot, raisins, almonds — under slow-cooked lamb shank.</p></div><div class="item-side"><span class="p">£16.95</span><button class="add-btn" type="button">Add</button><div class="stepper" hidden><button type="button" class="dec" aria-label="One less">−</button><span class="qty">1</span><button type="button" class="inc" aria-label="One more">+</button></div></div></div>
+    <div class="item" data-name="Mahicha" data-price="18.95"><img class="thumb" src="assets/dish-lamb.jpg" alt="Mahicha — slow-braised lamb shank on saffron rice" loading="lazy"><div class="item-main"><h3>Mahicha</h3><p class="desc">Lamb shank braised for hours until it gives up. Saffron rice, salad.</p></div><div class="item-side"><span class="p">£18.95</span><button class="add-btn" type="button">Add</button><div class="stepper" hidden><button type="button" class="dec" aria-label="One less">−</button><span class="qty">1</span><button type="button" class="inc" aria-label="One more">+</button></div></div></div>
+    <div class="item" data-name="Chicken Karahi" data-price="14.95"><div class="item-main"><h3>Chicken Karahi</h3><p class="desc">Tomato, ginger and green chilli, cooked fast in the karahi. Naan or rice.</p></div><div class="item-side"><span class="p">£14.95</span><button class="add-btn" type="button">Add</button><div class="stepper" hidden><button type="button" class="dec" aria-label="One less">−</button><span class="qty">1</span><button type="button" class="inc" aria-label="One more">+</button></div></div></div>
+    <div class="item" data-name="Lamb Karahi" data-price="15.95"><div class="item-main"><h3>Lamb Karahi</h3><p class="desc">The same fire, deeper flavour. Best shared with a second naan.</p></div><div class="item-side"><span class="p">£15.95</span><button class="add-btn" type="button">Add</button><div class="stepper" hidden><button type="button" class="dec" aria-label="One less">−</button><span class="qty">1</span><button type="button" class="inc" aria-label="One more">+</button></div></div></div>
+    <div class="item" data-name="Lubia" data-price="10.95"><div class="item-main"><h3>Lubia <span class="tag">Vegetarian</span></h3><p class="desc">Kidney beans slow-simmered with saffron rice — humble, rich, filling.</p></div><div class="item-side"><span class="p">£10.95</span><button class="add-btn" type="button">Add</button><div class="stepper" hidden><button type="button" class="dec" aria-label="One less">−</button><span class="qty">1</span><button type="button" class="inc" aria-label="One more">+</button></div></div></div>
+    <div class="item" data-name="Daal" data-price="9.95"><div class="item-main"><h3>Daal <span class="tag">Vegetarian</span></h3><p class="desc">Yellow lentils, gentle heat, a knob of butter to finish.</p></div><div class="item-side"><span class="p">£9.95</span><button class="add-btn" type="button">Add</button><div class="stepper" hidden><button type="button" class="dec" aria-label="One less">−</button><span class="qty">1</span><button type="button" class="inc" aria-label="One more">+</button></div></div></div>
   </div>
-
   <div class="menu-group" id="sides">
     <span class="eyebrow">Don't skip the naan</span>
-    <h2>Breads &amp; sides</h2>
-    <div class="item"><h3>Afghan Naan</h3><span class="p">£2.50</span><p class="desc">Baked to order. The long one — you'll know it when it arrives.</p></div>
-    <div class="item"><h3>Saffron Rice</h3><span class="p">£3.50</span></div>
-    <div class="item"><h3>House Salad</h3><span class="p">£3.95</span><p class="desc">Cucumber, tomato, red onion, lemon, herbs.</p></div>
-    <div class="item"><h3>Green Chutney</h3><span class="p">£1.50</span><p class="desc">Coriander and chilli. Proceed accordingly.</p></div>
+    <h2>Breads & sides</h2>
+    
+    <div class="item" data-name="Afghan Naan" data-price="2.50"><img class="thumb" src="assets/dish-naan.jpg" alt="Afghan naan — fresh from the tandoor" loading="lazy"><div class="item-main"><h3>Afghan Naan</h3><p class="desc">Baked to order. The long one — you'll know it when it arrives.</p></div><div class="item-side"><span class="p">£2.50</span><button class="add-btn" type="button">Add</button><div class="stepper" hidden><button type="button" class="dec" aria-label="One less">−</button><span class="qty">1</span><button type="button" class="inc" aria-label="One more">+</button></div></div></div>
+    <div class="item" data-name="Saffron Rice" data-price="3.50"><div class="item-main"><h3>Saffron Rice</h3></div><div class="item-side"><span class="p">£3.50</span><button class="add-btn" type="button">Add</button><div class="stepper" hidden><button type="button" class="dec" aria-label="One less">−</button><span class="qty">1</span><button type="button" class="inc" aria-label="One more">+</button></div></div></div>
+    <div class="item" data-name="House Salad" data-price="3.95"><div class="item-main"><h3>House Salad</h3><p class="desc">Cucumber, tomato, red onion, lemon, herbs.</p></div><div class="item-side"><span class="p">£3.95</span><button class="add-btn" type="button">Add</button><div class="stepper" hidden><button type="button" class="dec" aria-label="One less">−</button><span class="qty">1</span><button type="button" class="inc" aria-label="One more">+</button></div></div></div>
+    <div class="item" data-name="Green Chutney" data-price="1.50"><div class="item-main"><h3>Green Chutney</h3><p class="desc">Coriander and chilli. Proceed accordingly.</p></div><div class="item-side"><span class="p">£1.50</span><button class="add-btn" type="button">Add</button><div class="stepper" hidden><button type="button" class="dec" aria-label="One less">−</button><span class="qty">1</span><button type="button" class="inc" aria-label="One more">+</button></div></div></div>
   </div>
-
   <div class="menu-group" id="sweet">
     <span class="eyebrow">To finish</span>
-    <h2>Desserts &amp; drinks</h2>
-    <div class="item"><h3>Firni</h3><span class="p">£5.50</span><p class="desc">Chilled cardamom custard with crushed pistachio.</p></div>
-    <div class="item"><h3>Sheer Yakh</h3><span class="p">£5.95</span><p class="desc">Hand-churned Afghan ice cream — rose and cardamom.</p></div>
-    <div class="item"><h3>Afghan Green Tea</h3><span class="p">£2.50</span><p class="desc">Poured properly, with cardamom. Refills the pot for groups.</p></div>
-    <div class="item"><h3>Mint Lemonade</h3><span class="p">£3.95</span></div>
-    <div class="item"><h3>Soft Drinks</h3><span class="p">£2.05</span></div>
+    <h2>Desserts & drinks</h2>
+    
+    <div class="item" data-name="Firni" data-price="5.50"><img class="thumb" src="assets/dish-firni.jpg" alt="Firni — rosewater custard with pistachio and rose petals" loading="lazy"><div class="item-main"><h3>Firni</h3><p class="desc">Chilled cardamom custard with crushed pistachio.</p></div><div class="item-side"><span class="p">£5.50</span><button class="add-btn" type="button">Add</button><div class="stepper" hidden><button type="button" class="dec" aria-label="One less">−</button><span class="qty">1</span><button type="button" class="inc" aria-label="One more">+</button></div></div></div>
+    <div class="item" data-name="Sheer Yakh" data-price="5.95"><div class="item-main"><h3>Sheer Yakh</h3><p class="desc">Hand-churned Afghan ice cream — rose and cardamom.</p></div><div class="item-side"><span class="p">£5.95</span><button class="add-btn" type="button">Add</button><div class="stepper" hidden><button type="button" class="dec" aria-label="One less">−</button><span class="qty">1</span><button type="button" class="inc" aria-label="One more">+</button></div></div></div>
+    <div class="item" data-name="Afghan Green Tea" data-price="2.50"><div class="item-main"><h3>Afghan Green Tea</h3><p class="desc">Poured properly, with cardamom. Refills the pot for groups.</p></div><div class="item-side"><span class="p">£2.50</span><button class="add-btn" type="button">Add</button><div class="stepper" hidden><button type="button" class="dec" aria-label="One less">−</button><span class="qty">1</span><button type="button" class="inc" aria-label="One more">+</button></div></div></div>
+    <div class="item" data-name="Mint Lemonade" data-price="3.95"><div class="item-main"><h3>Mint Lemonade</h3></div><div class="item-side"><span class="p">£3.95</span><button class="add-btn" type="button">Add</button><div class="stepper" hidden><button type="button" class="dec" aria-label="One less">−</button><span class="qty">1</span><button type="button" class="inc" aria-label="One more">+</button></div></div></div>
+    <div class="item" data-name="Soft Drinks" data-price="2.05"><div class="item-main"><h3>Soft Drinks</h3></div><div class="item-side"><span class="p">£2.05</span><button class="add-btn" type="button">Add</button><div class="stepper" hidden><button type="button" class="dec" aria-label="One less">−</button><span class="qty">1</span><button type="button" class="inc" aria-label="One more">+</button></div></div></div>
   </div>
 
   <div class="menu-note">
     <b>Halal &amp; allergens:</b> everything on this menu is 100% halal. Dishes contain or may contain gluten, dairy, nuts and sesame — tell us about any allergy when you order and we'll walk you through what's safe. Prices include everything; no service surprises.
   </div>
+</div>
 
-  <div style="text-align:center;padding-bottom:32px">
-    <a class="btn saffron" href="https://wa.me/442079460018?text=Hello%20Zafrana%2C%20I%27d%20like%20to%20order%20takeaway" target="_blank" rel="noopener">Order takeaway on WhatsApp</a>
+<div class="cartbar" id="cartBar" hidden>
+  <div class="wrap cartbar-in">
+    <span id="cartSummary"></span>
+    <button class="btn saffron" id="openCart" type="button">Review &amp; order</button>
   </div>
 </div>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" hidden aria-label="Your order">
+  <div class="drawer-head"><h3>Your order</h3><button id="closeCart" type="button" aria-label="Close">✕</button></div>
+  <div class="fulfil" role="radiogroup" aria-label="Collection or delivery">
+    <label><input type="radio" name="fulfil" value="Collection" checked> Collection</label>
+    <label><input type="radio" name="fulfil" value="Delivery"> Delivery</label>
+  </div>
+  <div id="cartLines"></div>
+  <div class="cart-total"><span>Total</span><b id="cartTotal">£0.00</b></div>
+  <p class="cart-hint">Send the order to our WhatsApp and we'll confirm it straight back. Pay at the counter or on delivery — whatever's easier.</p>
+  <button class="btn saffron drawer-cta" id="sendOrder" type="button">Send order on WhatsApp</button>
+</aside>
 
 <footer>
   <div class="wrap">
@@ -127,5 +141,65 @@
 </footer>
 
 <a class="wa" href="https://wa.me/442079460018" target="_blank" rel="noopener" aria-label="WhatsApp us">✆</a>
+
+<script>
+const WA = "442079460018";
+const cart = new Map();
+const fmt = n => "£" + n.toFixed(2);
+
+function rowFor(name) { return document.querySelector('.item[data-name="' + CSS.escape(name) + '"]'); }
+
+function syncRow(name) {
+  const row = rowFor(name); if (!row) return;
+  const e = cart.get(name);
+  const add = row.querySelector('.add-btn'), st = row.querySelector('.stepper');
+  if (e && e.qty > 0) { add.hidden = true; st.hidden = false; st.querySelector('.qty').textContent = e.qty; }
+  else { add.hidden = false; st.hidden = true; }
+}
+
+function render() {
+  let count = 0, total = 0;
+  for (const e of cart.values()) { count += e.qty; total += e.qty * e.price; }
+  const bar = document.getElementById('cartBar');
+  bar.hidden = count === 0;
+  document.getElementById('cartSummary').textContent = count + (count === 1 ? " item" : " items") + " · " + fmt(total);
+  const lines = document.getElementById('cartLines');
+  lines.innerHTML = "";
+  for (const [name, e] of cart) {
+    const d = document.createElement('div'); d.className = "cline";
+    d.innerHTML = '<span class="cname"></span><div class="stepper small"><button type="button" class="dec">−</button><span class="qty"></span><button type="button" class="inc">+</button></div><b class="cline-total"></b>';
+    d.querySelector('.cname').textContent = name;
+    d.querySelector('.qty').textContent = e.qty;
+    d.querySelector('.cline-total').textContent = fmt(e.qty * e.price);
+    d.querySelector('.inc').onclick = () => { e.qty++; render(); syncRow(name); };
+    d.querySelector('.dec').onclick = () => { e.qty--; if (e.qty <= 0) cart.delete(name); render(); syncRow(name); };
+    lines.appendChild(d);
+  }
+  document.getElementById('cartTotal').textContent = fmt(total);
+}
+
+document.querySelectorAll('.item').forEach(row => {
+  const name = row.dataset.name, price = parseFloat(row.dataset.price);
+  row.querySelector('.add-btn').onclick = () => { cart.set(name, {price, qty: 1}); render(); syncRow(name); };
+  row.querySelector('.inc').onclick = () => { const e = cart.get(name); if (e) { e.qty++; render(); syncRow(name); } };
+  row.querySelector('.dec').onclick = () => { const e = cart.get(name); if (e) { e.qty--; if (e.qty <= 0) cart.delete(name); render(); syncRow(name); } };
+});
+
+const drawer = document.getElementById('drawer'), scrim = document.getElementById('scrim');
+function openDrawer() { drawer.hidden = false; scrim.hidden = false; }
+function closeDrawer() { drawer.hidden = true; scrim.hidden = true; }
+document.getElementById('openCart').onclick = openDrawer;
+document.getElementById('closeCart').onclick = closeDrawer;
+scrim.onclick = closeDrawer;
+
+document.getElementById('sendOrder').onclick = () => {
+  if (cart.size === 0) return;
+  const fulfil = document.querySelector('input[name="fulfil"]:checked').value;
+  let total = 0; const out = ["Hello Zafrana, I'd like to order for " + fulfil.toLowerCase() + ":", ""];
+  for (const [name, e] of cart) { out.push(e.qty + " × " + name + " — " + fmt(e.qty * e.price)); total += e.qty * e.price; }
+  out.push("", "Total: " + fmt(total), "", "Name:", "Address (if delivery):");
+  window.open("https://wa.me/" + WA + "?text=" + encodeURIComponent(out.join("\n")), "_blank");
+};
+</script>
 </body>
 </html>
