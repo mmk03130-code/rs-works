@@ -7,39 +7,66 @@
 <title>Admin — Zafrana</title>
 <link rel="stylesheet" href="styles.css">
 <style>
-  .admin-wrap{max-width:920px;margin:0 auto;padding:36px 20px 90px}
-  .admin-card{background:var(--cream);border:1px solid var(--line-soft);border-radius:18px;padding:26px;margin-bottom:26px}
-  .admin-card h2{font-size:1.35rem;margin-bottom:6px}
-  .admin-card .sub{color:#5a4a36;font-size:.92rem;margin-bottom:18px}
-  .login-box{max-width:420px;margin:9vh auto}
+  .admin-wrap{max-width:920px;margin:0 auto;padding:0 20px 110px}
+  .login-box{max-width:420px;margin:9vh auto;background:var(--cream);border:1px solid var(--line-soft);border-radius:18px;padding:26px}
   .login-box input{width:100%;padding:13px 15px;border:1.5px solid var(--line);border-radius:12px;font-size:1rem;margin-bottom:14px;background:#fff}
   .fld{display:flex;flex-direction:column;gap:5px;margin-bottom:13px}
   .fld label{font-size:.78rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#5a4a36}
-  .fld input,.fld textarea,.fld select{padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;font-size:.95rem;background:#fff;font-family:'Inter',sans-serif;width:100%}
+  .fld input,.fld textarea,.fld select{padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;font-size:.95rem;background:#fff;font-family:'Inter',sans-serif;width:100%}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
   @media (max-width:640px){.grid2{grid-template-columns:1fr}}
-  .cat-head{display:flex;align-items:baseline;justify-content:space-between;margin:24px 0 6px}
-  .cat-head h3{font-size:1.2rem}
-  .dish{border:1px solid var(--line-soft);border-radius:14px;padding:16px;margin:12px 0;background:var(--paper)}
-  .dish-top{display:flex;gap:10px;align-items:center;margin-bottom:10px}
-  .dish-top .dname{flex:1;font-weight:700;font-size:1rem;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff}
-  .dish-top .dprice{width:100px;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff}
-  .dish .ddesc{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff;margin-bottom:10px}
-  .dish-row2{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-  .dish-row2 select,.dish-row2 .dtag{padding:9px 11px;border:1.5px solid var(--line);border-radius:10px;background:#fff}
-  .dish-row2 .dtag{width:150px}
-  .soldout-lbl{display:inline-flex;gap:7px;align-items:center;font-weight:600;font-size:.9rem}
-  .soldout-lbl input{width:18px;height:18px;accent-color:#8a2f23}
-  .del-btn{margin-left:auto;background:none;border:0;color:#8a2f23;font-weight:700;cursor:pointer;font-size:.9rem}
-  .add-dish{background:none;border:1.5px dashed var(--line);border-radius:999px;padding:9px 18px;font-weight:700;cursor:pointer;color:var(--ink)}
-  .add-dish:hover{border-color:var(--ink)}
-  .save-row{display:flex;gap:12px;align-items:center;margin-top:20px}
-  .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(90px);background:var(--ink);color:var(--cream);padding:14px 26px;border-radius:999px;font-weight:700;z-index:200;transition:transform .35s ease;box-shadow:0 16px 40px rgba(24,16,9,.35)}
-  .toast.show{transform:translateX(-50%) translateY(0)}
   .err{color:#8a2f23;font-weight:600;margin-top:10px;min-height:1.2em}
-  .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-  .topbar .links a{margin-left:16px;font-weight:600}
-  .logout{background:none;border:0;font-weight:700;cursor:pointer;color:var(--saffron-deep)}
+  .tabbar{position:sticky;top:0;z-index:50;background:rgba(251,247,234,.97);backdrop-filter:blur(10px);border-bottom:1px solid var(--line-soft);margin:0 -20px;padding:14px 20px 0}
+  .tabbar-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:10px}
+  .tabbar-top .who{font-family:'Fraunces',serif;font-weight:700;font-size:1.15rem}
+  .tabbar-top .who small{display:block;font-family:'Inter',sans-serif;font-weight:600;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--saffron-deep)}
+  .tabbar-actions a{font-weight:600;margin-right:16px}
+  .logout{background:none;border:0;font-weight:700;cursor:pointer;color:var(--saffron-deep);font-size:.95rem}
+  .tabs{display:flex;gap:8px;overflow-x:auto}
+  .tabs button{border:1px solid var(--line);background:var(--paper);border-bottom:0;border-radius:14px 14px 0 0;padding:12px 22px;font-weight:700;font-size:.98rem;cursor:pointer;color:var(--ink);white-space:nowrap}
+  .tabs button.on{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+  .panel{padding-top:26px}
+  .panel .sub{color:#5a4a36;font-size:.94rem;margin-bottom:18px;max-width:62ch}
+  .searchbar{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+  .searchbar input{flex:1;padding:14px 16px;border:1.5px solid var(--line);border-radius:999px;font-size:1rem;background:#fff;font-family:'Inter',sans-serif}
+  .searchbar input:focus{outline:2px solid var(--saffron);border-color:var(--saffron)}
+  #searchCount{font-weight:600;color:#5a4a36;font-size:.9rem;white-space:nowrap}
+  .cat-badge{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--saffron-deep);background:var(--cream);border:1px solid var(--saffron);border-radius:999px;padding:3px 10px;margin-bottom:8px}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+  .chips button{border:1.5px solid var(--line);background:var(--paper);border-radius:999px;padding:9px 18px;font-weight:700;cursor:pointer;color:var(--ink)}
+  .chips button.on{background:var(--saffron);border-color:var(--saffron);color:var(--ink)}
+  .dish{border:1px solid var(--line-soft);border-radius:16px;padding:16px;margin:14px 0;background:var(--cream);display:flex;gap:16px}
+  .dish-photo{width:104px;flex:none;text-align:center}
+  .dish-photo img{width:104px;height:104px;object-fit:cover;border-radius:12px;border:1px solid var(--line-soft);background:#e9dfc9;display:block}
+  .dish-photo .noimg{width:104px;height:104px;border-radius:12px;border:1.5px dashed var(--line);display:flex;align-items:center;justify-content:center;color:#8a7a5f;font-size:.78rem;font-weight:600;padding:8px}
+  .upload-btn{display:inline-block;margin-top:8px;background:var(--ink);color:var(--cream);border-radius:999px;padding:8px 13px;font-weight:700;font-size:.8rem;cursor:pointer}
+  .dish-photo select{margin-top:8px;width:104px;padding:7px 6px;border:1.5px solid var(--line);border-radius:9px;background:#fff;font-size:.8rem}
+  .dish-fields{flex:1;min-width:0}
+  .dish-top{display:flex;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+  .dish-top .dname{flex:1;min-width:150px;font-weight:700;font-size:1rem;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff}
+  .dish-top .dprice{width:96px;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff}
+  .soldout-lbl{display:inline-flex;gap:7px;align-items:center;font-weight:600;font-size:.92rem}
+  .soldout-lbl input{width:19px;height:19px;accent-color:#8a2f23}
+  .dish .ddesc{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff;margin-bottom:10px}
+  .dish-row2{display:flex;gap:10px;align-items:center}
+  .dish-row2 .dtag{padding:9px 11px;border:1.5px solid var(--line);border-radius:10px;background:#fff;width:170px}
+  .del-btn{margin-left:auto;background:none;border:0;color:#8a2f23;font-weight:700;cursor:pointer;font-size:.92rem}
+  .dish-save{background:var(--saffron);color:var(--ink);border:0;border-radius:999px;padding:9px 18px;font-weight:700;cursor:pointer;font-size:.88rem}
+  .dish-save:hover{background:var(--saffron-deep);color:#fff}
+  .dish-save:disabled{opacity:.65;cursor:default}
+  @media (max-width:560px){.dish{flex-direction:column}.dish-photo{width:100%;text-align:left}.dish-photo img,.dish-photo .noimg{width:100%;height:150px}}
+  .add-dish{background:none;border:1.5px dashed var(--line);border-radius:999px;padding:11px 20px;font-weight:700;cursor:pointer;color:var(--ink);margin-top:6px}
+  .add-dish:hover{border-color:var(--ink)}
+  .savebar{position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--ink);color:var(--cream);box-shadow:0 -8px 30px rgba(24,16,9,.3)}
+  .savebar-in{max-width:920px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+  .savebar .what{font-weight:600;font-size:.95rem}
+  .toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%) translateY(140px);background:var(--saffron-deep);color:#fff;padding:14px 26px;border-radius:999px;font-weight:700;z-index:200;transition:transform .35s ease;box-shadow:0 16px 40px rgba(24,16,9,.35)}
+  .toast.show{transform:translateX(-50%) translateY(0)}
+  .photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px}
+  .photo-cell{border:1px solid var(--line-soft);border-radius:14px;overflow:hidden;background:var(--cream)}
+  .photo-cell img{width:100%;height:130px;object-fit:cover;display:block}
+  .photo-cell p{padding:10px 12px;font-size:.86rem;font-weight:600}
+  .photo-cell p span{display:block;font-weight:400;color:#5a4a36}
 </style>
 </head>
 <body>
@@ -47,10 +74,10 @@
 <div class="admin-wrap">
 
   <!-- LOGIN -->
-  <div id="loginView" class="admin-card login-box">
+  <div id="loginView" class="login-box">
     <span class="eyebrow">Zafrana · Owner admin</span>
-    <h2 style="margin-top:6px">Sign in to manage your site</h2>
-    <p class="sub">Update your menu, prices and details — changes go live for every visitor the moment you save.</p>
+    <h2 style="margin:6px 0 8px">Sign in to manage your site</h2>
+    <p style="color:#5a4a36;font-size:.94rem;margin-bottom:18px">Update your menu, prices and details — changes go live for every visitor the moment you save.</p>
     <input type="password" id="pw" placeholder="Admin password" autocomplete="current-password">
     <button class="btn saffron" id="loginBtn" type="button" style="width:100%;text-align:center">Sign in</button>
     <p class="err" id="loginErr"></p>
@@ -58,32 +85,55 @@
 
   <!-- EDITOR -->
   <div id="editorView" hidden>
-    <div class="topbar">
-      <div><span class="eyebrow">Zafrana · Owner admin</span><h2 style="font-size:1.6rem">Manage your website</h2></div>
-      <div class="links"><a href="index.html" target="_blank">View site ↗</a><button class="logout" id="logoutBtn" type="button">Sign out</button></div>
+    <div class="tabbar">
+      <div class="tabbar-top">
+        <div class="who">Zafrana<small>Owner admin</small></div>
+        <div class="tabbar-actions"><a href="index.html" target="_blank">View site ↗</a><button class="logout" id="logoutBtn" type="button">Sign out</button></div>
+      </div>
+      <div class="tabs" role="tablist">
+        <button type="button" data-tab="menu" class="on">🍽 Menu</button>
+        <button type="button" data-tab="details">🏪 Restaurant details</button>
+        <button type="button" data-tab="photos">📷 Photos</button>
+      </div>
     </div>
 
-    <div class="admin-card">
-      <h2>Menu</h2>
-      <p class="sub">Edit any dish, tick <b>Sold out</b> when something runs dry, or add tonight's special. Photo choices come from your site's photo library.</p>
+    <!-- MENU PANEL -->
+    <section class="panel" id="panel-menu">
+      <p class="sub">Search for any dish to edit it directly, or pick a course to browse. Change prices, tick <b>Sold out</b> when something runs dry, upload a photo, or add tonight's special.</p>
+      <div class="searchbar">
+        <input id="dishSearch" type="search" placeholder="🔍  Search any dish — try “kabuli”…" autocomplete="off">
+        <span id="searchCount"></span>
+      </div>
+      <div class="chips" id="catChips"></div>
       <div id="menuEditor"></div>
-      <div class="save-row"><button class="btn saffron" id="saveMenuBtn" type="button">Save menu — publish changes</button><span class="err" id="menuErr"></span></div>
-    </div>
+    </section>
 
-    <div class="admin-card">
-      <h2>Restaurant details</h2>
-      <p class="sub">These appear across the whole site — header, footer, visit page and order messages.</p>
+    <!-- DETAILS PANEL -->
+    <section class="panel" id="panel-details" hidden>
+      <p class="sub">These details appear across your whole website — the top bar, the footer, the visit page, and every WhatsApp order message.</p>
       <div class="grid2">
         <div class="fld"><label>Restaurant name</label><input id="s-name"></div>
-        <div class="fld"><label>Announcement bar</label><input id="s-announce"></div>
-        <div class="fld"><label>Phone (shown)</label><input id="s-phone"></div>
-        <div class="fld"><label>Phone (dial format)</label><input id="s-phoneHref"></div>
-        <div class="fld"><label>WhatsApp number (country code + number)</label><input id="s-whatsapp"></div>
+        <div class="fld"><label>Announcement bar (top of every page)</label><input id="s-announce"></div>
+        <div class="fld"><label>Phone (shown on site)</label><input id="s-phone"></div>
+        <div class="fld"><label>Phone (dial format, no spaces)</label><input id="s-phoneHref"></div>
+        <div class="fld"><label>WhatsApp number (country code + number, no +)</label><input id="s-whatsapp"></div>
         <div class="fld"><label>Address</label><input id="s-address"></div>
       </div>
       <div class="fld"><label>Opening hours — one line per row</label><textarea id="s-hours" rows="3"></textarea></div>
       <div class="fld"><label>Delivery note</label><input id="s-deliveryNote"></div>
-      <div class="save-row"><button class="btn saffron" id="saveSettingsBtn" type="button">Save details — publish changes</button><span class="err" id="settingsErr"></span></div>
+    </section>
+
+    <!-- PHOTOS PANEL -->
+    <section class="panel" id="panel-photos" hidden>
+      <p class="sub">Photos on your site right now. To add your own: open the <b>Menu</b> tab, find the dish, and tap <b>Upload photo</b> — pick a picture from your phone or computer and it replaces the current one when you save.</p>
+      <div class="photo-grid" id="photoGrid"></div>
+    </section>
+
+    <div class="savebar" id="savebar">
+      <div class="savebar-in">
+        <span class="what" id="saveWhat">Editing: Menu</span>
+        <button class="btn saffron" id="saveBtn" type="button">Save &amp; publish</button>
+      </div>
     </div>
   </div>
 </div>
@@ -93,17 +143,17 @@
 <script src="config.js"></script>
 <script>
 const API = window.ZAFRANA_API || "";
-const PHOTOS = ["", "assets/dish-bolani.jpg", "assets/dish-mantu.jpg", "assets/dish-grill.jpg", "assets/dish-kabuli.jpg", "assets/dish-lamb.jpg", "assets/dish-naan.jpg", "assets/dish-firni.jpg", "assets/hero.jpg"];
-const PHOTO_NAMES = {"":"No photo","assets/dish-bolani.jpg":"Bolani","assets/dish-mantu.jpg":"Mantu","assets/dish-grill.jpg":"Mixed grill","assets/dish-kabuli.jpg":"Kabuli pilaw","assets/dish-lamb.jpg":"Lamb shank","assets/dish-naan.jpg":"Naan basket","assets/dish-firni.jpg":"Firni","assets/hero.jpg":"Feast table"};
-let menuData = [], token = sessionStorage.getItem("zafrana_admin_token") || "";
+const LIBRARY = ["", "assets/dish-bolani.jpg", "assets/dish-mantu.jpg", "assets/dish-grill.jpg", "assets/dish-kabuli.jpg", "assets/dish-lamb.jpg", "assets/dish-naan.jpg", "assets/dish-firni.jpg", "assets/hero.jpg"];
+const LIBRARY_NAMES = {"":"No photo","assets/dish-bolani.jpg":"Library: Bolani","assets/dish-mantu.jpg":"Library: Mantu","assets/dish-grill.jpg":"Library: Mixed grill","assets/dish-kabuli.jpg":"Library: Kabuli pilaw","assets/dish-lamb.jpg":"Library: Lamb shank","assets/dish-naan.jpg":"Library: Naan basket","assets/dish-firni.jpg":"Library: Firni","assets/hero.jpg":"Library: Feast table"};
+let menuData = [], settingsData = {}, token = sessionStorage.getItem("zafrana_admin_token") || "";
+let activeTab = "menu", activeCat = 0, viewMode = "cat";
 
-function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2600); }
+function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2800); }
 async function api(path, opts = {}) {
   const r = await fetch(API + path, { ...opts, headers: { "Content-Type": "application/json", ...(opts.headers || {}), ...(token ? { Authorization: "Bearer " + token } : {}) } });
   if (!r.ok) { const e = await r.json().catch(() => ({})); throw new Error(e.error || ("HTTP " + r.status)); }
   return r.json();
 }
-
 async function doLogin() {
   const err = document.getElementById('loginErr'); err.textContent = "";
   try {
@@ -116,87 +166,229 @@ document.getElementById('loginBtn').onclick = doLogin;
 document.getElementById('pw').addEventListener('keydown', e => { if (e.key === "Enter") doLogin(); });
 document.getElementById('logoutBtn').onclick = () => { token = ""; sessionStorage.removeItem("zafrana_admin_token"); location.reload(); };
 
-function dishRow(catIdx, it) {
+function setTab(name) {
+  if (name !== activeTab) syncFromDOM();
+  activeTab = name;
+  document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === name));
+  ["menu", "details", "photos"].forEach(t => { document.getElementById('panel-' + t).hidden = t !== name; });
+  document.getElementById('saveWhat').textContent = "Editing: " + (name === "menu" ? "Menu" : name === "details" ? "Restaurant details" : "Photos");
+  document.getElementById('savebar').style.display = name === "photos" ? "none" : "";
+  if (name === "photos") renderPhotoGrid();
+}
+document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => setTab(b.dataset.tab));
+
+/* Photo upload: resize on the device first, then send to the API */
+function uploadPhoto(file, done) {
+  const img = new Image();
+  img.onload = () => {
+    const scale = Math.min(1, 1200 / Math.max(img.width, img.height));
+    const c = document.createElement('canvas');
+    c.width = Math.round(img.width * scale); c.height = Math.round(img.height * scale);
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+    c.toBlob(async blob => {
+      try {
+        const r = await fetch(API + "/api/upload", { method: "POST", headers: { Authorization: "Bearer " + token, "Content-Type": "image/jpeg" }, body: blob });
+        const out = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(out.error || "Upload failed");
+        done(out.url);
+      } catch (e) { toast("Upload failed: " + e.message); }
+      URL.revokeObjectURL(img.src);
+    }, "image/jpeg", 0.82);
+  };
+  img.onerror = () => toast("That file could not be read as a photo.");
+  img.src = URL.createObjectURL(file);
+}
+
+function dishRow(it, ci, badge) {
   const d = document.createElement('div'); d.className = "dish";
+  d._cat = ci; d._origName = it.name || "";
   d.innerHTML =
-    '<div class="dish-top"><input class="dname" value=""><input class="dprice" type="number" step="0.05" min="0" value="">' +
+    '<div class="dish-photo"><div class="pv"></div>' +
+    '<label class="upload-btn">Upload photo<input type="file" accept="image/*" class="dupload" hidden></label>' +
+    '<select class="dimg"></select></div>' +
+    '<div class="dish-fields">' + (badge ? '<span class="cat-badge"></span>' : '') +
+    '<div class="dish-top"><input class="dname" placeholder="Dish name"><input class="dprice" type="number" step="0.05" min="0" placeholder="£">' +
     '<label class="soldout-lbl"><input type="checkbox" class="dsold"> Sold out</label></div>' +
-    '<input class="ddesc" value="" placeholder="Description (optional)">' +
-    '<div class="dish-row2"><input class="dtag" value="" placeholder="Tag e.g. Vegetarian">' +
-    '<select class="dimg">' + PHOTOS.map(p => '<option value="' + p + '">' + PHOTO_NAMES[p] + '</option>').join("") + '</select>' +
-    '<button type="button" class="del-btn">Delete dish</button></div>';
+    '<input class="ddesc" placeholder="Description (optional)">' +
+    '<div class="dish-row2"><input class="dtag" placeholder="Tag e.g. Vegetarian">' +
+    '<button type="button" class="del-btn">Delete dish</button></div>' +
+    '<div style="margin-top:12px;text-align:right"><button type="button" class="dish-save">Save this dish</button></div></div>';
+  if (badge) d.querySelector('.cat-badge').textContent = badge;
+  const sel = d.querySelector('.dimg');
+  const opts = LIBRARY.slice();
+  if (it.img && !opts.includes(it.img)) opts.push(it.img);
+  sel.innerHTML = opts.map(p => '<option value="' + p + '">' + (LIBRARY_NAMES[p] || "Uploaded photo") + '</option>').join("");
+  sel.value = it.img || "";
+  const pv = d.querySelector('.pv');
+  function paint() {
+    const v = sel.value;
+    pv.innerHTML = v ? '<img src="' + v + '" alt="">' : '<div class="noimg">No photo yet</div>';
+  }
+  sel.onchange = paint; paint();
+  d.querySelector('.dupload').onchange = e => {
+    const f = e.target.files[0]; if (!f) return;
+    toast("Uploading photo…");
+    uploadPhoto(f, url => {
+      if (![...sel.options].some(o => o.value === url)) { const o = document.createElement('option'); o.value = url; o.textContent = "Uploaded photo"; sel.appendChild(o); }
+      sel.value = url; paint(); toast("Photo uploaded — press Save & publish to make it live");
+    });
+  };
   d.querySelector('.dname').value = it.name || "";
   d.querySelector('.dprice').value = it.price ?? "";
   d.querySelector('.ddesc').value = it.desc || "";
   d.querySelector('.dtag').value = it.tag || "";
-  d.querySelector('.dimg').value = it.img || "";
   d.querySelector('.dsold').checked = !!it.soldOut;
-  d.querySelector('.del-btn').onclick = () => { if (confirm("Delete " + (it.name || "this dish") + "?")) d.remove(); };
+  d.querySelector('.dish-save').onclick = async ev => {
+    const btn = ev.currentTarget;
+    const nm = d.querySelector('.dname').value.trim() || "Dish";
+    btn.disabled = true; const old = btn.textContent; btn.textContent = "Saving…";
+    try {
+      menuData = collectMenu();
+      await api("/api/menu", { method: "PUT", body: JSON.stringify(menuData) });
+      btn.textContent = "Saved ✓";
+      toast(nm + " saved — live now ✓");
+    } catch (e) { toast("Could not save: " + e.message); btn.textContent = old; }
+    setTimeout(() => { btn.disabled = false; btn.textContent = "Save this dish"; }, 1600);
+  };
+  d.querySelector('.del-btn').onclick = () => {
+    if (!confirm("Delete " + (d._origName || "this dish") + "?")) return;
+    if (viewMode === "search") {
+      const items = menuData[d._cat].items;
+      const ix = items.findIndex(x => x.name === d._origName);
+      if (ix >= 0) items.splice(ix, 1);
+      d.remove(); renderSearchCount();
+    } else { d.remove(); }
+  };
+  d._collect = () => ({
+    name: d.querySelector('.dname').value.trim(),
+    price: parseFloat(d.querySelector('.dprice').value) || 0,
+    desc: d.querySelector('.ddesc').value.trim(),
+    tag: d.querySelector('.dtag').value.trim(),
+    img: sel.value,
+    soldOut: d.querySelector('.dsold').checked,
+  });
   return d;
 }
+
+/* Fold whatever is on screen back into menuData before any re-render or save. */
+function syncFromDOM() {
+  const wrap = document.getElementById('menuEditor');
+  if (!wrap || !menuData.length) return;
+  if (viewMode === "cat") {
+    const list = wrap.querySelector('[data-cat-list]');
+    if (list) {
+      const ci = Number(list.dataset.catList);
+      menuData[ci].items = [...list.querySelectorAll('.dish')].map(x => { const c = x._collect(); x._origName = c.name; return c; }).filter(i => i.name);
+    }
+  } else {
+    wrap.querySelectorAll('.dish').forEach(x => {
+      const c = x._collect(); if (!c.name) return;
+      const items = menuData[x._cat].items;
+      const ix = items.findIndex(i => i.name === x._origName);
+      if (ix >= 0) items[ix] = c; else items.push(c);
+      x._origName = c.name;
+    });
+  }
+}
+function collectMenu() { syncFromDOM(); return menuData; }
+
+function renderSearchCount() {
+  const q = (document.getElementById('dishSearch').value || "").trim().toLowerCase();
+  if (!q) { document.getElementById('searchCount').textContent = ""; return; }
+  let n = 0;
+  menuData.forEach(cat => cat.items.forEach(it => { if (it.name.toLowerCase().includes(q)) n++; }));
+  document.getElementById('searchCount').textContent = n ? n + (n === 1 ? " dish" : " dishes") + " found" : "No dish matches — try another word";
+}
+
 function renderMenuEditor() {
+  const q = (document.getElementById('dishSearch').value || "").trim().toLowerCase();
+  const chips = document.getElementById('catChips'); chips.innerHTML = "";
   const wrap = document.getElementById('menuEditor'); wrap.innerHTML = "";
   menuData.forEach((cat, ci) => {
-    const head = document.createElement('div'); head.className = "cat-head";
-    head.innerHTML = "<h3></h3>"; head.querySelector('h3').textContent = cat.title;
-    const add = document.createElement('button'); add.type = "button"; add.className = "add-dish"; add.textContent = "+ Add dish";
-    const list = document.createElement('div'); list.dataset.catList = ci;
-    add.onclick = () => list.appendChild(dishRow(ci, { name: "", price: "", desc: "", tag: "", img: "", soldOut: false }));
-    head.appendChild(add); wrap.appendChild(head); wrap.appendChild(list);
-    cat.items.forEach(it => list.appendChild(dishRow(ci, it)));
+    const chip = document.createElement('button'); chip.type = "button"; chip.textContent = cat.title;
+    chip.className = (viewMode === "cat" && ci === activeCat) ? "on" : "";
+    chip.onclick = () => { syncFromDOM(); viewMode = "cat"; activeCat = ci; document.getElementById('dishSearch').value = ""; renderMenuEditor(); };
+    chips.appendChild(chip);
   });
+  if (q) {
+    viewMode = "search";
+    const list = document.createElement('div'); list.dataset.searchList = "1";
+    menuData.forEach((cat, ci) => cat.items.forEach(it => {
+      if (it.name.toLowerCase().includes(q)) list.appendChild(dishRow(it, ci, "In " + cat.title));
+    }));
+    wrap.appendChild(list);
+  } else {
+    viewMode = "cat";
+    const cat = menuData[activeCat];
+    const list = document.createElement('div'); list.dataset.catList = activeCat;
+    cat.items.forEach(it => list.appendChild(dishRow(it, activeCat, null)));
+    const add = document.createElement('button'); add.type = "button"; add.className = "add-dish"; add.textContent = "+ Add a dish to " + cat.title;
+    add.onclick = () => list.insertBefore(dishRow({}, activeCat, null), add);
+    wrap.appendChild(list); wrap.appendChild(add);
+  }
+  renderSearchCount();
 }
-function collectMenu() {
-  return menuData.map((cat, ci) => {
-    const list = document.querySelector('[data-cat-list="' + ci + '"]');
-    const items = [...list.querySelectorAll('.dish')].map(d => ({
-      name: d.querySelector('.dname').value.trim(),
-      price: parseFloat(d.querySelector('.dprice').value) || 0,
-      desc: d.querySelector('.ddesc').value.trim(),
-      tag: d.querySelector('.dtag').value.trim(),
-      img: d.querySelector('.dimg').value,
-      soldOut: d.querySelector('.dsold').checked,
-    })).filter(i => i.name);
-    return { ...cat, items };
-  });
+let searchTimer = null;
+document.getElementById('dishSearch').addEventListener('input', () => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => { syncFromDOM(); renderMenuEditor(); }, 220);
+});
+
+function renderPhotoGrid() {
+  const g = document.getElementById('photoGrid'); g.innerHTML = "";
+  collectMenu().forEach(cat => cat.items.forEach(it => {
+    if (!it.img) return;
+    const cell = document.createElement('div'); cell.className = "photo-cell";
+    const im = document.createElement('img'); im.src = it.img; im.alt = "";
+    const p = document.createElement('p'); p.textContent = it.name;
+    const s = document.createElement('span'); s.textContent = cat.title; p.appendChild(s);
+    cell.appendChild(im); cell.appendChild(p); g.appendChild(cell);
+  }));
+  if (!g.children.length) g.innerHTML = "<p>No photos yet — add some from the Menu tab.</p>";
 }
+
+document.getElementById('saveBtn').onclick = async () => {
+  try {
+    if (activeTab === "menu") {
+      menuData = collectMenu();
+      await api("/api/menu", { method: "PUT", body: JSON.stringify(menuData) });
+      toast("Menu saved — live now ✓");
+    } else if (activeTab === "details") {
+      settingsData = {
+        ...settingsData,
+        name: document.getElementById('s-name').value.trim(),
+        announce: document.getElementById('s-announce').value.trim(),
+        phone: document.getElementById('s-phone').value.trim(),
+        phoneHref: document.getElementById('s-phoneHref').value.trim(),
+        whatsapp: document.getElementById('s-whatsapp').value.trim(),
+        address: document.getElementById('s-address').value.trim(),
+        hours: document.getElementById('s-hours').value.split("\n").map(x => x.trim()).filter(Boolean),
+        deliveryNote: document.getElementById('s-deliveryNote').value.trim(),
+      };
+      await api("/api/settings", { method: "PUT", body: JSON.stringify(settingsData) });
+      toast("Details saved — live now ✓");
+    }
+  } catch (e) { toast("Could not save: " + e.message); }
+};
+
 async function showEditor() {
   document.getElementById('loginView').hidden = true;
   document.getElementById('editorView').hidden = false;
   try {
     menuData = await api("/api/menu");
+    settingsData = await api("/api/settings");
+    document.getElementById('s-name').value = settingsData.name || "";
+    document.getElementById('s-announce').value = settingsData.announce || "";
+    document.getElementById('s-phone').value = settingsData.phone || "";
+    document.getElementById('s-phoneHref').value = settingsData.phoneHref || "";
+    document.getElementById('s-whatsapp').value = settingsData.whatsapp || "";
+    document.getElementById('s-address').value = settingsData.address || "";
+    document.getElementById('s-hours').value = (settingsData.hours || []).join("\n");
+    document.getElementById('s-deliveryNote').value = settingsData.deliveryNote || "";
     renderMenuEditor();
-    const s = await api("/api/settings");
-    document.getElementById('s-name').value = s.name || "";
-    document.getElementById('s-announce').value = s.announce || "";
-    document.getElementById('s-phone').value = s.phone || "";
-    document.getElementById('s-phoneHref').value = s.phoneHref || "";
-    document.getElementById('s-whatsapp').value = s.whatsapp || "";
-    document.getElementById('s-address').value = s.address || "";
-    document.getElementById('s-hours').value = (s.hours || []).join("\n");
-    document.getElementById('s-deliveryNote').value = s.deliveryNote || "";
+    setTab("menu");
   } catch (e) { toast("Could not load data: " + e.message); }
 }
-document.getElementById('saveMenuBtn').onclick = async () => {
-  const err = document.getElementById('menuErr'); err.textContent = "";
-  try { await api("/api/menu", { method: "PUT", body: JSON.stringify(collectMenu()) }); menuData = collectMenu(); toast("Menu saved — live now ✓"); }
-  catch (e) { err.textContent = e.message; }
-};
-document.getElementById('saveSettingsBtn').onclick = async () => {
-  const err = document.getElementById('settingsErr'); err.textContent = "";
-  const s = {
-    name: document.getElementById('s-name').value.trim(),
-    announce: document.getElementById('s-announce').value.trim(),
-    phone: document.getElementById('s-phone').value.trim(),
-    phoneHref: document.getElementById('s-phoneHref').value.trim(),
-    whatsapp: document.getElementById('s-whatsapp').value.trim(),
-    address: document.getElementById('s-address').value.trim(),
-    hours: document.getElementById('s-hours').value.split("\n").map(x => x.trim()).filter(Boolean),
-    deliveryNote: document.getElementById('s-deliveryNote').value.trim(),
-  };
-  try { await api("/api/settings", { method: "PUT", body: JSON.stringify(s) }); toast("Details saved — live now ✓"); }
-  catch (e) { err.textContent = e.message; }
-};
 
 if (!API) { document.getElementById('loginErr').textContent = "Demo is in static mode — the live admin connects after deployment."; }
 else if (token) { showEditor().catch(() => { document.getElementById('loginView').hidden = false; document.getElementById('editorView').hidden = true; }); }
