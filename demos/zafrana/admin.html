@@ -84,7 +84,7 @@
 
 <div class="admin-wrap">
 
-  <!-- LOGIN -->
+  
   <div id="loginView" class="login-box">
     <span class="eyebrow">Zafrana · Owner admin</span>
     <h2 style="margin:6px 0 8px">Sign in to manage your site</h2>
@@ -94,7 +94,7 @@
     <p class="err" id="loginErr"></p>
   </div>
 
-  <!-- EDITOR -->
+  
   <div id="editorView" hidden>
     <div class="tabbar">
       <div class="tabbar-top">
@@ -108,7 +108,7 @@
       </div>
     </div>
 
-    <!-- MENU PANEL -->
+    
     <section class="panel" id="panel-menu">
       <p class="sub">Search for any dish to edit it directly, or pick a course to browse. Change prices, tick <b>Sold out</b> when something runs dry, upload a photo, or add tonight's special.</p>
       <div class="searchbar">
@@ -119,7 +119,7 @@
       <div id="menuEditor"></div>
     </section>
 
-    <!-- DETAILS PANEL -->
+    
     <section class="panel" id="panel-details" hidden>
       <p class="sub">These details appear across your whole website — the top bar, the footer, the visit page, and every WhatsApp order message.</p>
       <div class="grid2">
@@ -137,7 +137,7 @@
         <div class="fld"><label>Overall discount % — every dish without its own discount (0 = none)</label><input id="s-discountAll" type="number" min="0" max="95" step="1"></div>
     </section>
 
-    <!-- PHOTOS PANEL -->
+    
     <section class="panel" id="panel-photos" hidden>
       <p class="sub">Photos on your site right now. To add your own: open the <b>Menu</b> tab, find the dish, and tap <b>Upload photo</b> — pick a picture from your phone or computer and it replaces the current one when you save.</p>
       <div class="photo-grid" id="photoGrid"></div>
@@ -155,329 +155,7 @@
 <div class="toast" id="toast">Saved — your site is updated ✓</div>
 
 <script src="config.js"></script>
-<script>
-const API = window.ZAFRANA_API || "";
-const LIBRARY = ["", "assets/dish-bolani.jpg", "assets/dish-mantu.jpg", "assets/dish-grill.jpg", "assets/dish-kabuli.jpg", "assets/dish-lamb.jpg", "assets/dish-naan.jpg", "assets/dish-firni.jpg", "assets/hero.jpg"];
-const LIBRARY_NAMES = {"":"No photo","assets/dish-bolani.jpg":"Library: Bolani","assets/dish-mantu.jpg":"Library: Mantu","assets/dish-grill.jpg":"Library: Mixed grill","assets/dish-kabuli.jpg":"Library: Kabuli pilaw","assets/dish-lamb.jpg":"Library: Lamb shank","assets/dish-naan.jpg":"Library: Naan basket","assets/dish-firni.jpg":"Library: Firni","assets/hero.jpg":"Library: Feast table"};
-let menuData = [], settingsData = {}, token = sessionStorage.getItem("zafrana_admin_token") || "";
-let activeTab = "menu", activeCat = 0, viewMode = "cat";
-
-function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2800); }
-async function api(path, opts = {}) {
-  const r = await fetch(API + path, { ...opts, headers: { "Content-Type": "application/json", ...(opts.headers || {}), ...(token ? { Authorization: "Bearer " + token } : {}) } });
-  if (!r.ok) { const e = await r.json().catch(() => ({})); throw new Error(e.error || ("HTTP " + r.status)); }
-  return r.json();
-}
-async function doLogin() {
-  const err = document.getElementById('loginErr'); err.textContent = "";
-  try {
-    const out = await api("/api/login", { method: "POST", body: JSON.stringify({ password: document.getElementById('pw').value }) });
-    token = out.token; sessionStorage.setItem("zafrana_admin_token", token);
-    showEditor();
-  } catch (e) { err.textContent = e.message; }
-}
-document.getElementById('loginBtn').onclick = doLogin;
-document.getElementById('pw').addEventListener('keydown', e => { if (e.key === "Enter") doLogin(); });
-document.getElementById('logoutBtn').onclick = () => { token = ""; sessionStorage.removeItem("zafrana_admin_token"); location.reload(); };
-
-function setTab(name) {
-  if (name !== activeTab) syncFromDOM();
-  activeTab = name;
-  document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === name));
-  ["menu", "details", "photos"].forEach(t => { document.getElementById('panel-' + t).hidden = t !== name; });
-  document.getElementById('saveWhat').textContent = "Editing: " + (name === "menu" ? "Menu" : name === "details" ? "Restaurant details" : "Photos");
-  document.getElementById('savebar').style.display = name === "photos" ? "none" : "";
-  if (name === "photos") renderPhotoGrid();
-}
-document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => setTab(b.dataset.tab));
-
-/* Photo upload: resize on the device first, then send to the API */
-function uploadPhoto(file, done) {
-  const img = new Image();
-  img.onload = () => {
-    const scale = Math.min(1, 1200 / Math.max(img.width, img.height));
-    const c = document.createElement('canvas');
-    c.width = Math.round(img.width * scale); c.height = Math.round(img.height * scale);
-    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-    c.toBlob(async blob => {
-      try {
-        const r = await fetch(API + "/api/upload", { method: "POST", headers: { Authorization: "Bearer " + token, "Content-Type": "image/jpeg" }, body: blob });
-        const out = await r.json().catch(() => ({}));
-        if (!r.ok) throw new Error(out.error || "Upload failed");
-        done(out.url);
-      } catch (e) { toast("Upload failed: " + e.message); }
-      URL.revokeObjectURL(img.src);
-    }, "image/jpeg", 0.82);
-  };
-  img.onerror = () => toast("That file could not be read as a photo.");
-  img.src = URL.createObjectURL(file);
-}
-
-function dishRow(it, ci, badge) {
-  const d = document.createElement('div'); d.className = "dish";
-  d._cat = ci; d._origName = it.name || "";
-  d.innerHTML =
-    '<div class="dish-photo"><div class="pv"></div>' +
-    '<label class="upload-btn">Upload photo<input type="file" accept="image/*" class="dupload" hidden></label>' +
-    '<select class="dimg"></select></div>' +
-    '<div class="dish-fields">' + (badge ? '<span class="cat-badge"></span>' : '') +
-    '<div class="dish-top"><input class="dname" placeholder="Dish name"><input class="dprice" type="number" step="0.05" min="0" placeholder="£">' +
-    '<label class="soldout-lbl"><input type="checkbox" class="dsold"> Sold out</label></div>' +
-    '<input class="ddesc" placeholder="Description (optional)">' +
-    '<div class="dish-row2"><input class="dtag" placeholder="Tag e.g. Vegetarian">' +
-    '<input class="ddisc" type="number" min="0" max="95" step="1" placeholder="% off" title="Discount percent for this dish">' +
-    '<button type="button" class="del-btn">Delete dish</button></div>' +
-    '<div class="dish-tools"></div>' +
-    '<div style="margin-top:12px;text-align:right"><button type="button" class="dish-save">Save this dish</button></div></div>';
-  if (badge) d.querySelector('.cat-badge').textContent = badge;
-  const sel = d.querySelector('.dimg');
-  const opts = LIBRARY.slice();
-  if (it.img && !opts.includes(it.img)) opts.push(it.img);
-  sel.innerHTML = opts.map(p => '<option value="' + p + '">' + (LIBRARY_NAMES[p] || "Uploaded photo") + '</option>').join("");
-  sel.value = it.img || "";
-  const pv = d.querySelector('.pv');
-  function paint() {
-    const v = sel.value;
-    pv.innerHTML = v ? '<img src="' + v + '" alt="">' : '<div class="noimg">No photo yet</div>';
-  }
-  sel.onchange = paint; paint();
-  d.querySelector('.dupload').onchange = e => {
-    const f = e.target.files[0]; if (!f) return;
-    toast("Uploading photo…");
-    uploadPhoto(f, url => {
-      if (![...sel.options].some(o => o.value === url)) { const o = document.createElement('option'); o.value = url; o.textContent = "Uploaded photo"; sel.appendChild(o); }
-      sel.value = url; paint(); toast("Photo uploaded — press Save & publish to make it live");
-    });
-  };
-  d.querySelector('.dname').value = it.name || "";
-  d.querySelector('.dprice').value = it.price ?? "";
-  d.querySelector('.ddesc').value = it.desc || "";
-  d.querySelector('.dtag').value = it.tag || "";
-  d.querySelector('.ddisc').value = it.discount ? it.discount : "";
-  const tools = d.querySelector('.dish-tools');
-  if (!badge) {
-    const up = document.createElement('button'); up.type = "button"; up.className = "mv-btn"; up.textContent = "↑"; up.title = "Move dish up";
-    up.onclick = () => { const p = d.previousElementSibling; if (p && p.classList.contains('dish')) d.parentNode.insertBefore(d, p); };
-    const dn = document.createElement('button'); dn.type = "button"; dn.className = "mv-btn"; dn.textContent = "↓"; dn.title = "Move dish down";
-    dn.onclick = () => { const n = d.nextElementSibling; if (n && n.classList.contains('dish')) d.parentNode.insertBefore(n, d); };
-    tools.appendChild(up); tools.appendChild(dn);
-  }
-  const mv = document.createElement('select'); mv.className = "move-sel";
-  mv.innerHTML = '<option value="">Move to…</option>' + menuData.map((c, i) => i === ci ? "" : '<option value="' + i + '">' + c.title + '</option>').join("");
-  mv.onchange = () => { if (mv.value !== "") moveDishTo(d, Number(mv.value)); };
-  tools.appendChild(mv);
-  d.querySelector('.dsold').checked = !!it.soldOut;
-  d.querySelector('.dish-save').onclick = async ev => {
-    const btn = ev.currentTarget;
-    const nm = d.querySelector('.dname').value.trim() || "Dish";
-    btn.disabled = true; const old = btn.textContent; btn.textContent = "Saving…";
-    try {
-      menuData = collectMenu();
-      await api("/api/menu", { method: "PUT", body: JSON.stringify(menuData) });
-      btn.textContent = "Saved ✓";
-      toast(nm + " saved — live now ✓");
-    } catch (e) { toast("Could not save: " + e.message); btn.textContent = old; }
-    setTimeout(() => { btn.disabled = false; btn.textContent = "Save this dish"; }, 1600);
-  };
-  d.querySelector('.del-btn').onclick = () => {
-    if (!confirm("Delete " + (d._origName || "this dish") + "?")) return;
-    if (viewMode === "search") {
-      const items = menuData[d._cat].items;
-      const ix = items.findIndex(x => x.name === d._origName);
-      if (ix >= 0) items.splice(ix, 1);
-      d.remove(); renderSearchCount();
-    } else { d.remove(); }
-  };
-  d._collect = () => ({
-    name: d.querySelector('.dname').value.trim(),
-    price: parseFloat(d.querySelector('.dprice').value) || 0,
-    desc: d.querySelector('.ddesc').value.trim(),
-    tag: d.querySelector('.dtag').value.trim(),
-    discount: Math.min(95, Math.max(0, parseFloat(d.querySelector('.ddisc').value) || 0)),
-    img: sel.value,
-    soldOut: d.querySelector('.dsold').checked,
-  });
-  return d;
-}
-
-function moveDishTo(d, targetCi) {
-  const item = d._collect();
-  if (!item.name) { toast("Give the dish a name first, then move it."); return; }
-  syncFromDOM();
-  const src = menuData[d._cat].items;
-  const ix = src.findIndex(x => x.name === d._origName);
-  if (ix >= 0) src.splice(ix, 1);
-  menuData[targetCi].items.push(item);
-  toast(item.name + " moved to " + menuData[targetCi].title + " — Save to publish");
-  renderMenuEditor();
-}
-
-/* Fold whatever is on screen back into menuData before any re-render or save. */
-function syncFromDOM() {
-  const wrap = document.getElementById('menuEditor');
-  if (!wrap || !menuData.length) return;
-  if (viewMode === "cat") {
-    const list = wrap.querySelector('[data-cat-list]');
-    if (list) {
-      const ci = Number(list.dataset.catList);
-      const ct = document.getElementById('catTitle'), ce = document.getElementById('catEyebrow'), cl = document.getElementById('catLede');
-      if (ct) { if (ct.value.trim()) menuData[ci].title = ct.value.trim(); menuData[ci].eyebrow = ce.value.trim(); menuData[ci].lede = cl.value.trim(); }
-      menuData[ci].items = [...list.querySelectorAll('.dish')].map(x => { const c = x._collect(); x._origName = c.name; return c; }).filter(i => i.name);
-    }
-  } else {
-    wrap.querySelectorAll('.dish').forEach(x => {
-      const c = x._collect(); if (!c.name) return;
-      const items = menuData[x._cat].items;
-      const ix = items.findIndex(i => i.name === x._origName);
-      if (ix >= 0) items[ix] = c; else items.push(c);
-      x._origName = c.name;
-    });
-  }
-}
-function collectMenu() { syncFromDOM(); return menuData; }
-
-function renderSearchCount() {
-  const q = (document.getElementById('dishSearch').value || "").trim().toLowerCase();
-  if (!q) { document.getElementById('searchCount').textContent = ""; return; }
-  let n = 0;
-  menuData.forEach(cat => cat.items.forEach(it => { if (it.name.toLowerCase().includes(q)) n++; }));
-  document.getElementById('searchCount').textContent = n ? n + (n === 1 ? " dish" : " dishes") + " found" : "No dish matches — try another word";
-}
-
-function renderMenuEditor() {
-  const q = (document.getElementById('dishSearch').value || "").trim().toLowerCase();
-  const chips = document.getElementById('catChips'); chips.innerHTML = "";
-  const wrap = document.getElementById('menuEditor'); wrap.innerHTML = "";
-  menuData.forEach((cat, ci) => {
-    const chip = document.createElement('button'); chip.type = "button"; chip.textContent = cat.title;
-    chip.className = (viewMode === "cat" && ci === activeCat) ? "on" : "";
-    chip.onclick = () => { syncFromDOM(); viewMode = "cat"; activeCat = ci; document.getElementById('dishSearch').value = ""; renderMenuEditor(); };
-    chips.appendChild(chip);
-  });
-  const addC = document.createElement('button'); addC.type = "button"; addC.className = "add-cat"; addC.textContent = "+ Add category";
-  addC.onclick = () => {
-    syncFromDOM();
-    let slug = "new-category", n = 2;
-    while (menuData.some(c => c.slug === slug)) slug = "new-category-" + (n++);
-    menuData.push({ slug, title: "New category", eyebrow: "", lede: "", items: [] });
-    viewMode = "cat"; activeCat = menuData.length - 1;
-    document.getElementById('dishSearch').value = "";
-    renderMenuEditor();
-    toast("New category added — name it below, add dishes, then Save");
-  };
-  chips.appendChild(addC);
-  if (q) {
-    viewMode = "search";
-    const list = document.createElement('div'); list.dataset.searchList = "1";
-    menuData.forEach((cat, ci) => cat.items.forEach(it => {
-      if (it.name.toLowerCase().includes(q)) list.appendChild(dishRow(it, ci, "In " + cat.title));
-    }));
-    wrap.appendChild(list);
-  } else {
-    viewMode = "cat";
-    const cat = menuData[activeCat];
-    const bar = document.createElement('div'); bar.className = "catbar";
-    bar.innerHTML =
-      '<div class="fld"><label>Category name</label><input id="catTitle"></div>' +
-      '<div class="fld"><label>Small line above the name on its page (optional)</label><input id="catEyebrow"></div>' +
-      '<div class="fld"><label>Intro line on its page (optional)</label><input id="catLede"></div>' +
-      '<div class="catbar-btns">' +
-      '<button type="button" id="catUp">↑ Show earlier</button>' +
-      '<button type="button" id="catDown">↓ Show later</button>' +
-      '<button type="button" id="catDel" class="danger">Delete this category</button></div>';
-    bar.querySelector('#catTitle').value = cat.title || "";
-    bar.querySelector('#catEyebrow').value = cat.eyebrow || "";
-    bar.querySelector('#catLede').value = cat.lede || "";
-    bar.querySelector('#catUp').onclick = () => { if (activeCat === 0) return; syncFromDOM(); const t = menuData[activeCat - 1]; menuData[activeCat - 1] = menuData[activeCat]; menuData[activeCat] = t; activeCat--; renderMenuEditor(); };
-    bar.querySelector('#catDown').onclick = () => { if (activeCat >= menuData.length - 1) return; syncFromDOM(); const t = menuData[activeCat + 1]; menuData[activeCat + 1] = menuData[activeCat]; menuData[activeCat] = t; activeCat++; renderMenuEditor(); };
-    bar.querySelector('#catDel').onclick = () => {
-      if (!confirm("Delete the category \"" + cat.title + "\" and its " + cat.items.length + " dish(es)? You can re-add them later, but this removes them from the site when you save.")) return;
-      syncFromDOM();
-      menuData.splice(activeCat, 1);
-      activeCat = Math.max(0, Math.min(activeCat, menuData.length - 1));
-      renderMenuEditor();
-      toast("Category removed — Save to publish");
-    };
-    wrap.appendChild(bar);
-    const list = document.createElement('div'); list.dataset.catList = activeCat;
-    cat.items.forEach(it => list.appendChild(dishRow(it, activeCat, null)));
-    const add = document.createElement('button'); add.type = "button"; add.className = "add-dish"; add.textContent = "+ Add a dish to " + cat.title;
-    add.onclick = () => list.insertBefore(dishRow({}, activeCat, null), add);
-    wrap.appendChild(list); wrap.appendChild(add);
-  }
-  renderSearchCount();
-}
-let searchTimer = null;
-document.getElementById('dishSearch').addEventListener('input', () => {
-  clearTimeout(searchTimer);
-  searchTimer = setTimeout(() => { syncFromDOM(); renderMenuEditor(); }, 220);
-});
-
-function renderPhotoGrid() {
-  const g = document.getElementById('photoGrid'); g.innerHTML = "";
-  collectMenu().forEach(cat => cat.items.forEach(it => {
-    if (!it.img) return;
-    const cell = document.createElement('div'); cell.className = "photo-cell";
-    const im = document.createElement('img'); im.src = it.img; im.alt = "";
-    const p = document.createElement('p'); p.textContent = it.name;
-    const s = document.createElement('span'); s.textContent = cat.title; p.appendChild(s);
-    cell.appendChild(im); cell.appendChild(p); g.appendChild(cell);
-  }));
-  if (!g.children.length) g.innerHTML = "<p>No photos yet — add some from the Menu tab.</p>";
-}
-
-document.getElementById('saveBtn').onclick = async () => {
-  try {
-    if (activeTab === "menu") {
-      menuData = collectMenu();
-      await api("/api/menu", { method: "PUT", body: JSON.stringify(menuData) });
-      toast("Menu saved — live now ✓");
-    } else if (activeTab === "details") {
-      settingsData = {
-        ...settingsData,
-        name: document.getElementById('s-name').value.trim(),
-        announce: document.getElementById('s-announce').value.trim(),
-        phone: document.getElementById('s-phone').value.trim(),
-        phoneHref: "+" + document.getElementById('s-phone').value.replace(/\D/g, ""),
-        whatsapp: document.getElementById('s-whatsapp').value.trim(),
-        address: document.getElementById('s-address').value.trim(),
-        hours: document.getElementById('s-hours').value.split("\n").map(x => x.trim()).filter(Boolean),
-        deliveryNote: document.getElementById('s-deliveryNote').value.trim(),
-        discountAll: Math.min(95, Math.max(0, parseFloat(document.getElementById('s-discountAll').value) || 0)),
-        tz: document.getElementById('s-tz').value.trim() || "Europe/London",
-        deliveryFee: Math.max(0, parseFloat(document.getElementById('s-deliveryFee').value) || 0),
-        deliveryFreeOver: Math.max(0, parseFloat(document.getElementById('s-deliveryFreeOver').value) || 0),
-      };
-      await api("/api/settings", { method: "PUT", body: JSON.stringify(settingsData) });
-      toast("Details saved — live now ✓");
-    }
-  } catch (e) { toast("Could not save: " + e.message); }
-};
-
-async function showEditor() {
-  document.getElementById('loginView').hidden = true;
-  document.getElementById('editorView').hidden = false;
-  try {
-    menuData = await api("/api/menu");
-    settingsData = await api("/api/settings");
-    document.getElementById('s-name').value = settingsData.name || "";
-    document.getElementById('s-announce').value = settingsData.announce || "";
-    document.getElementById('s-phone').value = settingsData.phone || "";
-    document.getElementById('s-whatsapp').value = settingsData.whatsapp || "";
-    document.getElementById('s-address').value = settingsData.address || "";
-    document.getElementById('s-hours').value = (settingsData.hours || []).join("\n");
-    document.getElementById('s-deliveryNote').value = settingsData.deliveryNote || "";
-    document.getElementById('s-discountAll').value = settingsData.discountAll || "";
-    document.getElementById('s-tz').value = settingsData.tz || "";
-    document.getElementById('s-deliveryFee').value = settingsData.deliveryFee ?? "";
-    document.getElementById('s-deliveryFreeOver').value = settingsData.deliveryFreeOver ?? "";
-    renderMenuEditor();
-    setTab("menu");
-  } catch (e) { toast("Could not load data: " + e.message); }
-}
-
-if (!API) { document.getElementById('loginErr').textContent = "Demo is in static mode — the live admin connects after deployment."; }
-else if (token) { showEditor().catch(() => { document.getElementById('loginView').hidden = false; document.getElementById('editorView').hidden = true; }); }
+<script>const API=window.ZAFRANA_API||"",LIBRARY=["","assets/dish-bolani.jpg","assets/dish-mantu.jpg","assets/dish-grill.jpg","assets/dish-kabuli.jpg","assets/dish-lamb.jpg","assets/dish-naan.jpg","assets/dish-firni.jpg","assets/hero.jpg"],LIBRARY_NAMES={"":"No photo","assets/dish-bolani.jpg":"Library: Bolani","assets/dish-mantu.jpg":"Library: Mantu","assets/dish-grill.jpg":"Library: Mixed grill","assets/dish-kabuli.jpg":"Library: Kabuli pilaw","assets/dish-lamb.jpg":"Library: Lamb shank","assets/dish-naan.jpg":"Library: Naan basket","assets/dish-firni.jpg":"Library: Firni","assets/hero.jpg":"Library: Feast table"};let menuData=[],settingsData={},token=sessionStorage.getItem("zafrana_admin_token")||"",activeTab="menu",activeCat=0,viewMode="cat";function toast(e){const t=document.getElementById("toast");t.textContent=e,t.classList.add("show"),setTimeout(()=>t.classList.remove("show"),2800)}async function api(e,t={}){const a=await fetch(API+e,{...t,headers:{"Content-Type":"application/json",...t.headers||{},...token?{Authorization:"Bearer "+token}:{}}});if(!a.ok){const e=await a.json().catch(()=>({}));throw new Error(e.error||"HTTP "+a.status)}return a.json()}async function doLogin(){const e=document.getElementById("loginErr");e.textContent="";try{const e=await api("/api/login",{method:"POST",body:JSON.stringify({password:document.getElementById("pw").value})});token=e.token,sessionStorage.setItem("zafrana_admin_token",token),showEditor()}catch(t){e.textContent=t.message}}function setTab(e){e!==activeTab&&syncFromDOM(),activeTab=e,document.querySelectorAll(".tabs button").forEach(t=>t.classList.toggle("on",t.dataset.tab===e)),["menu","details","photos"].forEach(t=>{document.getElementById("panel-"+t).hidden=t!==e}),document.getElementById("saveWhat").textContent="Editing: "+("menu"===e?"Menu":"details"===e?"Restaurant details":"Photos"),document.getElementById("savebar").style.display="photos"===e?"none":"","photos"===e&&renderPhotoGrid()}function uploadPhoto(e,t){const a=new Image;a.onload=()=>{const e=Math.min(1,1200/Math.max(a.width,a.height)),n=document.createElement("canvas");n.width=Math.round(a.width*e),n.height=Math.round(a.height*e),n.getContext("2d").drawImage(a,0,0,n.width,n.height),n.toBlob(async e=>{try{const a=await fetch(API+"/api/upload",{method:"POST",headers:{Authorization:"Bearer "+token,"Content-Type":"image/jpeg"},body:e}),n=await a.json().catch(()=>({}));if(!a.ok)throw new Error(n.error||"Upload failed");t(n.url)}catch(e){toast("Upload failed: "+e.message)}URL.revokeObjectURL(a.src)},"image/jpeg",.82)},a.onerror=()=>toast("That file could not be read as a photo."),a.src=URL.createObjectURL(e)}function dishRow(e,t,a){const n=document.createElement("div");n.className="dish",n._cat=t,n._origName=e.name||"",n.innerHTML='<div class="dish-photo"><div class="pv"></div><label class="upload-btn">Upload photo<input type="file" accept="image/*" class="dupload" hidden></label><select class="dimg"></select></div><div class="dish-fields">'+(a?'<span class="cat-badge"></span>':"")+'<div class="dish-top"><input class="dname" placeholder="Dish name"><input class="dprice" type="number" step="0.05" min="0" placeholder="£"><label class="soldout-lbl"><input type="checkbox" class="dsold"> Sold out</label></div><input class="ddesc" placeholder="Description (optional)"><div class="dish-row2"><input class="dtag" placeholder="Tag e.g. Vegetarian"><input class="ddisc" type="number" min="0" max="95" step="1" placeholder="% off" title="Discount percent for this dish"><button type="button" class="del-btn">Delete dish</button></div><div class="dish-tools"></div><div style="margin-top:12px;text-align:right"><button type="button" class="dish-save">Save this dish</button></div></div>',a&&(n.querySelector(".cat-badge").textContent=a);const o=n.querySelector(".dimg"),i=LIBRARY.slice();e.img&&!i.includes(e.img)&&i.push(e.img),o.innerHTML=i.map(e=>'<option value="'+e+'">'+(LIBRARY_NAMES[e]||"Uploaded photo")+"</option>").join(""),o.value=e.img||"";const s=n.querySelector(".pv");function d(){const e=o.value;s.innerHTML=e?'<img src="'+e+'" alt="">':'<div class="noimg">No photo yet</div>'}o.onchange=d,d(),n.querySelector(".dupload").onchange=e=>{const t=e.target.files[0];t&&(toast("Uploading photo…"),uploadPhoto(t,e=>{if(![...o.options].some(t=>t.value===e)){const t=document.createElement("option");t.value=e,t.textContent="Uploaded photo",o.appendChild(t)}o.value=e,d(),toast("Photo uploaded — press Save & publish to make it live")}))},n.querySelector(".dname").value=e.name||"",n.querySelector(".dprice").value=e.price??"",n.querySelector(".ddesc").value=e.desc||"",n.querySelector(".dtag").value=e.tag||"",n.querySelector(".ddisc").value=e.discount?e.discount:"";const l=n.querySelector(".dish-tools");if(!a){const e=document.createElement("button");e.type="button",e.className="mv-btn",e.textContent="↑",e.title="Move dish up",e.onclick=()=>{const e=n.previousElementSibling;e&&e.classList.contains("dish")&&n.parentNode.insertBefore(n,e)};const t=document.createElement("button");t.type="button",t.className="mv-btn",t.textContent="↓",t.title="Move dish down",t.onclick=()=>{const e=n.nextElementSibling;e&&e.classList.contains("dish")&&n.parentNode.insertBefore(e,n)},l.appendChild(e),l.appendChild(t)}const c=document.createElement("select");return c.className="move-sel",c.innerHTML='<option value="">Move to…</option>'+menuData.map((e,a)=>a===t?"":'<option value="'+a+'">'+e.title+"</option>").join(""),c.onchange=()=>{""!==c.value&&moveDishTo(n,Number(c.value))},l.appendChild(c),n.querySelector(".dsold").checked=!!e.soldOut,n.querySelector(".dish-save").onclick=async e=>{const t=e.currentTarget,a=n.querySelector(".dname").value.trim()||"Dish";t.disabled=!0;const o=t.textContent;t.textContent="Saving…";try{menuData=collectMenu(),await api("/api/menu",{method:"PUT",body:JSON.stringify(menuData)}),t.textContent="Saved ✓",toast(a+" saved — live now ✓")}catch(e){toast("Could not save: "+e.message),t.textContent=o}setTimeout(()=>{t.disabled=!1,t.textContent="Save this dish"},1600)},n.querySelector(".del-btn").onclick=()=>{if(confirm("Delete "+(n._origName||"this dish")+"?"))if("search"===viewMode){const e=menuData[n._cat].items,t=e.findIndex(e=>e.name===n._origName);t>=0&&e.splice(t,1),n.remove(),renderSearchCount()}else n.remove()},n._collect=()=>({name:n.querySelector(".dname").value.trim(),price:parseFloat(n.querySelector(".dprice").value)||0,desc:n.querySelector(".ddesc").value.trim(),tag:n.querySelector(".dtag").value.trim(),discount:Math.min(95,Math.max(0,parseFloat(n.querySelector(".ddisc").value)||0)),img:o.value,soldOut:n.querySelector(".dsold").checked}),n}function moveDishTo(e,t){const a=e._collect();if(!a.name)return void toast("Give the dish a name first, then move it.");syncFromDOM();const n=menuData[e._cat].items,o=n.findIndex(t=>t.name===e._origName);o>=0&&n.splice(o,1),menuData[t].items.push(a),toast(a.name+" moved to "+menuData[t].title+" — Save to publish"),renderMenuEditor()}function syncFromDOM(){const e=document.getElementById("menuEditor");if(e&&menuData.length)if("cat"===viewMode){const t=e.querySelector("[data-cat-list]");if(t){const e=Number(t.dataset.catList),a=document.getElementById("catTitle"),n=document.getElementById("catEyebrow"),o=document.getElementById("catLede");a&&(a.value.trim()&&(menuData[e].title=a.value.trim()),menuData[e].eyebrow=n.value.trim(),menuData[e].lede=o.value.trim()),menuData[e].items=[...t.querySelectorAll(".dish")].map(e=>{const t=e._collect();return e._origName=t.name,t}).filter(e=>e.name)}}else e.querySelectorAll(".dish").forEach(e=>{const t=e._collect();if(!t.name)return;const a=menuData[e._cat].items,n=a.findIndex(t=>t.name===e._origName);n>=0?a[n]=t:a.push(t),e._origName=t.name})}function collectMenu(){return syncFromDOM(),menuData}function renderSearchCount(){const e=(document.getElementById("dishSearch").value||"").trim().toLowerCase();if(!e)return void(document.getElementById("searchCount").textContent="");let t=0;menuData.forEach(a=>a.items.forEach(a=>{a.name.toLowerCase().includes(e)&&t++})),document.getElementById("searchCount").textContent=t?t+(1===t?" dish":" dishes")+" found":"No dish matches — try another word"}function renderMenuEditor(){const e=(document.getElementById("dishSearch").value||"").trim().toLowerCase(),t=document.getElementById("catChips");t.innerHTML="";const a=document.getElementById("menuEditor");a.innerHTML="",menuData.forEach((e,a)=>{const n=document.createElement("button");n.type="button",n.textContent=e.title,n.className="cat"===viewMode&&a===activeCat?"on":"",n.onclick=()=>{syncFromDOM(),viewMode="cat",activeCat=a,document.getElementById("dishSearch").value="",renderMenuEditor()},t.appendChild(n)});const n=document.createElement("button");if(n.type="button",n.className="add-cat",n.textContent="+ Add category",n.onclick=()=>{syncFromDOM();let e="new-category",t=2;for(;menuData.some(t=>t.slug===e);)e="new-category-"+t++;menuData.push({slug:e,title:"New category",eyebrow:"",lede:"",items:[]}),viewMode="cat",activeCat=menuData.length-1,document.getElementById("dishSearch").value="",renderMenuEditor(),toast("New category added — name it below, add dishes, then Save")},t.appendChild(n),e){viewMode="search";const t=document.createElement("div");t.dataset.searchList="1",menuData.forEach((a,n)=>a.items.forEach(o=>{o.name.toLowerCase().includes(e)&&t.appendChild(dishRow(o,n,"In "+a.title))})),a.appendChild(t)}else{viewMode="cat";const e=menuData[activeCat],t=document.createElement("div");t.className="catbar",t.innerHTML='<div class="fld"><label>Category name</label><input id="catTitle"></div><div class="fld"><label>Small line above the name on its page (optional)</label><input id="catEyebrow"></div><div class="fld"><label>Intro line on its page (optional)</label><input id="catLede"></div><div class="catbar-btns"><button type="button" id="catUp">↑ Show earlier</button><button type="button" id="catDown">↓ Show later</button><button type="button" id="catDel" class="danger">Delete this category</button></div>',t.querySelector("#catTitle").value=e.title||"",t.querySelector("#catEyebrow").value=e.eyebrow||"",t.querySelector("#catLede").value=e.lede||"",t.querySelector("#catUp").onclick=()=>{if(0===activeCat)return;syncFromDOM();const e=menuData[activeCat-1];menuData[activeCat-1]=menuData[activeCat],menuData[activeCat]=e,activeCat--,renderMenuEditor()},t.querySelector("#catDown").onclick=()=>{if(activeCat>=menuData.length-1)return;syncFromDOM();const e=menuData[activeCat+1];menuData[activeCat+1]=menuData[activeCat],menuData[activeCat]=e,activeCat++,renderMenuEditor()},t.querySelector("#catDel").onclick=()=>{confirm('Delete the category "'+e.title+'" and its '+e.items.length+" dish(es)? You can re-add them later, but this removes them from the site when you save.")&&(syncFromDOM(),menuData.splice(activeCat,1),activeCat=Math.max(0,Math.min(activeCat,menuData.length-1)),renderMenuEditor(),toast("Category removed — Save to publish"))},a.appendChild(t);const n=document.createElement("div");n.dataset.catList=activeCat,e.items.forEach(e=>n.appendChild(dishRow(e,activeCat,null)));const o=document.createElement("button");o.type="button",o.className="add-dish",o.textContent="+ Add a dish to "+e.title,o.onclick=()=>n.insertBefore(dishRow({},activeCat,null),o),a.appendChild(n),a.appendChild(o)}renderSearchCount()}document.getElementById("loginBtn").onclick=doLogin,document.getElementById("pw").addEventListener("keydown",e=>{"Enter"===e.key&&doLogin()}),document.getElementById("logoutBtn").onclick=()=>{token="",sessionStorage.removeItem("zafrana_admin_token"),location.reload()},document.querySelectorAll(".tabs button").forEach(e=>e.onclick=()=>setTab(e.dataset.tab));let searchTimer=null;function renderPhotoGrid(){const e=document.getElementById("photoGrid");e.innerHTML="",collectMenu().forEach(t=>t.items.forEach(a=>{if(!a.img)return;const n=document.createElement("div");n.className="photo-cell";const o=document.createElement("img");o.src=a.img,o.alt="";const i=document.createElement("p");i.textContent=a.name;const s=document.createElement("span");s.textContent=t.title,i.appendChild(s),n.appendChild(o),n.appendChild(i),e.appendChild(n)})),e.children.length||(e.innerHTML="<p>No photos yet — add some from the Menu tab.</p>")}async function showEditor(){document.getElementById("loginView").hidden=!0,document.getElementById("editorView").hidden=!1;try{menuData=await api("/api/menu"),settingsData=await api("/api/settings"),document.getElementById("s-name").value=settingsData.name||"",document.getElementById("s-announce").value=settingsData.announce||"",document.getElementById("s-phone").value=settingsData.phone||"",document.getElementById("s-whatsapp").value=settingsData.whatsapp||"",document.getElementById("s-address").value=settingsData.address||"",document.getElementById("s-hours").value=(settingsData.hours||[]).join("\n"),document.getElementById("s-deliveryNote").value=settingsData.deliveryNote||"",document.getElementById("s-discountAll").value=settingsData.discountAll||"",document.getElementById("s-tz").value=settingsData.tz||"",document.getElementById("s-deliveryFee").value=settingsData.deliveryFee??"",document.getElementById("s-deliveryFreeOver").value=settingsData.deliveryFreeOver??"",renderMenuEditor(),setTab("menu")}catch(e){toast("Could not load data: "+e.message)}}document.getElementById("dishSearch").addEventListener("input",()=>{clearTimeout(searchTimer),searchTimer=setTimeout(()=>{syncFromDOM(),renderMenuEditor()},220)}),document.getElementById("saveBtn").onclick=async()=>{try{"menu"===activeTab?(menuData=collectMenu(),await api("/api/menu",{method:"PUT",body:JSON.stringify(menuData)}),toast("Menu saved — live now ✓")):"details"===activeTab&&(settingsData={...settingsData,name:document.getElementById("s-name").value.trim(),announce:document.getElementById("s-announce").value.trim(),phone:document.getElementById("s-phone").value.trim(),phoneHref:"+"+document.getElementById("s-phone").value.replace(/\D/g,""),whatsapp:document.getElementById("s-whatsapp").value.trim(),address:document.getElementById("s-address").value.trim(),hours:document.getElementById("s-hours").value.split("\n").map(e=>e.trim()).filter(Boolean),deliveryNote:document.getElementById("s-deliveryNote").value.trim(),discountAll:Math.min(95,Math.max(0,parseFloat(document.getElementById("s-discountAll").value)||0)),tz:document.getElementById("s-tz").value.trim()||"Europe/London",deliveryFee:Math.max(0,parseFloat(document.getElementById("s-deliveryFee").value)||0),deliveryFreeOver:Math.max(0,parseFloat(document.getElementById("s-deliveryFreeOver").value)||0)},await api("/api/settings",{method:"PUT",body:JSON.stringify(settingsData)}),toast("Details saved — live now ✓"))}catch(e){toast("Could not save: "+e.message)}},API?token&&showEditor().catch(()=>{document.getElementById("loginView").hidden=!1,document.getElementById("editorView").hidden=!0}):document.getElementById("loginErr").textContent="Demo is in static mode — the live admin connects after deployment.";
 </script>
 </body>
 </html>
