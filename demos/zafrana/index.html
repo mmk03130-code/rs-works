@@ -33,7 +33,7 @@
     <p class="sub">Charcoal kebabs, saffron rice and dumplings folded by hand — every plate 100% halal, every dish cooked fresh, every day.</p>
     <div class="hero-meta">
       <span id="openNow">Open today · 12:00 – 22:30</span>
-      <span>☎ +44 20 7946 0018</span>
+      <a href="tel:+442079460018" data-tel>☎ <span data-set="phone">+44 20 7946 0018</span></a>
       <span>★ Loved across South East London</span>
     </div>
     <div class="hero-cta">
@@ -173,14 +173,6 @@
 
 <a class="wa" href="https://wa.me/442079460018?text=Hello%20Zafrana" data-wa target="_blank" rel="noopener" aria-label="WhatsApp us">✆</a>
 
-<script>
-(function(){
-  var h=new Date().getHours(), d=new Date().getDay(), el=document.getElementById('openNow');
-  var close=(d===0)?22:((d>=5)?23.5:22.5), open=12;
-  var s=(h>=open&&h<close)?('Open now · until '+Math.floor(close)+':'+(close%1?'30':'00')):'Opens today · 12:00';
-  el.textContent=s;
-})();
-</script>
 <script src="config.js"></script>
 <script src="settings.js"></script>
 </body>

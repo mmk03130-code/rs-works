@@ -5,11 +5,11 @@
   if (!window.ZAFRANA_API) return;
 
   var DAY_ORDER = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-  function coversToday(dayPart) {
+  function coversToday(dayPart, todayTok) {
     if (!dayPart) return false;
     var tokens = dayPart.match(/(Mon|Tue|Wed|Thu|Fri|Sat|Sun)/g);
     if (!tokens || !tokens.length) return false;
-    var today = DAY_ORDER[(new Date().getDay() + 6) % 7]; // JS getDay: Sun=0 → Mon-first index
+    var today = todayTok || DAY_ORDER[(new Date().getDay() + 6) % 7]; // JS getDay: Sun=0 → Mon-first index
     if (tokens.length === 1) return tokens[0] === today;
     if (tokens.length === 2) {
       var a = DAY_ORDER.indexOf(tokens[0]), b = DAY_ORDER.indexOf(tokens[1]), guard = 0;
@@ -34,6 +34,7 @@
         el.textContent = s.phone || el.textContent;
         if (el.tagName === "A" && s.phoneHref) el.href = "tel:" + s.phoneHref;
       });
+      document.querySelectorAll("[data-tel]").forEach(el => { if (s.phoneHref) el.href = "tel:" + s.phoneHref; });
       document.querySelectorAll('[data-set="address"]').forEach(el => { el.textContent = s.address || el.textContent; });
       document.querySelectorAll("[data-wa]").forEach(el => {
         if (s.whatsapp) el.href = el.href.replace(/wa\.me\/\d+/, "wa.me/" + s.whatsapp);
@@ -60,6 +61,32 @@
           return "<tr" + (today ? ' class="today-row"' : "") + "><td>" + day + pill + "</td><td>" + time + "</td></tr>";
         }).join("");
       });
+      // Open-now chip (#openNow): read today's line in the restaurant's timezone.
+      var openEl = document.getElementById('openNow');
+      if (openEl && Array.isArray(s.hours) && s.hours.length) {
+        try {
+          var tz = s.tz || "Europe/London";
+          var parts = new Intl.DateTimeFormat("en-GB", { timeZone: tz, weekday: "short", hour: "2-digit", minute: "2-digit", hour12: false }).formatToParts(new Date());
+          var wd = "", hh = 0, mm = 0;
+          parts.forEach(p => {
+            if (p.type === "weekday") wd = p.value.slice(0, 3);
+            if (p.type === "hour") hh = Number(p.value) % 24;
+            if (p.type === "minute") mm = Number(p.value);
+          });
+          var line = s.hours.find(h => coversToday(String(h).split("·")[0], wd));
+          if (line) {
+            var m = String(line).match(/(\d{1,2}):(\d{2})\s*[\u2013-]\s*(\d{1,2}):(\d{2})/);
+            if (m) {
+              var open = Number(m[1]) * 60 + Number(m[2]), close = Number(m[3]) * 60 + Number(m[4]);
+              var now = hh * 60 + mm;
+              var f = (h2, m2) => String(h2).padStart(2, "0") + ":" + String(m2).padStart(2, "0");
+              openEl.textContent = now >= open && now < close
+                ? "Open now · until " + f(Number(m[3]), Number(m[4]))
+                : now < open ? "Opens today · " + f(Number(m[1]), Number(m[2])) : "Closed · back tomorrow";
+            }
+          } else { openEl.textContent = "Closed today"; }
+        } catch (e) { /* keep the static fallback text */ }
+      }
     })
     .catch(() => {});
 })();
