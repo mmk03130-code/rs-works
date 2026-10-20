@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact & Appointments — Maison Solenne</title>
+<meta name="description" content="Book an appointment at Maison Solenne, Washington. Commissions for rings, bespoke watches and leather straps, and private gallery viewings.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header></header>
+
+<section class="phead wrap">
+  <div class="eyebrow">Contact</div>
+  <h1>Begin with a conversation.</h1>
+  <p>Every commission starts here — not with a deposit, with a talk. Tell us what you are imagining and we will reply within two working days. Private viewings at the atelier in <span data-set="city">Washington</span>, or by video call if you are further away.</p>
+</section>
+
+<section class="wrap" style="display:grid;grid-template-columns:1fr 2fr;gap:60px;padding-bottom:20px" id="contact-grid">
+  <div>
+    <h4 style="font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:14px">The Atelier</h4>
+    <p style="color:var(--ink2);font-size:15px">By appointment only<br><span data-set="city2">Washington</span><br><br>
+    <a href="#" data-set="email" style="color:var(--ink)">atelier@maison-solenne.example</a><br>
+    <a href="#" data-set="phone" style="color:var(--ink)">+1 (202) 555-0147</a><br><br>
+    Instagram · Pinterest</p>
+  </div>
+  <form class="appt-form" id="appt" style="margin-top:0">
+    <label for="nm">Your name</label>
+    <input id="nm" required autocomplete="name" placeholder="Full name">
+    <label for="em">Email</label>
+    <input id="em" type="email" required autocomplete="email" placeholder="you@example.com">
+    <label for="tp">I am interested in</label>
+    <select id="tp">
+      <option>A ring</option><option>A bespoke watch</option><option>A leather strap</option>
+      <option>A private viewing</option><option>Something else</option>
+    </select>
+    <label for="ms">What are you imagining?</label>
+    <textarea id="ms" placeholder="Materials, occasion, timing — anything you already know."></textarea>
+    <button class="btn" type="submit" style="border:0;cursor:pointer;font-family:var(--sans)">Request an appointment</button>
+    <div class="ok" id="ok">Thank you — your request is with the atelier. Expect a reply within two working days. If it is urgent, call us and mention this form.</div>
+  </form>
+</section>
+
+<footer></footer>
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+(function () {
+  var D = window.SOLENNE;
+  document.querySelector('[data-set="city"]').textContent = D.settings.city;
+  document.querySelector('[data-set="city2"]').textContent = D.settings.city;
+  var em = document.querySelector('[data-set="email"]'); em.textContent = D.settings.email; em.href = 'mailto:' + D.settings.email;
+  var ph = document.querySelector('[data-set="phone"]'); ph.textContent = D.settings.phone; ph.href = 'tel:' + D.settings.phone.replace(/[^+\d]/g, '');
+  document.getElementById('appt').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var list = [];
+    try { list = JSON.parse(localStorage.getItem('solenne-enquiries') || '[]'); } catch (err) {}
+    list.push({ name: document.getElementById('nm').value, email: document.getElementById('em').value, topic: document.getElementById('tp').value, msg: document.getElementById('ms').value, at: new Date().toISOString() });
+    try { localStorage.setItem('solenne-enquiries', JSON.stringify(list)); } catch (err) {}
+    document.getElementById('ok').style.display = 'block';
+    e.target.querySelector('button').textContent = 'Request sent ✓';
+    e.target.querySelector('button').disabled = true;
+  });
+  if (window.innerWidth < 860) document.getElementById('contact-grid').style.gridTemplateColumns = '1fr';
+})();
+</script>
+</body>
+</html>

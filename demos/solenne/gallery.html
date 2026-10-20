@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Gallery — Maison Solenne</title>
+<meta name="description" content="The Maison Solenne gallery: handmade rings, bespoke watches and leather straps. Click any piece to view it closely. Purchases complete on our secure external checkout.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header></header>
+
+<section class="phead wrap">
+  <div class="eyebrow">The Gallery</div>
+  <h1>Three lines. Nothing else.</h1>
+  <p>We make rings, bespoke watches and leather straps — and we have resisted making anything else. Click any piece to look closer. Buying takes you to our secure checkout partner; nothing is sold on this page itself.</p>
+  <nav class="gnav"><a href="#rings">01 · Rings</a><a href="#watches">02 · Bespoke Watches</a><a href="#straps">03 · Leather Straps</a></nav>
+</section>
+
+<main id="gallery-main"></main>
+
+<section class="band">
+  <div class="wrap"><div class="in rv">
+    <div class="eyebrow">Not sure yet?</div>
+    <h2>Come and hold them first.</h2>
+    <p>Photographs flatten gold and lie about leather. Book a half hour at the atelier and handle every piece in this gallery under real light.</p>
+    <a class="btn" href="contact.html">Book an appointment</a>
+  </div></div>
+</section>
+
+<footer></footer>
+<div class="lb" id="lb"><button class="x" aria-label="Close">×</button><button class="nav prev" aria-label="Previous">‹</button><img alt=""><button class="nav next" aria-label="Next">›</button><div class="cap"><div class="nm"></div><div class="mt"></div><a class="lbuy" href="#" target="_blank" rel="noopener">Buy Now</a></div></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+(function () {
+  var D = window.SOLENNE;
+  var main = document.getElementById('gallery-main');
+  main.innerHTML = D.lines.map(function (L) {
+    return '<section class="chapter wrap rv" id="' + L.id + '" style="padding-top:80px"><div class="no">Chapter ' + L.no + ' — ' + L.name + '</div>' +
+      '<h2>' + L.title + '</h2><p class="intro">' + L.intro + '</p>' +
+      '<div class="grid" id="g-' + L.id + '"></div></section>';
+  }).join('');
+  D.lines.forEach(function (L) { window.renderCards(L.id, 'g-' + L.id); });
+  var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } }); }, { threshold: 0.08 });
+  document.querySelectorAll('.rv').forEach(function (el) { io.observe(el); });
+})();
+</script>
+</body>
+</html>

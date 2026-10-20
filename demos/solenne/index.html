@@ -1,10 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<title>Maison Solenne</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maison Solenne — Rings, Bespoke Watches & Leather Straps</title>
+<meta name="description" content="Maison Solenne is a Washington atelier for handmade rings, bespoke watches and leather watch straps. Made one at a time, by appointment.">
+<link rel="stylesheet" href="style.css">
 </head>
-<body>
-<!-- placeholder: replaced by full site upload -->
+<body class="dark-hero">
+<header></header>
+
+<section class="hero">
+  <div class="slide on"><video autoplay muted loop playsinline poster="hero.jpg"><source src="hero-loop.webm" type="video/webm"><source src="hero-loop.mp4" type="video/mp4"></video></div>
+  <div class="veil"></div>
+  <div class="inner">
+    <div class="eyebrow" style="color:#C6A86B">The Atelier — By Appointment</div>
+    <h1 data-set="heroTitle">Objects for a lifetime, not a season.</h1>
+    <p data-set="heroSub">Rings, bespoke watches and leather straps, made one at a time in our Washington atelier. Nothing here is made for stock.</p>
+    <a class="link-arrow" href="gallery.html">Enter the gallery</a>
+  </div>
+  <div class="cue"><span>Scroll</span></div>
+</section>
+
+<section class="pin" id="pin">
+  <div class="pin-stage">
+    <img id="pin-img" src="rings-wide.jpg" alt="Gold rings glowing in warm light">
+    <div class="pin-veil"></div>
+    <div class="pin-eyebrow">The Solenne Way</div>
+    <div class="pin-lines">
+      <p class="pl">First, the stone.</p>
+      <p class="pl">Then, the hand that sets it.</p>
+      <p class="pl">Then, a lifetime of wearing it.</p>
+    </div>
+    <div class="pin-hint">Keep scrolling</div>
+  </div>
+</section>
+
+<main id="chapters"></main>
+
+<section class="numbers">
+  <div class="wrap"><div class="row">
+    <div class="rv"><div class="n">1</div><div class="t">Pair of hands per watch</div></div>
+    <div class="rv"><div class="n">214</div><div class="t">Steps in a single strap</div></div>
+    <div class="rv"><div class="n">6</div><div class="t">Weeks for a bespoke commission</div></div>
+    <div class="rv"><div class="n">0</div><div class="t">Pieces made for stock</div></div>
+  </div></div>
+</section>
+
+<section class="process wrap">
+  <div class="eyebrow rv">Inside the atelier</div>
+  <h2 class="serif rv" style="font-weight:500;font-size:clamp(32px,4vw,50px);margin-top:12px">How a strap is made</h2>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:44px" class="proc-imgs">
+    <img class="rv" src="craft3.jpg" alt="Watchmaker tools laid out in a wooden box" style="height:260px;width:100%;object-fit:cover">
+    <video class="rv" autoplay muted loop playsinline poster="craft1.jpg" style="height:260px;width:100%;object-fit:cover"><source src="craft-loop.mp4" type="video/mp4"></video>
+    <img class="rv" src="craft2.jpg" alt="Tweezers adjusting a fine watch movement" style="height:260px;width:100%;object-fit:cover">
+  </div>
+  <div class="steps" id="steps"></div>
+</section>
+
+<section class="band">
+  <div class="wrap"><div class="in rv">
+    <div class="eyebrow">Commissions</div>
+    <h2>The November book is open.</h2>
+    <p>Six commissions a month, no more. Tell us what you are imagining — a ring, a watch, a strap for a watch you already love — and we will write back within two working days.</p>
+    <a class="btn" href="contact.html">Book an appointment</a>
+  </div></div>
+</section>
+
+<footer></footer>
+<div class="lb" id="lb"><button class="x" aria-label="Close">×</button><button class="nav prev" aria-label="Previous">‹</button><img alt=""><button class="nav next" aria-label="Next">›</button><div class="cap"><div class="nm"></div><div class="mt"></div><a class="lbuy" href="#" target="_blank" rel="noopener">Buy Now</a></div></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+(function () {
+  var D = window.SOLENNE;
+  document.querySelector('[data-set="heroTitle"]').textContent = D.settings.heroTitle;
+  document.querySelector('[data-set="heroSub"]').textContent = D.settings.heroSub;
+  var main = document.getElementById('chapters');
+  main.innerHTML = D.lines.map(function (L) {
+    return '<section class="chapter wrap rv"><div class="no">Chapter ' + L.no + ' — ' + L.name + '</div>' +
+      '<h2>' + L.title + '</h2><p class="intro">' + L.intro + '</p>' +
+      '<div class="wide"><img loading="lazy" src="' + L.wide + '" alt="' + L.name + ' at Maison Solenne"></div>' +
+      '<div class="grid" id="grid-' + L.id + '"></div>' +
+      '<a class="link-arrow" style="color:var(--ink);margin-top:34px" href="gallery.html#' + L.id + '">View the ' + L.name.toLowerCase() + ' gallery</a></section>';
+  }).join('');
+  D.lines.forEach(function (L) { window.renderCards(L.id, 'grid-' + L.id); });
+  document.getElementById('steps').innerHTML = D.steps.map(function (s) {
+    return '<div class="step rv"><div class="n">' + s.n + '.</div><h3>' + s.t + '</h3><p>' + s.d + '</p></div>';
+  }).join('');
+  var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } }); }, { threshold: 0.1 });
+  document.querySelectorAll('.rv').forEach(function (el) { io.observe(el); });
+})();
+</script>
 </body>
 </html>

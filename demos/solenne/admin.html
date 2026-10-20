@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Owner Admin — Maison Solenne</title>
+<meta name="description" content="Owner admin for the Maison Solenne demo: edit pieces, homepage wording and contact details.">
+<link rel="stylesheet" href="style.css">
+<style>
+  .adm{max-width:860px;margin:0 auto;padding:150px 32px 40px}
+  .adm h1{font-family:var(--serif);font-weight:500;font-size:40px}
+  .adm h2{font-family:var(--serif);font-weight:500;font-size:27px;margin:44px 0 6px}
+  .adm p.note{color:var(--ink2);font-size:14.5px;max-width:40em}
+  .adm label{display:block;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink2);margin:18px 0 6px}
+  .adm input,.adm textarea{width:100%;background:#fff;border:1px solid var(--line);padding:12px 14px;font-size:15px;font-family:var(--sans)}
+  .prow{display:grid;grid-template-columns:56px 1fr 1fr;gap:12px;align-items:end;background:#fff;border:1px solid var(--line);padding:12px;margin-top:10px}
+  .prow img{width:56px;height:56px;object-fit:cover}
+  .prow label{margin:0 0 4px}
+  .bar{display:flex;gap:14px;margin-top:34px;flex-wrap:wrap}
+  .ghost{background:none;border:1px solid var(--ink);color:var(--ink)}
+  .enq{background:#fff;border:1px solid var(--line);padding:14px 16px;margin-top:10px;font-size:14.5px}
+  .gate{max-width:420px;margin:22vh auto 0;padding:0 32px;text-align:center}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<header></header>
+
+<div class="gate" id="gate">
+  <div class="eyebrow">Owner only</div>
+  <h1 class="serif" style="font-weight:500;font-size:36px;margin:12px 0 8px">Atelier admin</h1>
+  <p style="color:var(--ink2);font-size:14.5px">Demo password: <b>demo-solenne-42</b><br>(On a live site, the owner sets their own.)</p>
+  <input id="pw" type="password" placeholder="Password" style="width:100%;margin-top:20px;background:#fff;border:1px solid var(--line);padding:14px 16px;font-size:15px">
+  <button class="btn" id="login" style="border:0;cursor:pointer;width:100%">Log in</button>
+  <p id="err" style="color:#A33;margin-top:12px;font-size:14px"></p>
+</div>
+
+<main class="adm hidden" id="panel">
+  <div class="eyebrow">Owner admin</div>
+  <h1>Run your shop window</h1>
+  <p class="note">Change a name, a material line, the homepage headline or your contact details, press save, and the whole website updates. No code, no calling a developer. This demo saves in this browser; the live version saves to your private backend and works from any device.</p>
+
+  <h2>Homepage</h2>
+  <label>Headline</label><input id="s-heroTitle">
+  <label>Opening line</label><textarea id="s-heroSub" rows="2"></textarea>
+
+  <h2>Atelier details</h2>
+  <label>City</label><input id="s-city">
+  <label>Email</label><input id="s-email">
+  <label>Phone</label><input id="s-phone">
+  <label>Buy Now link — your checkout (Shopify, Etsy, any shop)</label><input id="s-buyUrl" placeholder="https://your-shop.example.com">
+  <p class="note" style="margin-top:8px">Every piece has a Buy Now button. It sends the customer straight to this link, in a new tab. Selling happens there, never on this website.</p>
+
+  <h2>Your pieces</h2>
+  <p class="note">Names and material lines, per piece. Photos are changed by uploading a replacement in the live version.</p>
+  <div id="products"></div>
+
+  <h2>Appointment requests</h2>
+  <div id="enquiries"><p class="note">None yet in this browser.</p></div>
+
+  <div class="bar">
+    <button class="btn" id="save" style="border:0;cursor:pointer">Save changes</button>
+    <button class="btn ghost" id="reset" style="cursor:pointer">Reset to original</button>
+    <a class="btn ghost" href="index.html" style="text-decoration:none">View website</a>
+  </div>
+  <p id="saved" style="color:#4A7A2E;margin-top:14px;font-size:14.5px"></p>
+</main>
+
+<footer></footer>
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+(function () {
+  var PASS = 'demo-solenne-42';
+  function data() {
+    try { var o = localStorage.getItem('solenne-data'); if (o) return JSON.parse(o); } catch (e) {}
+    return JSON.parse(JSON.stringify(window.SOLENNE_DEFAULT));
+  }
+  var D = data();
+  document.getElementById('login').addEventListener('click', tryLogin);
+  document.getElementById('pw').addEventListener('keydown', function (e) { if (e.key === 'Enter') tryLogin(); });
+  function tryLogin() {
+    if (document.getElementById('pw').value === PASS) {
+      document.getElementById('gate').classList.add('hidden');
+      document.getElementById('panel').classList.remove('hidden');
+      fill();
+    } else document.getElementById('err').textContent = 'That password is not right. Try again.';
+  }
+  function fill() {
+    ['heroTitle', 'heroSub', 'city', 'email', 'phone', 'buyUrl'].forEach(function (k) {
+      document.getElementById('s-' + k).value = D.settings[k] || '';
+    });
+    document.getElementById('products').innerHTML = D.products.map(function (p, i) {
+      return '<div class="prow"><img src="' + p.img + '" alt=""><div><label>Piece name</label><input data-p="' + i + '" data-f="name" value="' + p.name.replace(/"/g, '&quot;') + '"></div>' +
+        '<div><label>Material line</label><input data-p="' + i + '" data-f="material" value="' + p.material.replace(/"/g, '&quot;') + '"></div></div>';
+    }).join('');
+    var list = [];
+    try { list = JSON.parse(localStorage.getItem('solenne-enquiries') || '[]'); } catch (e) {}
+    if (list.length) document.getElementById('enquiries').innerHTML = list.map(function (q) {
+      return '<div class="enq"><b>' + q.name + '</b> · ' + q.topic + '<br><span style="color:var(--ink2)">' + q.email + ' — ' + (q.msg || '(no message)') + '</span></div>';
+    }).join('');
+  }
+  document.getElementById('save').addEventListener('click', function () {
+    ['heroTitle', 'heroSub', 'city', 'email', 'phone', 'buyUrl'].forEach(function (k) { D.settings[k] = document.getElementById('s-' + k).value; });
+    document.querySelectorAll('[data-p]').forEach(function (inp) { D.products[+inp.getAttribute('data-p')][inp.getAttribute('data-f')] = inp.value; });
+    try { localStorage.setItem('solenne-data', JSON.stringify(D)); } catch (e) {}
+    document.getElementById('saved').textContent = 'Saved ✓ — open the website to see it live.';
+  });
+  document.getElementById('reset').addEventListener('click', function () {
+    try { localStorage.removeItem('solenne-data'); } catch (e) {}
+    D = JSON.parse(JSON.stringify(window.SOLENNE_DEFAULT)); fill();
+    document.getElementById('saved').textContent = 'Reset to the original wording.';
+  });
+})();
+</script>
+</body>
+</html>
