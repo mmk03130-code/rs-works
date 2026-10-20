@@ -8,6 +8,9 @@ window.SOLENNE_DEFAULT = {
     email: "atelier@maison-solenne.com",
     phone: "+1 (202) 555-0147",
     buyUrl: "https://checkout.example.com",
+    bandKicker: "Commissions",
+    bandTitle: "The November book is open.",
+    bandText: "Six commissions a month, no more. Tell us what you are imagining — a ring, a watch, a strap for a watch you already love — and we will write back within two working days.",
     heroTitle: "Objects for a lifetime, not a season.",
     heroSub: "Rings, bespoke watches and leather straps, made one at a time in our Washington atelier. Nothing here is made for stock."
   },

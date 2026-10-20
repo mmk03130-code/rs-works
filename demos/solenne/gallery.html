@@ -42,6 +42,8 @@
 (function () {
   var D = window.SOLENNE;
   var main = document.getElementById('gallery-main');
+  var gnav = document.querySelector('.gnav');
+  if (gnav) gnav.innerHTML = D.lines.map(function (L) { return '<a href="#' + L.id + '">' + L.no + ' · ' + L.name + '</a>'; }).join('');
   main.innerHTML = D.lines.map(function (L) {
     return '<section class="chapter wrap rv" id="' + L.id + '" style="padding-top:64px"><div class="no">Chapter ' + L.no + ' — ' + L.name + '</div>' +
       '<h2>' + L.title + '</h2><p class="intro">' + L.intro + '</p>' +

@@ -64,9 +64,9 @@
 
 <section class="band">
   <div class="wrap"><div class="in rv">
-    <div class="eyebrow">Commissions</div>
-    <h2>The November book is open.</h2>
-    <p>Six commissions a month, no more. Tell us what you are imagining — a ring, a watch, a strap for a watch you already love — and we will write back within two working days.</p>
+    <div class="eyebrow" data-set="bandKicker">Commissions</div>
+    <h2 data-set="bandTitle">The November book is open.</h2>
+    <p data-set="bandText">Six commissions a month, no more. Tell us what you are imagining — a ring, a watch, a strap for a watch you already love — and we will write back within two working days.</p>
     <a class="btn" href="contact.html">Book an appointment</a>
   </div></div>
 </section>
@@ -79,8 +79,10 @@
 <script>
 (function () {
   var D = window.SOLENNE;
-  document.querySelector('[data-set="heroTitle"]').textContent = D.settings.heroTitle;
-  document.querySelector('[data-set="heroSub"]').textContent = D.settings.heroSub;
+  document.querySelectorAll('[data-set]').forEach(function (el) {
+    var k = el.getAttribute('data-set');
+    if (D.settings[k] != null) el.textContent = D.settings[k];
+  });
   var main = document.getElementById('chapters');
   main.innerHTML = D.lines.map(function (L) {
     return '<section class="chapter wrap rv"><div class="no">Chapter ' + L.no + ' — ' + L.name + '</div>' +
