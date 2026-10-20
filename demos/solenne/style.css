@@ -63,8 +63,8 @@ body.dark-hero header:not(.solid) .appt{border-color:#F3EDE1}
 .chapter .no{font-family:var(--serif);font-style:italic;font-size:20px;color:var(--gold)}
 .chapter h2{font-family:var(--serif);font-weight:500;font-size:clamp(34px,4.4vw,56px);line-height:1.08;margin:10px 0 16px;max-width:16em}
 .chapter .intro{max-width:38em;color:var(--ink2)}
-.chapter .wide{margin:48px calc(50% - 50vw) 8px;width:100vw;height:min(68vh,600px);overflow:hidden;position:relative;background:var(--ivory2)}
-.chapter .wide img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:kenburns 28s ease-in-out infinite alternate}
+.wide{margin:48px calc(50% - 50vw) 8px;width:100vw;height:min(68vh,600px);overflow:hidden;position:relative;background:var(--ivory2)}
+.wide img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:kenburns 28s ease-in-out infinite alternate}
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;margin-top:38px}
 .card{cursor:pointer}
 .card .ph{overflow:hidden;background:var(--ivory2)}
@@ -94,15 +94,9 @@ body.dark-hero header:not(.solid) .appt{border-color:#F3EDE1}
 .btn:hover{background:var(--gold)}
 /* page head */
 .phead{padding:170px 0 20px;text-align:left}
-.phead.split{display:grid;grid-template-columns:1.08fr .92fr;column-gap:56px;align-items:stretch}
-.phead .ph-main{align-self:center}
-.phead .ph-img{overflow:hidden;height:540px}
-.phead .ph-img img{width:100%;height:100%;object-fit:cover;display:block}
-.phead.split .gnav{grid-column:1/-1}
-@media(max-width:900px){
-  .phead.split{grid-template-columns:1fr}
-  .phead .ph-img{min-height:0;height:260px;margin-top:34px}
-}
+.phead.big h1{font-size:clamp(52px,7vw,100px);max-width:12em}
+.phead.big p{font-size:17.5px}
+.headband{height:58vh;min-height:340px;margin-top:30px}
 .phead h1{font-family:var(--serif);font-weight:500;font-size:clamp(42px,5.6vw,72px);line-height:1.05;margin-top:16px}
 .phead p{color:var(--ink2);max-width:38em;margin-top:14px}
 .gnav{display:flex;gap:28px;margin-top:36px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0}
