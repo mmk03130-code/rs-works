@@ -132,6 +132,8 @@
       <div class="fld"><label>Opening hours — one line per row</label><textarea id="s-hours" rows="3"></textarea></div>
       <div class="fld"><label>Delivery note</label><input id="s-deliveryNote"></div>
         <div class="fld"><label>Timezone (for the “Open now” clock — e.g. Europe/London)</label><input id="s-tz" placeholder="Europe/London"></div>
+        <div class="fld"><label>Delivery fee (£)</label><input id="s-deliveryFee" type="number" min="0" step="0.25"></div>
+        <div class="fld"><label>Free delivery over (£) — 0 means delivery is never free</label><input id="s-deliveryFreeOver" type="number" min="0" step="1"></div>
         <div class="fld"><label>Overall discount % — every dish without its own discount (0 = none)</label><input id="s-discountAll" type="number" min="0" max="95" step="1"></div>
     </section>
 
@@ -443,6 +445,8 @@ document.getElementById('saveBtn').onclick = async () => {
         deliveryNote: document.getElementById('s-deliveryNote').value.trim(),
         discountAll: Math.min(95, Math.max(0, parseFloat(document.getElementById('s-discountAll').value) || 0)),
         tz: document.getElementById('s-tz').value.trim() || "Europe/London",
+        deliveryFee: Math.max(0, parseFloat(document.getElementById('s-deliveryFee').value) || 0),
+        deliveryFreeOver: Math.max(0, parseFloat(document.getElementById('s-deliveryFreeOver').value) || 0),
       };
       await api("/api/settings", { method: "PUT", body: JSON.stringify(settingsData) });
       toast("Details saved — live now ✓");
@@ -465,6 +469,8 @@ async function showEditor() {
     document.getElementById('s-deliveryNote').value = settingsData.deliveryNote || "";
     document.getElementById('s-discountAll').value = settingsData.discountAll || "";
     document.getElementById('s-tz').value = settingsData.tz || "";
+    document.getElementById('s-deliveryFee').value = settingsData.deliveryFee ?? "";
+    document.getElementById('s-deliveryFreeOver').value = settingsData.deliveryFreeOver ?? "";
     renderMenuEditor();
     setTab("menu");
   } catch (e) { toast("Could not load data: " + e.message); }

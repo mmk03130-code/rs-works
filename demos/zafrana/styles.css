@@ -226,3 +226,5 @@ body{padding-bottom:0}
 .item-side .p s{color:#9b8b6d;font-weight:400;margin-right:7px}
 .off-badge{background:#8a2f23;color:#fff;border-radius:999px;padding:2px 9px;font-size:.74rem;font-weight:700;margin-left:8px;vertical-align:middle;white-space:nowrap}
 .cart-save{display:flex;justify-content:space-between;padding:10px 0 0;font-weight:700;color:#2e7d43}
+.cart-del{display:flex;justify-content:space-between;flex-wrap:wrap;padding:10px 0 0;font-weight:600}
+.cart-del .del-hint{flex-basis:100%;font-size:.84rem;font-weight:600;color:var(--saffron-deep);margin-top:3px}

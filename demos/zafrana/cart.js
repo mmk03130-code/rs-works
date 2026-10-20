@@ -11,6 +11,7 @@ for (const e of cart.values()) { if (e.was === undefined) e.was = e.price; }
 
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 let DISCOUNT_ALL = 0; // overall % from settings (live mode)
+let DELIVERY_FEE = 2.5, DELIVERY_FREE_OVER = 25; // from settings (live mode); defaults match the demo note
 const STATIC_PAGES = { starters: 1, grill: 1, mains: 1, sides: 1, sweet: 1 };
 const catHref = slug => STATIC_PAGES[slug] ? "menu-" + slug + ".html" : "menu-cat.html?c=" + encodeURIComponent(slug);
 function pctFor(it) { const d = Number(it.discount) || 0; return d > 0 ? d : DISCOUNT_ALL; }
@@ -41,6 +42,12 @@ function syncRow(name) {
   if (e && e.qty > 0) { add.hidden = true; st.hidden = false; st.querySelector('.qty').textContent = e.qty; }
   else { add.hidden = false; st.hidden = true; }
 }
+function fulfilType() { const r = document.querySelector('input[name="fulfil"]:checked'); return r ? r.value : "Collection"; }
+function deliveryCharge(subtotal) {
+  if (fulfilType() !== "Delivery" || subtotal <= 0) return 0;
+  if (DELIVERY_FREE_OVER > 0 && subtotal >= DELIVERY_FREE_OVER) return 0;
+  return DELIVERY_FEE;
+}
 function render() {
   let count = 0, total = 0;
   for (const e of cart.values()) { count += e.qty; total += e.qty * e.price; }
@@ -62,7 +69,20 @@ function render() {
       d.querySelector('.dec').onclick = () => { e.qty--; if (e.qty <= 0) cart.delete(name); saveCart(); render(); syncRow(name); };
       lines.appendChild(d);
     }
-    document.getElementById('cartTotal').textContent = fmt(total);
+    const fee = deliveryCharge(total);
+    document.getElementById('cartTotal').textContent = fmt(total + fee);
+    const ct0 = document.querySelector('.cart-total');
+    if (ct0) {
+      let dv = document.getElementById('cartDelivery');
+      if (!dv) { dv = document.createElement('div'); dv.id = "cartDelivery"; dv.className = "cart-del"; ct0.parentNode.insertBefore(dv, ct0); }
+      if (count === 0 || fulfilType() !== "Delivery") { dv.hidden = true; dv.innerHTML = ""; }
+      else {
+        dv.hidden = false;
+        let html = "<span>Delivery</span><b>" + (fee > 0 ? fmt(fee) : "FREE") + "</b>";
+        if (fee > 0 && DELIVERY_FREE_OVER > 0) html += '<span class="del-hint">Add ' + fmt(DELIVERY_FREE_OVER - total) + " more for free delivery</span>";
+        dv.innerHTML = html;
+      }
+    }
     let savings = 0;
     for (const e of cart.values()) { if (e.was > e.price) savings += e.qty * (e.was - e.price); }
     const ct = document.querySelector('.cart-total');
@@ -86,6 +106,7 @@ function bindItems() {
   });
 }
 function wireDrawer() {
+  document.querySelectorAll('input[name="fulfil"]').forEach(r => r.addEventListener("change", render));
   const drawer = document.getElementById('drawer'), scrim = document.getElementById('scrim');
   const openBtn = document.getElementById('openCart'); if (openBtn) openBtn.onclick = () => { drawer.hidden = false; scrim.hidden = false; };
   const closeBtn = document.getElementById('closeCart'); if (closeBtn) closeBtn.onclick = () => { drawer.hidden = true; scrim.hidden = true; };
@@ -97,6 +118,7 @@ function wireDrawer() {
     let total = 0; const out = ["Hello Zafrana, I'd like to order for " + fulfil.toLowerCase() + ":", ""];
     let savings = 0;
     for (const [name, e] of cart) { out.push(e.qty + " × " + name + " — " + fmt(e.qty * e.price)); total += e.qty * e.price; if (e.was > e.price) savings += e.qty * (e.was - e.price); }
+    if (fulfil === "Delivery") { const fee = deliveryCharge(total); out.push("Delivery: " + (fee > 0 ? fmt(fee) : "FREE")); total += fee; }
     out.push("", "Total: " + fmt(total));
     if (savings > 0) out.push("You saved: " + fmt(savings));
     out.push("", "Name:", "Address (if delivery):");
@@ -115,7 +137,7 @@ async function init() {
         fetch(window.ZAFRANA_API + "/api/menu", { signal: ctl.signal, cache: "no-store" }),
         fetch(window.ZAFRANA_API + "/api/settings", { signal: ctl.signal, cache: "no-store" }).catch(() => null),
       ]);
-      if (rs && rs.ok) { const st = await rs.json(); DISCOUNT_ALL = Math.min(95, Math.max(0, Number(st.discountAll) || 0)); }
+      if (rs && rs.ok) { const st = await rs.json(); DISCOUNT_ALL = Math.min(95, Math.max(0, Number(st.discountAll) || 0)); if (st.deliveryFee !== undefined) DELIVERY_FEE = Math.max(0, Number(st.deliveryFee) || 0); if (st.deliveryFreeOver !== undefined) DELIVERY_FREE_OVER = Math.max(0, Number(st.deliveryFreeOver) || 0); }
       if (rm.ok) {
         const menu = await rm.json();
         const nav = document.querySelector('.menu-cats');
