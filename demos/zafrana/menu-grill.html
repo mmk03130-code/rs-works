@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>From the grill — Menu · Zafrana Afghan Kitchen, Lewisham</title>
+<meta name="description" content="Zafrana from the grill: order online for collection or delivery. 100% halal Afghan food in Lewisham.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="announce"><b>100% Halal</b> · Takeaway &amp; delivery · Call <b>+44 20 7946 0018</b></div>
+
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="index.html">ZAFRANA<small>AFGHAN KITCHEN · LEWISHAM</small></a>
+    <nav class="links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="menu.html" class="active">Menu</a>
+      <a href="story.html">Our Story</a>
+      <a href="visit.html">Visit Us</a>
+      <a class="btn" href="menu.html">Order online</a>
+    </nav>
+    <button class="burger" onclick="document.getElementById('navLinks').classList.toggle('open')" aria-label="Menu">☰</button>
+  </div>
+</header>
+
+<section class="page-hero slim">
+  <img class="bg" src="assets/dish-grill.jpg" alt="">
+  <div class="wrap">
+    <span class="eyebrow">Real charcoal, cooked to order</span>
+    <h1>From the grill</h1>
+    <p>Each plate lands on warm naan with grilled tomato, red onion and salad.</p>
+  </div>
+</section>
+
+<div class="wrap">
+  <nav class="menu-cats"><a href="menu.html">All categories</a><a href="menu-starters.html">Starters</a><a href="menu-grill.html" class="on">From the grill</a><a href="menu-mains.html">Mains</a><a href="menu-sides.html">Breads & sides</a><a href="menu-sweet.html">Desserts & drinks</a></nav>
+
+  <div class="menu-group first">
+    <div class="item" data-name="Seekh Kebab" data-price="13.95"><div class="item-main"><h3>Seekh Kebab</h3><p class="desc">Hand-minced lamb, green chilli and coriander, two long skewers.</p></div><div class="item-side"><span class="p">£13.95</span><button class="add-btn" type="button">Add</button><div class="stepper" hidden><button type="button" class="dec" aria-label="One less">−</button><span class="qty">1</span><button type="button" class="inc" aria-label="One more">+</button></div></div></div>
+    <div class="item" data-name="Chicken Tikka" data-price="12.95"><div class="item-main"><h3>Chicken Tikka</h3><p class="desc">Overnight marinade, charred at the edges the way it should be.</p></div><div class="item-side"><span class="p">£12.95</span><button class="add-btn" type="button">Add</button><div class="stepper" hidden><button type="button" class="dec" aria-label="One less">−</button><span class="qty">1</span><button type="button" class="inc" aria-label="One more">+</button></div></div></div>
+    <div class="item" data-name="Lamb Chops" data-price="17.95"><div class="item-main"><h3>Lamb Chops</h3><p class="desc">Four cutlets, house spice rub, rested before they reach you.</p></div><div class="item-side"><span class="p">£17.95</span><button class="add-btn" type="button">Add</button><div class="stepper" hidden><button type="button" class="dec" aria-label="One less">−</button><span class="qty">1</span><button type="button" class="inc" aria-label="One more">+</button></div></div></div>
+    <div class="item" data-name="Mixed Grill" data-price="24.95"><img class="thumb" src="assets/dish-grill.jpg" alt="Mixed grill — kebabs and chops over charcoal" loading="lazy"><div class="item-main"><h3>Mixed Grill <span class="tag">For sharing</span></h3><p class="desc">Seekh kebab, chicken tikka and lamb chops on one platter — built for two, ordered by one.</p></div><div class="item-side"><span class="p">£24.95</span><button class="add-btn" type="button">Add</button><div class="stepper" hidden><button type="button" class="dec" aria-label="One less">−</button><span class="qty">1</span><button type="button" class="inc" aria-label="One more">+</button></div></div></div>
+  </div>
+
+  <div class="menu-note">
+    <b>Halal &amp; allergens:</b> everything on this menu is 100% halal. Dishes contain or may contain gluten, dairy, nuts and sesame — tell us about any allergy when you order and we'll walk you through what's safe. Prices include everything; no service surprises.
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <h4>Zafrana</h4>
+        <a href="story.html">Our story</a><a href="menu.html">Menu</a><a href="visit.html">Visit &amp; order</a>
+      </div>
+      <div>
+        <h4>Visit</h4>
+        <a>Lewisham High Street, London SE13</a>
+        <a href="tel:+442079460018">+44 20 7946 0018</a>
+        <a href="https://wa.me/442079460018" target="_blank" rel="noopener">WhatsApp us</a>
+      </div>
+      <div>
+        <h4>Hours</h4>
+        <a>Mon–Thu · 12:00–22:30</a><a>Fri–Sat · 12:00–23:30</a><a>Sun · 12:00–22:00</a>
+      </div>
+    </div>
+    <div class="foot-note"><span>© 2026 Zafrana Afghan Kitchen. 100% Halal.</span><span>Demo website concept — built by RS Works</span></div>
+  </div>
+</footer>
+
+<a class="wa" href="https://wa.me/442079460018" target="_blank" rel="noopener" aria-label="WhatsApp us">✆</a>
+
+<div class="cartbar" id="cartBar" hidden>
+  <div class="wrap cartbar-in">
+    <span id="cartSummary"></span>
+    <button class="btn saffron" id="openCart" type="button">Review &amp; order</button>
+  </div>
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" hidden aria-label="Your order">
+  <div class="drawer-head"><h3>Your order</h3><button id="closeCart" type="button" aria-label="Close">✕</button></div>
+  <div class="fulfil" role="radiogroup" aria-label="Collection or delivery">
+    <label><input type="radio" name="fulfil" value="Collection" checked> Collection</label>
+    <label><input type="radio" name="fulfil" value="Delivery"> Delivery</label>
+  </div>
+  <div id="cartLines"></div>
+  <div class="cart-total"><span>Total</span><b id="cartTotal">£0.00</b></div>
+  <p class="cart-hint">Send the order to our WhatsApp and we'll confirm it straight back. Pay at the counter or on delivery — whatever's easier.</p>
+  <button class="btn saffron drawer-cta" id="sendOrder" type="button">Send order on WhatsApp</button>
+</aside>
+
+<script src="cart.js"></script>
+</body>
+</html>
