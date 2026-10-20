@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin — Zafrana</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  .admin-wrap{max-width:920px;margin:0 auto;padding:36px 20px 90px}
+  .admin-card{background:var(--cream);border:1px solid var(--line-soft);border-radius:18px;padding:26px;margin-bottom:26px}
+  .admin-card h2{font-size:1.35rem;margin-bottom:6px}
+  .admin-card .sub{color:#5a4a36;font-size:.92rem;margin-bottom:18px}
+  .login-box{max-width:420px;margin:9vh auto}
+  .login-box input{width:100%;padding:13px 15px;border:1.5px solid var(--line);border-radius:12px;font-size:1rem;margin-bottom:14px;background:#fff}
+  .fld{display:flex;flex-direction:column;gap:5px;margin-bottom:13px}
+  .fld label{font-size:.78rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#5a4a36}
+  .fld input,.fld textarea,.fld select{padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;font-size:.95rem;background:#fff;font-family:'Inter',sans-serif;width:100%}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+  @media (max-width:640px){.grid2{grid-template-columns:1fr}}
+  .cat-head{display:flex;align-items:baseline;justify-content:space-between;margin:24px 0 6px}
+  .cat-head h3{font-size:1.2rem}
+  .dish{border:1px solid var(--line-soft);border-radius:14px;padding:16px;margin:12px 0;background:var(--paper)}
+  .dish-top{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+  .dish-top .dname{flex:1;font-weight:700;font-size:1rem;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff}
+  .dish-top .dprice{width:100px;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff}
+  .dish .ddesc{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff;margin-bottom:10px}
+  .dish-row2{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .dish-row2 select,.dish-row2 .dtag{padding:9px 11px;border:1.5px solid var(--line);border-radius:10px;background:#fff}
+  .dish-row2 .dtag{width:150px}
+  .soldout-lbl{display:inline-flex;gap:7px;align-items:center;font-weight:600;font-size:.9rem}
+  .soldout-lbl input{width:18px;height:18px;accent-color:#8a2f23}
+  .del-btn{margin-left:auto;background:none;border:0;color:#8a2f23;font-weight:700;cursor:pointer;font-size:.9rem}
+  .add-dish{background:none;border:1.5px dashed var(--line);border-radius:999px;padding:9px 18px;font-weight:700;cursor:pointer;color:var(--ink)}
+  .add-dish:hover{border-color:var(--ink)}
+  .save-row{display:flex;gap:12px;align-items:center;margin-top:20px}
+  .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(90px);background:var(--ink);color:var(--cream);padding:14px 26px;border-radius:999px;font-weight:700;z-index:200;transition:transform .35s ease;box-shadow:0 16px 40px rgba(24,16,9,.35)}
+  .toast.show{transform:translateX(-50%) translateY(0)}
+  .err{color:#8a2f23;font-weight:600;margin-top:10px;min-height:1.2em}
+  .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+  .topbar .links a{margin-left:16px;font-weight:600}
+  .logout{background:none;border:0;font-weight:700;cursor:pointer;color:var(--saffron-deep)}
+</style>
+</head>
+<body>
+
+<div class="admin-wrap">
+
+  <!-- LOGIN -->
+  <div id="loginView" class="admin-card login-box">
+    <span class="eyebrow">Zafrana · Owner admin</span>
+    <h2 style="margin-top:6px">Sign in to manage your site</h2>
+    <p class="sub">Update your menu, prices and details — changes go live for every visitor the moment you save.</p>
+    <input type="password" id="pw" placeholder="Admin password" autocomplete="current-password">
+    <button class="btn saffron" id="loginBtn" type="button" style="width:100%;text-align:center">Sign in</button>
+    <p class="err" id="loginErr"></p>
+  </div>
+
+  <!-- EDITOR -->
+  <div id="editorView" hidden>
+    <div class="topbar">
+      <div><span class="eyebrow">Zafrana · Owner admin</span><h2 style="font-size:1.6rem">Manage your website</h2></div>
+      <div class="links"><a href="index.html" target="_blank">View site ↗</a><button class="logout" id="logoutBtn" type="button">Sign out</button></div>
+    </div>
+
+    <div class="admin-card">
+      <h2>Menu</h2>
+      <p class="sub">Edit any dish, tick <b>Sold out</b> when something runs dry, or add tonight's special. Photo choices come from your site's photo library.</p>
+      <div id="menuEditor"></div>
+      <div class="save-row"><button class="btn saffron" id="saveMenuBtn" type="button">Save menu — publish changes</button><span class="err" id="menuErr"></span></div>
+    </div>
+
+    <div class="admin-card">
+      <h2>Restaurant details</h2>
+      <p class="sub">These appear across the whole site — header, footer, visit page and order messages.</p>
+      <div class="grid2">
+        <div class="fld"><label>Restaurant name</label><input id="s-name"></div>
+        <div class="fld"><label>Announcement bar</label><input id="s-announce"></div>
+        <div class="fld"><label>Phone (shown)</label><input id="s-phone"></div>
+        <div class="fld"><label>Phone (dial format)</label><input id="s-phoneHref"></div>
+        <div class="fld"><label>WhatsApp number (country code + number)</label><input id="s-whatsapp"></div>
+        <div class="fld"><label>Address</label><input id="s-address"></div>
+      </div>
+      <div class="fld"><label>Opening hours — one line per row</label><textarea id="s-hours" rows="3"></textarea></div>
+      <div class="fld"><label>Delivery note</label><input id="s-deliveryNote"></div>
+      <div class="save-row"><button class="btn saffron" id="saveSettingsBtn" type="button">Save details — publish changes</button><span class="err" id="settingsErr"></span></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Saved — your site is updated ✓</div>
+
+<script src="config.js"></script>
+<script>
+const API = window.ZAFRANA_API || "";
+const PHOTOS = ["", "assets/dish-bolani.jpg", "assets/dish-mantu.jpg", "assets/dish-grill.jpg", "assets/dish-kabuli.jpg", "assets/dish-lamb.jpg", "assets/dish-naan.jpg", "assets/dish-firni.jpg", "assets/hero.jpg"];
+const PHOTO_NAMES = {"":"No photo","assets/dish-bolani.jpg":"Bolani","assets/dish-mantu.jpg":"Mantu","assets/dish-grill.jpg":"Mixed grill","assets/dish-kabuli.jpg":"Kabuli pilaw","assets/dish-lamb.jpg":"Lamb shank","assets/dish-naan.jpg":"Naan basket","assets/dish-firni.jpg":"Firni","assets/hero.jpg":"Feast table"};
+let menuData = [], token = sessionStorage.getItem("zafrana_admin_token") || "";
+
+function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2600); }
+async function api(path, opts = {}) {
+  const r = await fetch(API + path, { ...opts, headers: { "Content-Type": "application/json", ...(opts.headers || {}), ...(token ? { Authorization: "Bearer " + token } : {}) } });
+  if (!r.ok) { const e = await r.json().catch(() => ({})); throw new Error(e.error || ("HTTP " + r.status)); }
+  return r.json();
+}
+
+async function doLogin() {
+  const err = document.getElementById('loginErr'); err.textContent = "";
+  try {
+    const out = await api("/api/login", { method: "POST", body: JSON.stringify({ password: document.getElementById('pw').value }) });
+    token = out.token; sessionStorage.setItem("zafrana_admin_token", token);
+    showEditor();
+  } catch (e) { err.textContent = e.message; }
+}
+document.getElementById('loginBtn').onclick = doLogin;
+document.getElementById('pw').addEventListener('keydown', e => { if (e.key === "Enter") doLogin(); });
+document.getElementById('logoutBtn').onclick = () => { token = ""; sessionStorage.removeItem("zafrana_admin_token"); location.reload(); };
+
+function dishRow(catIdx, it) {
+  const d = document.createElement('div'); d.className = "dish";
+  d.innerHTML =
+    '<div class="dish-top"><input class="dname" value=""><input class="dprice" type="number" step="0.05" min="0" value="">' +
+    '<label class="soldout-lbl"><input type="checkbox" class="dsold"> Sold out</label></div>' +
+    '<input class="ddesc" value="" placeholder="Description (optional)">' +
+    '<div class="dish-row2"><input class="dtag" value="" placeholder="Tag e.g. Vegetarian">' +
+    '<select class="dimg">' + PHOTOS.map(p => '<option value="' + p + '">' + PHOTO_NAMES[p] + '</option>').join("") + '</select>' +
+    '<button type="button" class="del-btn">Delete dish</button></div>';
+  d.querySelector('.dname').value = it.name || "";
+  d.querySelector('.dprice').value = it.price ?? "";
+  d.querySelector('.ddesc').value = it.desc || "";
+  d.querySelector('.dtag').value = it.tag || "";
+  d.querySelector('.dimg').value = it.img || "";
+  d.querySelector('.dsold').checked = !!it.soldOut;
+  d.querySelector('.del-btn').onclick = () => { if (confirm("Delete " + (it.name || "this dish") + "?")) d.remove(); };
+  return d;
+}
+function renderMenuEditor() {
+  const wrap = document.getElementById('menuEditor'); wrap.innerHTML = "";
+  menuData.forEach((cat, ci) => {
+    const head = document.createElement('div'); head.className = "cat-head";
+    head.innerHTML = "<h3></h3>"; head.querySelector('h3').textContent = cat.title;
+    const add = document.createElement('button'); add.type = "button"; add.className = "add-dish"; add.textContent = "+ Add dish";
+    const list = document.createElement('div'); list.dataset.catList = ci;
+    add.onclick = () => list.appendChild(dishRow(ci, { name: "", price: "", desc: "", tag: "", img: "", soldOut: false }));
+    head.appendChild(add); wrap.appendChild(head); wrap.appendChild(list);
+    cat.items.forEach(it => list.appendChild(dishRow(ci, it)));
+  });
+}
+function collectMenu() {
+  return menuData.map((cat, ci) => {
+    const list = document.querySelector('[data-cat-list="' + ci + '"]');
+    const items = [...list.querySelectorAll('.dish')].map(d => ({
+      name: d.querySelector('.dname').value.trim(),
+      price: parseFloat(d.querySelector('.dprice').value) || 0,
+      desc: d.querySelector('.ddesc').value.trim(),
+      tag: d.querySelector('.dtag').value.trim(),
+      img: d.querySelector('.dimg').value,
+      soldOut: d.querySelector('.dsold').checked,
+    })).filter(i => i.name);
+    return { ...cat, items };
+  });
+}
+async function showEditor() {
+  document.getElementById('loginView').hidden = true;
+  document.getElementById('editorView').hidden = false;
+  try {
+    menuData = await api("/api/menu");
+    renderMenuEditor();
+    const s = await api("/api/settings");
+    document.getElementById('s-name').value = s.name || "";
+    document.getElementById('s-announce').value = s.announce || "";
+    document.getElementById('s-phone').value = s.phone || "";
+    document.getElementById('s-phoneHref').value = s.phoneHref || "";
+    document.getElementById('s-whatsapp').value = s.whatsapp || "";
+    document.getElementById('s-address').value = s.address || "";
+    document.getElementById('s-hours').value = (s.hours || []).join("\n");
+    document.getElementById('s-deliveryNote').value = s.deliveryNote || "";
+  } catch (e) { toast("Could not load data: " + e.message); }
+}
+document.getElementById('saveMenuBtn').onclick = async () => {
+  const err = document.getElementById('menuErr'); err.textContent = "";
+  try { await api("/api/menu", { method: "PUT", body: JSON.stringify(collectMenu()) }); menuData = collectMenu(); toast("Menu saved — live now ✓"); }
+  catch (e) { err.textContent = e.message; }
+};
+document.getElementById('saveSettingsBtn').onclick = async () => {
+  const err = document.getElementById('settingsErr'); err.textContent = "";
+  const s = {
+    name: document.getElementById('s-name').value.trim(),
+    announce: document.getElementById('s-announce').value.trim(),
+    phone: document.getElementById('s-phone').value.trim(),
+    phoneHref: document.getElementById('s-phoneHref').value.trim(),
+    whatsapp: document.getElementById('s-whatsapp').value.trim(),
+    address: document.getElementById('s-address').value.trim(),
+    hours: document.getElementById('s-hours').value.split("\n").map(x => x.trim()).filter(Boolean),
+    deliveryNote: document.getElementById('s-deliveryNote').value.trim(),
+  };
+  try { await api("/api/settings", { method: "PUT", body: JSON.stringify(s) }); toast("Details saved — live now ✓"); }
+  catch (e) { err.textContent = e.message; }
+};
+
+if (!API) { document.getElementById('loginErr').textContent = "Demo is in static mode — the live admin connects after deployment."; }
+else if (token) { showEditor().catch(() => { document.getElementById('loginView').hidden = false; document.getElementById('editorView').hidden = true; }); }
+</script>
+</body>
+</html>

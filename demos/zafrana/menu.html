@@ -7,9 +7,9 @@
 <meta name="description" content="The Zafrana menu: starters, charcoal grill, mains, breads and desserts. Order online for collection or delivery. Halal Afghan food in Lewisham.">
 <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body data-hub="1">
 
-<div class="announce"><b>100% Halal</b> · Takeaway &amp; delivery · Call <b>+44 20 7946 0018</b></div>
+<div class="announce"><b data-set="announce">100% Halal · Takeaway &amp; delivery</b> · Call <b data-set="phone">+44 20 7946 0018</b></div>
 
 <header class="site">
   <div class="wrap nav">
@@ -42,7 +42,7 @@
           <span class="eyebrow">To begin</span>
           <h3>Starters</h3>
           <p>Bolani, mantu, ashak and more — folded, steamed and baked through the day.</p>
-          <span class="cat-go">5 dishes · View &amp; order →</span>
+          <span class="cat-go"><span data-count-for="starters">5</span> dishes · View &amp; order →</span>
         </div>
       </a>
       <a class="cat-card" href="menu-grill.html">
@@ -51,7 +51,7 @@
           <span class="eyebrow">Real charcoal, cooked to order</span>
           <h3>From the grill</h3>
           <p>Seekh kebabs, chicken tikka, lamb chops — real charcoal, cooked to order.</p>
-          <span class="cat-go">4 dishes · View &amp; order →</span>
+          <span class="cat-go"><span data-count-for="grill">4</span> dishes · View &amp; order →</span>
         </div>
       </a>
       <a class="cat-card" href="menu-mains.html">
@@ -60,7 +60,7 @@
           <span class="eyebrow">The heart of the kitchen</span>
           <h3>Mains</h3>
           <p>Kabuli pilaw, slow lamb shank, karahis — the heart of the kitchen.</p>
-          <span class="cat-go">6 dishes · View &amp; order →</span>
+          <span class="cat-go"><span data-count-for="mains">6</span> dishes · View &amp; order →</span>
         </div>
       </a>
       <a class="cat-card" href="menu-sides.html">
@@ -69,7 +69,7 @@
           <span class="eyebrow">Don't skip the naan</span>
           <h3>Breads & sides</h3>
           <p>Tandoor naan, saffron rice, salads and the green chutney. Proceed accordingly.</p>
-          <span class="cat-go">4 dishes · View &amp; order →</span>
+          <span class="cat-go"><span data-count-for="sides">4</span> dishes · View &amp; order →</span>
         </div>
       </a>
       <a class="cat-card" href="menu-sweet.html">
@@ -78,7 +78,7 @@
           <span class="eyebrow">To finish</span>
           <h3>Desserts & drinks</h3>
           <p>Firni, sheer yakh, green tea with cardamom — the proper way to finish.</p>
-          <span class="cat-go">5 dishes · View &amp; order →</span>
+          <span class="cat-go"><span data-count-for="sweet">5</span> dishes · View &amp; order →</span>
         </div>
       </a>
   </div>
@@ -97,20 +97,20 @@
       </div>
       <div>
         <h4>Visit</h4>
-        <a>Lewisham High Street, London SE13</a>
-        <a href="tel:+442079460018">+44 20 7946 0018</a>
-        <a href="https://wa.me/442079460018" target="_blank" rel="noopener">WhatsApp us</a>
+        <a data-set="address">Lewisham High Street, London SE13</a>
+        <a data-set="phone" href="tel:+442079460018">+44 20 7946 0018</a>
+        <a data-wa href="https://wa.me/442079460018" target="_blank" rel="noopener">WhatsApp us</a>
       </div>
       <div>
         <h4>Hours</h4>
-        <a>Mon–Thu · 12:00–22:30</a><a>Fri–Sat · 12:00–23:30</a><a>Sun · 12:00–22:00</a>
+        <span data-hours><a>Mon–Thu · 12:00–22:30</a><a>Fri–Sat · 12:00–23:30</a><a>Sun · 12:00–22:00</a></span>
       </div>
     </div>
     <div class="foot-note"><span>© 2026 Zafrana Afghan Kitchen. 100% Halal.</span><span>Demo website concept — built by RS Works</span></div>
   </div>
 </footer>
 
-<a class="wa" href="https://wa.me/442079460018" target="_blank" rel="noopener" aria-label="WhatsApp us">✆</a>
+<a class="wa" data-wa href="https://wa.me/442079460018" target="_blank" rel="noopener" aria-label="WhatsApp us">✆</a>
 
 <div class="cartbar" id="cartBar" hidden>
   <div class="wrap cartbar-in">
@@ -132,6 +132,8 @@
   <button class="btn saffron drawer-cta" id="sendOrder" type="button">Send order on WhatsApp</button>
 </aside>
 
+<script src="config.js"></script>
+<script src="settings.js"></script>
 <script src="cart.js"></script>
 </body>
 </html>

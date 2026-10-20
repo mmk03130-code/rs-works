@@ -209,3 +209,8 @@ body{padding-bottom:0}
 .cat-card-body h3{font-size:1.45rem;margin:4px 0 8px}
 .cat-card-body p{color:#5a4a36;font-size:.94rem;margin-bottom:14px}
 .cat-go{font-weight:700;color:var(--saffron-deep);font-size:.92rem}
+
+/* --- Sold out (live data) --- */
+.item.soldout{opacity:.62}
+.item.soldout .thumb{filter:grayscale(.5)}
+.soldout-tag{font-weight:700;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:#8a2f23;border:1.5px solid #8a2f23;border-radius:999px;padding:7px 14px}
