@@ -19,11 +19,6 @@
   <h1>Three lines. Nothing else.</h1>
   <p>We make rings, bespoke watches and leather straps — and we have resisted making anything else. Click any piece to look closer. Buying takes you to our secure checkout partner; nothing is sold on this page itself.</p>
   <nav class="gnav"><a href="#rings">01 · Rings</a><a href="#watches">02 · Bespoke Watches</a><a href="#straps">03 · Leather Straps</a></nav>
-  <div class="gindex">
-    <a class="gcard rv" href="#rings"><div class="ph"><img src="r2.jpg" alt="A solitaire ring resting on marble"></div><div class="cap"><span class="no">01</span><span class="nm">Rings</span><span class="go">The chapter ↓</span></div></a>
-    <a class="gcard rv" href="#watches"><div class="ph"><img src="w2.jpg" alt="A blue dial bespoke watch on a mesh bracelet"></div><div class="cap"><span class="no">02</span><span class="nm">Bespoke Watches</span><span class="go">The chapter ↓</span></div></a>
-    <a class="gcard rv" href="#straps"><div class="ph"><img src="s1.jpg" alt="A black leather strap resting on velvet"></div><div class="cap"><span class="no">03</span><span class="nm">Leather Straps</span><span class="go">The chapter ↓</span></div></a>
-  </div>
 </section>
 
 <main id="gallery-main"></main>
@@ -47,8 +42,9 @@
   var D = window.SOLENNE;
   var main = document.getElementById('gallery-main');
   main.innerHTML = D.lines.map(function (L) {
-    return '<section class="chapter wrap rv" id="' + L.id + '" style="padding-top:80px"><div class="no">Chapter ' + L.no + ' — ' + L.name + '</div>' +
+    return '<section class="chapter wrap rv" id="' + L.id + '" style="padding-top:64px"><div class="no">Chapter ' + L.no + ' — ' + L.name + '</div>' +
       '<h2>' + L.title + '</h2><p class="intro">' + L.intro + '</p>' +
+      '<div class="wide"><img loading="lazy" src="' + L.wide + '" alt="' + L.name + ' at Maison Solenne"></div>' +
       '<div class="grid" id="g-' + L.id + '"></div></section>';
   }).join('');
   D.lines.forEach(function (L) { window.renderCards(L.id, 'g-' + L.id); });
