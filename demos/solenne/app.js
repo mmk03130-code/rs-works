@@ -26,7 +26,7 @@
     ft.innerHTML = '<div class="wrap"><div class="cols">' +
       '<div><div class="wm">' + brand + '</div><p style="margin-top:14px;max-width:26em;font-size:14.5px">' + esc(D.settings.tagline) + '. Made one at a time in ' + esc(D.settings.city) + ', by appointment.</p></div>' +
       '<div><h4>Explore</h4><a href="gallery.html#rings">Rings</a><a href="gallery.html#watches">Bespoke Watches</a><a href="gallery.html#straps">Leather Straps</a><a href="about.html">Our Story</a></div>' +
-      '<div><h4>Atelier</h4><a href="contact.html">Book an appointment</a><a href="mailto:' + esc(D.settings.email) + '">' + esc(D.settings.email) + '</a><a href="tel:' + esc(D.settings.phone.replace(/[^+\d]/g, '')) + '">' + esc(D.settings.phone) + '</a><a href="admin.html">Owner login</a></div>' +
+      '<div><h4>Atelier</h4><a href="contact.html">Book an appointment</a><a href="mailto:' + esc(D.settings.email) + '">' + esc(D.settings.email) + '</a><a href="tel:' + esc(D.settings.phone.replace(/[^+\d]/g, '')) + '">' + esc(D.settings.phone) + '</a></div>' +
       '</div><div class="fine"><span>© ' + new Date().getFullYear() + ' ' + brand + '. Demonstration website — photography from Pexels.</span><span>Instagram · Pinterest</span></div></div>';
   }
 

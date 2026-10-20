@@ -5,7 +5,7 @@ window.SOLENNE_DEFAULT = {
     brand: "MAISON SOLENNE",
     tagline: "Rings · Bespoke Watches · Leather Straps",
     city: "Washington",
-    email: "atelier@maison-solenne.example",
+    email: "atelier@maison-solenne.com",
     phone: "+1 (202) 555-0147",
     buyUrl: "https://checkout.example.com",
     heroTitle: "Objects for a lifetime, not a season.",
