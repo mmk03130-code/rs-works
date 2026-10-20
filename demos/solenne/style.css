@@ -99,6 +99,18 @@ body.dark-hero header:not(.solid) .appt{border-color:#F3EDE1}
 .gnav{display:flex;gap:28px;margin-top:36px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0}
 .gnav a{font-size:11px;letter-spacing:.26em;text-transform:uppercase;text-decoration:none;color:var(--ink2)}
 .gnav a:hover{color:var(--gold)}
+/* gallery chapter index */
+.gindex{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:46px}
+.gcard{text-decoration:none;display:block}
+.gcard .ph{overflow:hidden;aspect-ratio:3/4;background:var(--ivory2)}
+.gcard .ph img{width:100%;height:100%;object-fit:cover;transition:transform 1.4s cubic-bezier(.2,.6,.2,1)}
+.gcard:hover .ph img{transform:scale(1.06)}
+.gcard .cap{display:flex;align-items:baseline;gap:14px;margin-top:14px}
+.gcard .no{font-family:var(--serif);font-style:italic;color:var(--gold);font-size:18px}
+.gcard .nm{font-family:var(--serif);font-size:24px;font-weight:500}
+.gcard .go{margin-left:auto;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink2);white-space:nowrap}
+.gcard:hover .go{color:var(--gold)}
+@media(max-width:640px){.gindex{grid-template-columns:1fr}.gcard .ph{aspect-ratio:16/10}}
 /* about */
 .split{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;padding:70px 0 10px}
 .split .ph{overflow:hidden}
