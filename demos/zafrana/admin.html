@@ -62,6 +62,17 @@
   .savebar .what{font-weight:600;font-size:.95rem}
   .toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%) translateY(140px);background:var(--saffron-deep);color:#fff;padding:14px 26px;border-radius:999px;font-weight:700;z-index:200;transition:transform .35s ease;box-shadow:0 16px 40px rgba(24,16,9,.35)}
   .toast.show{transform:translateX(-50%) translateY(0)}
+  .ddisc{width:92px;padding:9px 11px;border:1.5px solid var(--line);border-radius:10px;background:#fff}
+  .dish-tools{display:flex;gap:8px;align-items:center;margin-top:10px}
+  .mv-btn{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--line);background:#fff;font-weight:700;cursor:pointer;font-size:1rem;line-height:1}
+  .mv-btn:hover{border-color:var(--ink)}
+  .move-sel{padding:8px 10px;border:1.5px solid var(--line);border-radius:10px;background:#fff;font-size:.88rem}
+  .catbar{background:var(--cream);border:1px solid var(--line-soft);border-radius:16px;padding:16px;margin:6px 0 16px}
+  .catbar .fld{margin-bottom:10px}
+  .catbar-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+  .catbar-btns button{border:1.5px solid var(--line);background:var(--paper);border-radius:999px;padding:8px 16px;font-weight:700;cursor:pointer;color:var(--ink)}
+  .catbar-btns button.danger{color:#8a2f23;border-color:#d8a79d}
+  .add-cat{border:1.5px dashed var(--saffron-deep);background:none;border-radius:999px;padding:9px 18px;font-weight:700;cursor:pointer;color:var(--saffron-deep)}
   .photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px}
   .photo-cell{border:1px solid var(--line-soft);border-radius:14px;overflow:hidden;background:var(--cream)}
   .photo-cell img{width:100%;height:130px;object-fit:cover;display:block}
@@ -113,14 +124,14 @@
       <p class="sub">These details appear across your whole website — the top bar, the footer, the visit page, and every WhatsApp order message.</p>
       <div class="grid2">
         <div class="fld"><label>Restaurant name</label><input id="s-name"></div>
-        <div class="fld"><label>Announcement bar (top of every page)</label><input id="s-announce"></div>
-        <div class="fld"><label>Phone (shown on site)</label><input id="s-phone"></div>
-        <div class="fld"><label>Phone (dial format, no spaces)</label><input id="s-phoneHref"></div>
+        <div class="fld"><label>Announcement — top of every page (offers, holidays, news)</label><input id="s-announce"></div>
+        <div class="fld"><label>Phone number (customers see it and tap to call)</label><input id="s-phone"></div>
         <div class="fld"><label>WhatsApp number (country code + number, no +)</label><input id="s-whatsapp"></div>
         <div class="fld"><label>Address</label><input id="s-address"></div>
       </div>
       <div class="fld"><label>Opening hours — one line per row</label><textarea id="s-hours" rows="3"></textarea></div>
       <div class="fld"><label>Delivery note</label><input id="s-deliveryNote"></div>
+        <div class="fld"><label>Overall discount % — every dish without its own discount (0 = none)</label><input id="s-discountAll" type="number" min="0" max="95" step="1"></div>
     </section>
 
     <!-- PHOTOS PANEL -->
@@ -211,7 +222,9 @@ function dishRow(it, ci, badge) {
     '<label class="soldout-lbl"><input type="checkbox" class="dsold"> Sold out</label></div>' +
     '<input class="ddesc" placeholder="Description (optional)">' +
     '<div class="dish-row2"><input class="dtag" placeholder="Tag e.g. Vegetarian">' +
+    '<input class="ddisc" type="number" min="0" max="95" step="1" placeholder="% off" title="Discount percent for this dish">' +
     '<button type="button" class="del-btn">Delete dish</button></div>' +
+    '<div class="dish-tools"></div>' +
     '<div style="margin-top:12px;text-align:right"><button type="button" class="dish-save">Save this dish</button></div></div>';
   if (badge) d.querySelector('.cat-badge').textContent = badge;
   const sel = d.querySelector('.dimg');
@@ -237,6 +250,19 @@ function dishRow(it, ci, badge) {
   d.querySelector('.dprice').value = it.price ?? "";
   d.querySelector('.ddesc').value = it.desc || "";
   d.querySelector('.dtag').value = it.tag || "";
+  d.querySelector('.ddisc').value = it.discount ? it.discount : "";
+  const tools = d.querySelector('.dish-tools');
+  if (!badge) {
+    const up = document.createElement('button'); up.type = "button"; up.className = "mv-btn"; up.textContent = "↑"; up.title = "Move dish up";
+    up.onclick = () => { const p = d.previousElementSibling; if (p && p.classList.contains('dish')) d.parentNode.insertBefore(d, p); };
+    const dn = document.createElement('button'); dn.type = "button"; dn.className = "mv-btn"; dn.textContent = "↓"; dn.title = "Move dish down";
+    dn.onclick = () => { const n = d.nextElementSibling; if (n && n.classList.contains('dish')) d.parentNode.insertBefore(n, d); };
+    tools.appendChild(up); tools.appendChild(dn);
+  }
+  const mv = document.createElement('select'); mv.className = "move-sel";
+  mv.innerHTML = '<option value="">Move to…</option>' + menuData.map((c, i) => i === ci ? "" : '<option value="' + i + '">' + c.title + '</option>').join("");
+  mv.onchange = () => { if (mv.value !== "") moveDishTo(d, Number(mv.value)); };
+  tools.appendChild(mv);
   d.querySelector('.dsold').checked = !!it.soldOut;
   d.querySelector('.dish-save').onclick = async ev => {
     const btn = ev.currentTarget;
@@ -264,10 +290,23 @@ function dishRow(it, ci, badge) {
     price: parseFloat(d.querySelector('.dprice').value) || 0,
     desc: d.querySelector('.ddesc').value.trim(),
     tag: d.querySelector('.dtag').value.trim(),
+    discount: Math.min(95, Math.max(0, parseFloat(d.querySelector('.ddisc').value) || 0)),
     img: sel.value,
     soldOut: d.querySelector('.dsold').checked,
   });
   return d;
+}
+
+function moveDishTo(d, targetCi) {
+  const item = d._collect();
+  if (!item.name) { toast("Give the dish a name first, then move it."); return; }
+  syncFromDOM();
+  const src = menuData[d._cat].items;
+  const ix = src.findIndex(x => x.name === d._origName);
+  if (ix >= 0) src.splice(ix, 1);
+  menuData[targetCi].items.push(item);
+  toast(item.name + " moved to " + menuData[targetCi].title + " — Save to publish");
+  renderMenuEditor();
 }
 
 /* Fold whatever is on screen back into menuData before any re-render or save. */
@@ -278,6 +317,8 @@ function syncFromDOM() {
     const list = wrap.querySelector('[data-cat-list]');
     if (list) {
       const ci = Number(list.dataset.catList);
+      const ct = document.getElementById('catTitle'), ce = document.getElementById('catEyebrow'), cl = document.getElementById('catLede');
+      if (ct) { if (ct.value.trim()) menuData[ci].title = ct.value.trim(); menuData[ci].eyebrow = ce.value.trim(); menuData[ci].lede = cl.value.trim(); }
       menuData[ci].items = [...list.querySelectorAll('.dish')].map(x => { const c = x._collect(); x._origName = c.name; return c; }).filter(i => i.name);
     }
   } else {
@@ -310,6 +351,18 @@ function renderMenuEditor() {
     chip.onclick = () => { syncFromDOM(); viewMode = "cat"; activeCat = ci; document.getElementById('dishSearch').value = ""; renderMenuEditor(); };
     chips.appendChild(chip);
   });
+  const addC = document.createElement('button'); addC.type = "button"; addC.className = "add-cat"; addC.textContent = "+ Add category";
+  addC.onclick = () => {
+    syncFromDOM();
+    let slug = "new-category", n = 2;
+    while (menuData.some(c => c.slug === slug)) slug = "new-category-" + (n++);
+    menuData.push({ slug, title: "New category", eyebrow: "", lede: "", items: [] });
+    viewMode = "cat"; activeCat = menuData.length - 1;
+    document.getElementById('dishSearch').value = "";
+    renderMenuEditor();
+    toast("New category added — name it below, add dishes, then Save");
+  };
+  chips.appendChild(addC);
   if (q) {
     viewMode = "search";
     const list = document.createElement('div'); list.dataset.searchList = "1";
@@ -320,6 +373,29 @@ function renderMenuEditor() {
   } else {
     viewMode = "cat";
     const cat = menuData[activeCat];
+    const bar = document.createElement('div'); bar.className = "catbar";
+    bar.innerHTML =
+      '<div class="fld"><label>Category name</label><input id="catTitle"></div>' +
+      '<div class="fld"><label>Small line above the name on its page (optional)</label><input id="catEyebrow"></div>' +
+      '<div class="fld"><label>Intro line on its page (optional)</label><input id="catLede"></div>' +
+      '<div class="catbar-btns">' +
+      '<button type="button" id="catUp">↑ Show earlier</button>' +
+      '<button type="button" id="catDown">↓ Show later</button>' +
+      '<button type="button" id="catDel" class="danger">Delete this category</button></div>';
+    bar.querySelector('#catTitle').value = cat.title || "";
+    bar.querySelector('#catEyebrow').value = cat.eyebrow || "";
+    bar.querySelector('#catLede').value = cat.lede || "";
+    bar.querySelector('#catUp').onclick = () => { if (activeCat === 0) return; syncFromDOM(); const t = menuData[activeCat - 1]; menuData[activeCat - 1] = menuData[activeCat]; menuData[activeCat] = t; activeCat--; renderMenuEditor(); };
+    bar.querySelector('#catDown').onclick = () => { if (activeCat >= menuData.length - 1) return; syncFromDOM(); const t = menuData[activeCat + 1]; menuData[activeCat + 1] = menuData[activeCat]; menuData[activeCat] = t; activeCat++; renderMenuEditor(); };
+    bar.querySelector('#catDel').onclick = () => {
+      if (!confirm("Delete the category \"" + cat.title + "\" and its " + cat.items.length + " dish(es)? You can re-add them later, but this removes them from the site when you save.")) return;
+      syncFromDOM();
+      menuData.splice(activeCat, 1);
+      activeCat = Math.max(0, Math.min(activeCat, menuData.length - 1));
+      renderMenuEditor();
+      toast("Category removed — Save to publish");
+    };
+    wrap.appendChild(bar);
     const list = document.createElement('div'); list.dataset.catList = activeCat;
     cat.items.forEach(it => list.appendChild(dishRow(it, activeCat, null)));
     const add = document.createElement('button'); add.type = "button"; add.className = "add-dish"; add.textContent = "+ Add a dish to " + cat.title;
@@ -359,11 +435,12 @@ document.getElementById('saveBtn').onclick = async () => {
         name: document.getElementById('s-name').value.trim(),
         announce: document.getElementById('s-announce').value.trim(),
         phone: document.getElementById('s-phone').value.trim(),
-        phoneHref: document.getElementById('s-phoneHref').value.trim(),
+        phoneHref: "+" + document.getElementById('s-phone').value.replace(/\D/g, ""),
         whatsapp: document.getElementById('s-whatsapp').value.trim(),
         address: document.getElementById('s-address').value.trim(),
         hours: document.getElementById('s-hours').value.split("\n").map(x => x.trim()).filter(Boolean),
         deliveryNote: document.getElementById('s-deliveryNote').value.trim(),
+        discountAll: Math.min(95, Math.max(0, parseFloat(document.getElementById('s-discountAll').value) || 0)),
       };
       await api("/api/settings", { method: "PUT", body: JSON.stringify(settingsData) });
       toast("Details saved — live now ✓");
@@ -380,11 +457,11 @@ async function showEditor() {
     document.getElementById('s-name').value = settingsData.name || "";
     document.getElementById('s-announce').value = settingsData.announce || "";
     document.getElementById('s-phone').value = settingsData.phone || "";
-    document.getElementById('s-phoneHref').value = settingsData.phoneHref || "";
     document.getElementById('s-whatsapp').value = settingsData.whatsapp || "";
     document.getElementById('s-address').value = settingsData.address || "";
     document.getElementById('s-hours').value = (settingsData.hours || []).join("\n");
     document.getElementById('s-deliveryNote').value = settingsData.deliveryNote || "";
+    document.getElementById('s-discountAll').value = settingsData.discountAll || "";
     renderMenuEditor();
     setTab("menu");
   } catch (e) { toast("Could not load data: " + e.message); }

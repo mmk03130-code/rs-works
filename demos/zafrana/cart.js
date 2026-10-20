@@ -7,17 +7,24 @@ const fmt = n => "£" + n.toFixed(2);
 let cart = new Map();
 try { cart = new Map(JSON.parse(localStorage.getItem(CART_KEY) || "[]")); } catch (e) { cart = new Map(); }
 function saveCart() { try { localStorage.setItem(CART_KEY, JSON.stringify([...cart])); } catch (e) {} }
+for (const e of cart.values()) { if (e.was === undefined) e.was = e.price; }
 
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+let DISCOUNT_ALL = 0; // overall % from settings (live mode)
+const STATIC_PAGES = { starters: 1, grill: 1, mains: 1, sides: 1, sweet: 1 };
+const catHref = slug => STATIC_PAGES[slug] ? "menu-" + slug + ".html" : "menu-cat.html?c=" + encodeURIComponent(slug);
+function pctFor(it) { const d = Number(it.discount) || 0; return d > 0 ? d : DISCOUNT_ALL; }
+function effPrice(it) { const p = pctFor(it); return p > 0 ? Math.round(Number(it.price) * (1 - p / 100) * 100) / 100 : Number(it.price); }
 function itemNode(it) {
   const d = document.createElement("div");
   d.className = "item" + (it.soldOut ? " soldout" : "");
-  d.dataset.name = it.name; d.dataset.price = it.price;
+  const eff = effPrice(it), pct = pctFor(it);
+  d.dataset.name = it.name; d.dataset.price = eff; if (pct > 0) d.dataset.was = it.price;
   let inner = "";
   if (it.img) inner += '<img class="thumb" src="' + esc(it.img) + '" alt="" loading="lazy">';
   inner += '<div class="item-main"><h3>' + esc(it.name) + (it.tag ? ' <span class="tag">' + esc(it.tag) + "</span>" : "") + "</h3>" +
     (it.desc ? '<p class="desc">' + esc(it.desc) + "</p>" : "") + "</div>";
-  inner += '<div class="item-side"><span class="p">' + fmt(Number(it.price)) + "</span>";
+  inner += '<div class="item-side"><span class="p">' + (pct > 0 ? "<s>" + fmt(Number(it.price)) + "</s>" + fmt(eff) + '<span class="off-badge">-' + pct + "%</span>" : fmt(eff)) + "</span>";
   if (it.soldOut) inner += '<span class="soldout-tag">Sold out</span>';
   else inner += '<button class="add-btn" type="button">Add</button><div class="stepper" hidden><button type="button" class="dec" aria-label="One less">−</button><span class="qty">1</span><button type="button" class="inc" aria-label="One more">+</button></div>';
   inner += "</div>";
@@ -56,13 +63,23 @@ function render() {
       lines.appendChild(d);
     }
     document.getElementById('cartTotal').textContent = fmt(total);
+    let savings = 0;
+    for (const e of cart.values()) { if (e.was > e.price) savings += e.qty * (e.was - e.price); }
+    const ct = document.querySelector('.cart-total');
+    if (ct) {
+      let sv = document.getElementById('cartSavings');
+      if (!sv) { sv = document.createElement('div'); sv.id = "cartSavings"; sv.className = "cart-save"; ct.parentNode.insertBefore(sv, ct); }
+      sv.hidden = savings <= 0;
+      sv.innerHTML = savings > 0 ? "<span>You save</span><b>" + fmt(savings) + "</b>" : "";
+    }
   }
 }
 function bindItems() {
   document.querySelectorAll('.item').forEach(row => {
     const add = row.querySelector('.add-btn'); if (!add) return;
     const name = row.dataset.name, price = parseFloat(row.dataset.price);
-    add.onclick = () => { cart.set(name, { price, qty: 1 }); saveCart(); render(); syncRow(name); };
+    const was = row.dataset.was ? parseFloat(row.dataset.was) : price;
+    add.onclick = () => { cart.set(name, { price, was, qty: 1 }); saveCart(); render(); syncRow(name); };
     row.querySelector('.inc').onclick = () => { const e = cart.get(name); if (e) { e.qty++; saveCart(); render(); syncRow(name); } };
     row.querySelector('.dec').onclick = () => { const e = cart.get(name); if (e) { e.qty--; if (e.qty <= 0) cart.delete(name); saveCart(); render(); syncRow(name); } };
     syncRow(name);
@@ -78,8 +95,11 @@ function wireDrawer() {
     if (cart.size === 0) return;
     const fulfil = document.querySelector('input[name="fulfil"]:checked').value;
     let total = 0; const out = ["Hello Zafrana, I'd like to order for " + fulfil.toLowerCase() + ":", ""];
-    for (const [name, e] of cart) { out.push(e.qty + " × " + name + " — " + fmt(e.qty * e.price)); total += e.qty * e.price; }
-    out.push("", "Total: " + fmt(total), "", "Name:", "Address (if delivery):");
+    let savings = 0;
+    for (const [name, e] of cart) { out.push(e.qty + " × " + name + " — " + fmt(e.qty * e.price)); total += e.qty * e.price; if (e.was > e.price) savings += e.qty * (e.was - e.price); }
+    out.push("", "Total: " + fmt(total));
+    if (savings > 0) out.push("You saved: " + fmt(savings));
+    out.push("", "Name:", "Address (if delivery):");
     window.open("https://wa.me/" + (window.ZAFRANA_WA || WA_NUMBER) + "?text=" + encodeURIComponent(out.join("\n")), "_blank");
   };
 }
@@ -91,18 +111,52 @@ async function init() {
   if (window.ZAFRANA_API && (slug || isHub)) {
     try {
       const ctl = new AbortController(); setTimeout(() => ctl.abort(), 4000);
-      const r = await fetch(window.ZAFRANA_API + "/api/menu", { signal: ctl.signal, cache: "no-store" });
-      if (r.ok) {
-        const menu = await r.json();
+      const [rm, rs] = await Promise.all([
+        fetch(window.ZAFRANA_API + "/api/menu", { signal: ctl.signal, cache: "no-store" }),
+        fetch(window.ZAFRANA_API + "/api/settings", { signal: ctl.signal, cache: "no-store" }).catch(() => null),
+      ]);
+      if (rs && rs.ok) { const st = await rs.json(); DISCOUNT_ALL = Math.min(95, Math.max(0, Number(st.discountAll) || 0)); }
+      if (rm.ok) {
+        const menu = await rm.json();
+        const nav = document.querySelector('.menu-cats');
+        if (nav) {
+          nav.innerHTML = '<a href="menu.html">All categories</a>' + menu.map(c =>
+            '<a href="' + catHref(c.slug) + '"' + (c.slug === slug ? ' class="on"' : "") + ">" + esc(c.title) + "</a>").join("");
+        }
         if (slug) {
           const cat = menu.find(c => c.slug === slug);
           const wrap = document.getElementById('items');
-          if (cat && wrap) { wrap.innerHTML = ""; cat.items.forEach(it => wrap.appendChild(itemNode(it))); }
+          if (wrap) {
+            if (cat) {
+              wrap.innerHTML = ""; cat.items.forEach(it => wrap.appendChild(itemNode(it)));
+              const eb = document.querySelector('[data-cat-eyebrow]'); if (eb) eb.textContent = cat.eyebrow || "";
+              const ti = document.querySelector('[data-cat-title]'); if (ti) { ti.textContent = cat.title; document.title = cat.title + " — Zafrana · Afghan Kitchen, Lewisham"; }
+              const le = document.querySelector('[data-cat-lede]'); if (le) le.textContent = cat.lede || "";
+            } else {
+              wrap.innerHTML = '<p class="desc">This part of the menu has moved. <a href="menu.html">See the full menu →</a></p>';
+            }
+          }
         }
-        if (isHub) menu.forEach(c => {
-          const el = document.querySelector('[data-count-for="' + c.slug + '"]');
-          if (el) el.textContent = c.items.length;
-        });
+        if (isHub) {
+          const grid = document.querySelector('.cat-grid');
+          if (grid) menu.forEach(c => {
+            if (document.querySelector('[data-count-for="' + c.slug + '"]')) return;
+            const first = c.items.find(i => i.img);
+            const a = document.createElement('a');
+            a.className = "cat-card"; a.href = catHref(c.slug);
+            a.innerHTML = (first ? '<img src="' + esc(first.img) + '" alt="" loading="lazy">' : "") +
+              '<div class="cat-card-body">' +
+              (c.eyebrow ? '<span class="eyebrow">' + esc(c.eyebrow) + "</span>" : "") +
+              "<h3>" + esc(c.title) + "</h3>" +
+              (c.lede ? "<p>" + esc(c.lede) + "</p>" : "") +
+              '<span class="cat-go"><span data-count-for="' + c.slug + '">0</span> dishes · View &amp; order →</span></div>';
+            grid.appendChild(a);
+          });
+          menu.forEach(c => {
+            const el = document.querySelector('[data-count-for="' + c.slug + '"]');
+            if (el) el.textContent = c.items.length;
+          });
+        }
       }
     } catch (e) { /* static fallback stays */ }
   }
