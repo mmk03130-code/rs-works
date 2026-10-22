@@ -9,10 +9,22 @@
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="theme-color" content="#161310">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header></header>
+<!-- ============ Header · shared include: identical markup on every page ============ -->
+<header>
+  <div class="hd">
+    <a class="wordmark" href="index.html" data-set="brand">MAISON SOLENNE</a>
+    <button class="burger" id="burger" aria-label="Menu">☰</button>
+    <nav class="main" id="mainnav"><a href="index.html">Home</a><a href="gallery.html">Gallery</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
+    <a class="appt" href="contact.html">Book an appointment</a>
+  </div>
+</header>
+<!-- ============ /Header ============ -->
 
 <section class="phead wrap big">
   <div class="eyebrow">The Gallery</div>
@@ -21,11 +33,11 @@
   <nav class="gnav"><a href="#rings">01 · Rings</a><a href="#watches">02 · Bespoke Watches</a><a href="#straps">03 · Leather Straps</a></nav>
 </section>
 
-<section class="wrap rv" aria-hidden="true"><div class="wide headband"><img class="kb" src="craft1.jpg" alt=""></div></section>
+<section class="wrap rv" aria-hidden="true"><div class="wide wide--band"><picture><source type="image/webp" srcset="craft1-800.webp 800w, craft1.webp 1100w" sizes="100vw"><img class="kb" src="craft1.jpg" srcset="craft1-800.jpg 800w, craft1.jpg 1100w" sizes="100vw" width="1100" height="733" alt=""></picture></div></section>
 <main id="gallery-main"></main>
 
 <section class="band">
-  <div class="wrap"><div class="in rv">
+  <div class="wrap"><div class="band__inner rv">
     <div class="eyebrow">Not sure yet?</div>
     <h2>Come and hold them first.</h2>
     <p>Photographs flatten gold and lie about leather. Book a half hour at the atelier and handle every piece in this gallery under real light.</p>
@@ -33,27 +45,18 @@
   </div></div>
 </section>
 
-<footer></footer>
-<div class="lb" id="lb"><button class="x" aria-label="Close">×</button><button class="nav prev" aria-label="Previous">‹</button><img alt=""><button class="nav next" aria-label="Next">›</button><div class="cap"><div class="nm"></div><div class="mt"></div><a class="lbuy" href="#" target="_blank" rel="noopener">Buy Now</a></div></div>
+<!-- ============ Footer · shared include: identical markup on every page ============ -->
+<footer>
+  <div class="wrap"><div class="cols">
+    <div><div class="footer__wordmark" data-set="brand">MAISON SOLENNE</div><p class="footer__blurb"><span data-set="tagline">Rings · Bespoke Watches · Leather Straps</span>. Made one at a time in <span data-set="city">Washington</span>, by appointment.</p></div>
+    <div><h4>Explore</h4><a href="gallery.html#rings">Rings</a><a href="gallery.html#watches">Bespoke Watches</a><a href="gallery.html#straps">Leather Straps</a><a href="about.html">Our Story</a></div>
+    <div><h4>Atelier</h4><a href="contact.html">Book an appointment</a><a href="mailto:atelier@maison-solenne.com" data-set="email">atelier@maison-solenne.com</a><a href="tel:+12025550147" data-set="phone">+1 (202) 555-0147</a></div>
+  </div><div class="fine"><span>© 2026 <span data-set="brand">MAISON SOLENNE</span>. Demonstration website — photography from Pexels.</span><span>Instagram · Pinterest</span></div></div>
+</footer>
+<!-- ============ /Footer ============ -->
+<div class="lb" id="lb"><button class="x" aria-label="Close">×</button><button class="nav prev" aria-label="Previous">‹</button><picture><source id="lb-source" type="image/webp"><img id="lb-img" alt=""></picture><button class="nav next" aria-label="Next">›</button><div class="cap"><div class="lb__name"></div><div class="lb__meta"></div><a class="lb__buy" href="#" target="_blank" rel="noopener">Buy Now</a></div></div>
 
 <script src="data.js"></script>
 <script src="app.js"></script>
-<script>
-(function () {
-  var D = window.SOLENNE;
-  var main = document.getElementById('gallery-main');
-  var gnav = document.querySelector('.gnav');
-  if (gnav) gnav.innerHTML = D.lines.map(function (L) { return '<a href="#' + L.id + '">' + L.no + ' · ' + L.name + '</a>'; }).join('');
-  main.innerHTML = D.lines.map(function (L) {
-    return '<section class="chapter wrap rv" id="' + L.id + '" style="padding-top:64px"><div class="no">Chapter ' + L.no + ' — ' + L.name + '</div>' +
-      '<h2>' + L.title + '</h2><p class="intro">' + L.intro + '</p>' +
-      '<div class="wide"><img loading="lazy" src="' + L.wide + '" alt="' + L.name + ' at Maison Solenne"></div>' +
-      '<div class="grid" id="g-' + L.id + '"></div></section>';
-  }).join('');
-  D.lines.forEach(function (L) { window.renderCards(L.id, 'g-' + L.id); });
-  var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } }); }, { threshold: 0.08 });
-  document.querySelectorAll('.rv').forEach(function (el) { io.observe(el); });
-})();
-</script>
 </body>
 </html>

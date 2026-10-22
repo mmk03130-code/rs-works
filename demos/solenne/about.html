@@ -9,10 +9,22 @@
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="theme-color" content="#161310">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header></header>
+<!-- ============ Header · shared include: identical markup on every page ============ -->
+<header>
+  <div class="hd">
+    <a class="wordmark" href="index.html" data-set="brand">MAISON SOLENNE</a>
+    <button class="burger" id="burger" aria-label="Menu">☰</button>
+    <nav class="main" id="mainnav"><a href="index.html">Home</a><a href="gallery.html">Gallery</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
+    <a class="appt" href="contact.html">Book an appointment</a>
+  </div>
+</header>
+<!-- ============ /Header ============ -->
 
 <section class="phead wrap big">
   <div class="eyebrow">About Us</div>
@@ -21,7 +33,7 @@
 </section>
 
 <section class="split wrap">
-  <div class="ph rv"><img class="kb" src="w3.jpg" alt="An exposed watch movement, gears and jewels in gold"></div>
+  <div class="ph rv"><picture><source type="image/webp" srcset="w3-800.webp 800w, w3.webp 1100w" sizes="(min-width: 961px) 600px, 92vw"><img class="kb" src="w3.jpg" srcset="w3-800.jpg 800w, w3.jpg 1100w" sizes="(min-width: 961px) 600px, 92vw" width="1100" height="733" alt="An exposed watch movement, gears and jewels in gold" loading="lazy"></picture></div>
   <div class="rv">
     <div class="eyebrow">The studio</div>
     <h2>One bench. One maker. Start to finish.</h2>
@@ -42,21 +54,29 @@
 
 <section class="numbers">
   <div class="wrap"><div class="row">
-    <div class="rv"><div class="n">40</div><div class="t">Days to tan one hide</div></div>
-    <div class="rv"><div class="n">100+</div><div class="t">Years in our oldest diamond</div></div>
-    <div class="rv"><div class="n">6</div><div class="t">Commissions taken monthly</div></div>
-    <div class="rv"><div class="n">∞</div><div class="t">Repairs on our own work</div></div>
+    <div class="rv"><div class="numbers__value">40</div><div class="numbers__label">Days to tan one hide</div></div>
+    <div class="rv"><div class="numbers__value">100+</div><div class="numbers__label">Years in our oldest diamond</div></div>
+    <div class="rv"><div class="numbers__value">6</div><div class="numbers__label">Commissions taken monthly</div></div>
+    <div class="rv"><div class="numbers__value">∞</div><div class="numbers__label">Repairs on our own work</div></div>
   </div></div>
 </section>
 
 <section class="process wrap">
   <div class="eyebrow rv">The craft, in short</div>
-  <h2 class="serif rv" style="font-weight:500;font-size:clamp(32px,4vw,50px);margin-top:12px">Slow is a specification</h2>
-  <p class="rv" style="color:var(--ink2);max-width:38em;margin-top:14px">A strap passes through six stages and two hundred and fourteen steps. A watch is regulated in five positions over nine days. A ring is soldered, filed, and polished until the join disappears — then the maker tries to find it under the loupe, and only when they cannot is it finished.</p>
-  <a class="link-arrow rv" style="color:var(--ink);margin-top:26px" href="gallery.html">See what the slow way produces</a>
+  <h2 class="lead-title rv">Slow is a specification</h2>
+  <p class="process__text rv">A strap passes through six stages and two hundred and fourteen steps. A watch is regulated in five positions over nine days. A ring is soldered, filed, and polished until the join disappears — then the maker tries to find it under the loupe, and only when they cannot is it finished.</p>
+  <a class="link-arrow link-arrow--dark rv" href="gallery.html">See what the slow way produces</a>
 </section>
 
-<footer></footer>
+<!-- ============ Footer · shared include: identical markup on every page ============ -->
+<footer>
+  <div class="wrap"><div class="cols">
+    <div><div class="footer__wordmark" data-set="brand">MAISON SOLENNE</div><p class="footer__blurb"><span data-set="tagline">Rings · Bespoke Watches · Leather Straps</span>. Made one at a time in <span data-set="city">Washington</span>, by appointment.</p></div>
+    <div><h4>Explore</h4><a href="gallery.html#rings">Rings</a><a href="gallery.html#watches">Bespoke Watches</a><a href="gallery.html#straps">Leather Straps</a><a href="about.html">Our Story</a></div>
+    <div><h4>Atelier</h4><a href="contact.html">Book an appointment</a><a href="mailto:atelier@maison-solenne.com" data-set="email">atelier@maison-solenne.com</a><a href="tel:+12025550147" data-set="phone">+1 (202) 555-0147</a></div>
+  </div><div class="fine"><span>© 2026 <span data-set="brand">MAISON SOLENNE</span>. Demonstration website — photography from Pexels.</span><span>Instagram · Pinterest</span></div></div>
+</footer>
+<!-- ============ /Footer ============ -->
 <script src="data.js"></script>
 <script src="app.js"></script>
 </body>
