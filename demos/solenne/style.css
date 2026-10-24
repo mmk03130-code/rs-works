@@ -79,6 +79,7 @@ body.dark-hero header:not(.solid) .appt{border-color:#F3EDE1}
 .wide img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:kenburns 28s ease-in-out infinite alternate}
 .grid{display:grid;grid-template-columns:1fr;gap:var(--sp-4);margin-top:38px}
 .card{cursor:pointer}
+.card{min-width:0}
 .card__media{overflow:hidden;background:var(--ivory2)}
 .card__media img{width:100%;height:260px;object-fit:cover;transition:transform 1.4s cubic-bezier(.2,.6,.2,1)}
 .card:hover .card__media img{transform:scale(1.08) translate(-1.5%,-1.5%)}
